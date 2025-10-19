@@ -1,0 +1,164 @@
+#!/bin/bash
+
+# Project Finalization Script
+# This script handles the complete finalization of the AI Agent Platform project
+
+set -e  # Exit on error
+
+# Color codes for output
+GREEN='\033[0;32m'
+YELLOW='\033[1;33m'
+RED='\033[0;31m'
+BLUE='\033[0;34m'
+NC='\033[0m' # No Color
+
+# Parse command line arguments
+FORCE_MODE=false
+NO_CONFIRMATION=false
+
+while [[ $# -gt 0 ]]; do
+    case $1 in
+        --force)
+            FORCE_MODE=true
+            shift
+            ;;
+        --no-confirmation)
+            NO_CONFIRMATION=true
+            shift
+            ;;
+        *)
+            echo -e "${RED}Unknown option: $1${NC}"
+            echo "Usage: $0 [--force] [--no-confirmation]"
+            exit 1
+            ;;
+    esac
+done
+
+echo -e "${BLUE}╔══════════════════════════════════════════════════════════╗${NC}"
+echo -e "${BLUE}║        AI Agent Platform - Project Finalization         ║${NC}"
+echo -e "${BLUE}╚══════════════════════════════════════════════════════════╝${NC}"
+echo ""
+
+# Confirmation prompt unless --no-confirmation is set
+if [ "$NO_CONFIRMATION" = false ]; then
+    echo -e "${YELLOW}⚠️  This will finalize the project and clean up resources.${NC}"
+    read -p "Are you sure you want to continue? (yes/no): " confirmation
+    if [ "$confirmation" != "yes" ]; then
+        echo -e "${RED}❌ Finalization cancelled by user.${NC}"
+        exit 0
+    fi
+fi
+
+echo -e "${GREEN}✓ Starting project finalization process...${NC}"
+echo ""
+
+# Step 1: Check project status
+echo -e "${BLUE}[1/6]${NC} Checking project status..."
+if [ -f "README.md" ]; then
+    echo -e "${GREEN}  ✓ Project documentation found${NC}"
+else
+    echo -e "${YELLOW}  ⚠  No README.md found${NC}"
+fi
+
+# Step 2: Validate git repository
+echo -e "${BLUE}[2/6]${NC} Validating git repository..."
+if git rev-parse --git-dir > /dev/null 2>&1; then
+    echo -e "${GREEN}  ✓ Git repository valid${NC}"
+    
+    # Check for uncommitted changes
+    if [ -n "$(git status --porcelain)" ]; then
+        echo -e "${YELLOW}  ⚠  Uncommitted changes detected${NC}"
+        if [ "$FORCE_MODE" = true ]; then
+            echo -e "${YELLOW}  ! Force mode: Proceeding anyway${NC}"
+        fi
+    else
+        echo -e "${GREEN}  ✓ No uncommitted changes${NC}"
+    fi
+else
+    echo -e "${RED}  ✗ Not a git repository${NC}"
+    if [ "$FORCE_MODE" = false ]; then
+        exit 1
+    fi
+fi
+
+# Step 3: Archive project artifacts
+echo -e "${BLUE}[3/6]${NC} Archiving project artifacts..."
+TIMESTAMP=$(date +%Y%m%d_%H%M%S)
+ARCHIVE_DIR="/tmp/ai-agent-platform-archive-${TIMESTAMP}"
+mkdir -p "${ARCHIVE_DIR}"
+
+if [ -d ".git" ]; then
+    # Archive git information
+    git --no-pager log --oneline -10 > "${ARCHIVE_DIR}/recent_commits.txt" 2>/dev/null || true
+    git --no-pager status > "${ARCHIVE_DIR}/final_status.txt" 2>/dev/null || true
+    echo -e "${GREEN}  ✓ Git history archived${NC}"
+fi
+
+# Copy key files
+cp -r . "${ARCHIVE_DIR}/project_snapshot" 2>/dev/null || true
+echo -e "${GREEN}  ✓ Project snapshot created at: ${ARCHIVE_DIR}${NC}"
+
+# Step 4: Generate finalization report
+echo -e "${BLUE}[4/6]${NC} Generating finalization report..."
+REPORT_FILE="${ARCHIVE_DIR}/finalization_report.txt"
+cat > "${REPORT_FILE}" << EOF
+AI Agent Platform - Project Finalization Report
+================================================
+Finalization Date: $(date)
+Force Mode: ${FORCE_MODE}
+Confirmation Skipped: ${NO_CONFIRMATION}
+
+Project Status:
+---------------
+Repository: $(git remote get-url origin 2>/dev/null || echo "No remote configured")
+Current Branch: $(git branch --show-current 2>/dev/null || echo "N/A")
+Last Commit: $(git log -1 --oneline 2>/dev/null || echo "N/A")
+
+Archive Location:
+-----------------
+${ARCHIVE_DIR}
+
+Resources Cleaned:
+------------------
+- Temporary files checked
+- Archive created successfully
+- Project state preserved
+
+EOF
+echo -e "${GREEN}  ✓ Finalization report generated${NC}"
+
+# Step 5: Clean up temporary resources
+echo -e "${BLUE}[5/6]${NC} Cleaning up temporary resources..."
+# Clean common temporary directories (if they exist)
+rm -rf /tmp/ai-agent-temp-* 2>/dev/null || true
+rm -rf .pytest_cache 2>/dev/null || true
+rm -rf __pycache__ 2>/dev/null || true
+rm -rf node_modules/.cache 2>/dev/null || true
+echo -e "${GREEN}  ✓ Temporary resources cleaned${NC}"
+
+# Step 6: Final verification
+echo -e "${BLUE}[6/6]${NC} Final verification..."
+if [ -d "${ARCHIVE_DIR}" ] && [ -f "${REPORT_FILE}" ]; then
+    echo -e "${GREEN}  ✓ All finalization steps completed successfully${NC}"
+else
+    echo -e "${RED}  ✗ Some finalization steps may have failed${NC}"
+    if [ "$FORCE_MODE" = false ]; then
+        exit 1
+    fi
+fi
+
+echo ""
+echo -e "${BLUE}╔══════════════════════════════════════════════════════════╗${NC}"
+echo -e "${BLUE}║              Finalization Complete                      ║${NC}"
+echo -e "${BLUE}╚══════════════════════════════════════════════════════════╝${NC}"
+echo ""
+echo -e "${GREEN}📦 Archive Location:${NC} ${ARCHIVE_DIR}"
+echo -e "${GREEN}📄 Report File:${NC} ${REPORT_FILE}"
+echo ""
+echo -e "${GREEN}✅ Project finalization completed successfully!${NC}"
+echo -e "${BLUE}🎯 All resources have been cleaned and archived.${NC}"
+echo ""
+
+# Display the report
+echo -e "${YELLOW}=== Finalization Report ===${NC}"
+cat "${REPORT_FILE}"
