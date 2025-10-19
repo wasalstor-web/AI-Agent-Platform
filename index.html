@@ -1,0 +1,752 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>منصة وكيل الذكاء الاصطناعي - AI Agent Platform</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 40px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .header p {
+            font-size: 1.2em;
+            opacity: 0.9;
+        }
+
+        .lang-toggle {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            background: rgba(255, 255, 255, 0.2);
+            border: 2px solid white;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s;
+        }
+
+        .lang-toggle:hover {
+            background: white;
+            color: #667eea;
+        }
+
+        .content {
+            padding: 40px;
+        }
+
+        .section {
+            margin-bottom: 40px;
+        }
+
+        .section h2 {
+            color: #667eea;
+            font-size: 2em;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 3px solid #667eea;
+        }
+
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-top: 30px;
+        }
+
+        .feature-card {
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            padding: 30px;
+            border-radius: 15px;
+            text-align: center;
+            transition: transform 0.3s, box-shadow 0.3s;
+            cursor: pointer;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.3);
+        }
+
+        .feature-card .icon {
+            font-size: 3em;
+            margin-bottom: 15px;
+        }
+
+        .feature-card h3 {
+            color: #333;
+            margin-bottom: 10px;
+            font-size: 1.3em;
+        }
+
+        .feature-card p {
+            color: #666;
+            font-size: 0.95em;
+        }
+
+        .workflow {
+            background: #f8f9fa;
+            padding: 30px;
+            border-radius: 15px;
+            margin-top: 20px;
+        }
+
+        .workflow-steps {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .workflow-step {
+            display: flex;
+            align-items: center;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s;
+        }
+
+        .workflow-step:hover {
+            transform: translateX(-5px);
+            box-shadow: 0 5px 20px rgba(102, 126, 234, 0.3);
+        }
+
+        .step-number {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 1.5em;
+            margin-left: 20px;
+            flex-shrink: 0;
+        }
+
+        .step-content {
+            flex-grow: 1;
+        }
+
+        .step-content h4 {
+            color: #667eea;
+            margin-bottom: 5px;
+            font-size: 1.2em;
+        }
+
+        .step-content p {
+            color: #666;
+        }
+
+        .command-box {
+            background: #2d2d2d;
+            color: #f8f8f2;
+            padding: 20px;
+            border-radius: 10px;
+            font-family: 'Courier New', monospace;
+            overflow-x: auto;
+            margin-top: 15px;
+            position: relative;
+        }
+
+        .command-box code {
+            color: #a6e22e;
+        }
+
+        .copy-btn {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 5px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 0.9em;
+            transition: background 0.3s;
+        }
+
+        .copy-btn:hover {
+            background: #764ba2;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+            margin-top: 20px;
+        }
+
+        .btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 10px;
+            font-size: 1.1em;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-decoration: none;
+            display: inline-block;
+            font-weight: bold;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-secondary {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+        }
+
+        .btn-success {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+        }
+
+        .info-box {
+            background: #e3f2fd;
+            border-right: 5px solid #2196f3;
+            padding: 20px;
+            border-radius: 10px;
+            margin-top: 20px;
+        }
+
+        .info-box h3 {
+            color: #1976d2;
+            margin-bottom: 10px;
+        }
+
+        .info-box ul {
+            list-style: none;
+            padding-right: 20px;
+        }
+
+        .info-box ul li {
+            padding: 8px 0;
+            color: #424242;
+        }
+
+        .info-box ul li::before {
+            content: "✓ ";
+            color: #4caf50;
+            font-weight: bold;
+            margin-left: 10px;
+        }
+
+        .footer {
+            background: #333;
+            color: white;
+            text-align: center;
+            padding: 30px;
+        }
+
+        .footer a {
+            color: #667eea;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .footer a:hover {
+            color: #764ba2;
+        }
+
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 1.8em;
+            }
+
+            .lang-toggle {
+                position: static;
+                margin-bottom: 20px;
+            }
+
+            .feature-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .workflow-step {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .step-number {
+                margin: 0 0 15px 0;
+            }
+
+            .action-buttons {
+                flex-direction: column;
+            }
+
+            .btn {
+                width: 100%;
+            }
+        }
+
+        /* English Mode */
+        body[dir="ltr"] .step-number {
+            margin-right: 20px;
+            margin-left: 0;
+        }
+
+        body[dir="ltr"] .workflow-step:hover {
+            transform: translateX(5px);
+        }
+
+        body[dir="ltr"] .info-box {
+            border-right: none;
+            border-left: 5px solid #2196f3;
+        }
+
+        body[dir="ltr"] .info-box ul {
+            padding-left: 20px;
+            padding-right: 0;
+        }
+
+        body[dir="ltr"] .info-box ul li::before {
+            margin-right: 10px;
+            margin-left: 0;
+        }
+
+        body[dir="ltr"] .copy-btn {
+            left: auto;
+            right: 10px;
+        }
+    </style>
+</head>
+<body>
+    <button class="lang-toggle" onclick="toggleLanguage()">English / عربي</button>
+
+    <div class="container">
+        <div class="header">
+            <h1 id="title">منصة وكيل الذكاء الاصطناعي</h1>
+            <p id="subtitle">بنية تحتية متقدمة لبناء ونشر وإدارة وكلاء الذكاء الاصطناعي</p>
+        </div>
+
+        <div class="content">
+            <!-- Overview Section -->
+            <div class="section">
+                <h2 id="overview-title">نظرة عامة على المشروع</h2>
+                <p id="overview-text">
+                    منصة وكيل الذكاء الاصطناعي هي منصة شاملة توفر البنية التحتية والأدوات اللازمة لبناء ونشر وإدارة وكلاء الذكاء الاصطناعي بكفاءة عالية. تتضمن المنصة نظام إدارة دورة حياة المشروع بشكل تلقائي مع أدوات متقدمة للأرشفة والتنظيف.
+                </p>
+            </div>
+
+            <!-- Features Section -->
+            <div class="section">
+                <h2 id="features-title">الميزات الرئيسية</h2>
+                <div class="feature-grid">
+                    <div class="feature-card">
+                        <div class="icon">🤖</div>
+                        <h3 id="feature1-title">إدارة الوكلاء</h3>
+                        <p id="feature1-desc">بناء ونشر وكلاء ذكاء اصطناعي متعددة مع إدارة كاملة لدورة حياتهم</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="icon">🔧</div>
+                        <h3 id="feature2-title">أدوات متقدمة</h3>
+                        <p id="feature2-desc">مجموعة شاملة من الأدوات لتسهيل التطوير والنشر والصيانة</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="icon">📦</div>
+                        <h3 id="feature3-title">الأرشفة التلقائية</h3>
+                        <p id="feature3-desc">نظام تلقائي لأرشفة حالة المشروع وحفظ السجلات</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="icon">🔒</div>
+                        <h3 id="feature4-title">الأمان</h3>
+                        <p id="feature4-desc">اتباع أفضل ممارسات الأمان مع استبعاد الملفات الحساسة</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="icon">📊</div>
+                        <h3 id="feature5-title">التقارير الشاملة</h3>
+                        <p id="feature5-desc">توليد تقارير مفصلة عن حالة المشروع والعمليات المنفذة</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="icon">🌐</div>
+                        <h3 id="feature6-title">دعم متعدد اللغات</h3>
+                        <p id="feature6-desc">واجهة وتوثيق باللغتين العربية والإنجليزية</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Workflow Section -->
+            <div class="section">
+                <h2 id="workflow-title">سير عمل الإنهاء</h2>
+                <div class="workflow">
+                    <div class="workflow-steps">
+                        <div class="workflow-step">
+                            <div class="step-number">1</div>
+                            <div class="step-content">
+                                <h4 id="step1-title">فحص حالة المشروع</h4>
+                                <p id="step1-desc">التحقق من وجود التوثيق والهيكل الصحيح للمشروع</p>
+                            </div>
+                        </div>
+                        <div class="workflow-step">
+                            <div class="step-number">2</div>
+                            <div class="step-content">
+                                <h4 id="step2-title">التحقق من المستودع</h4>
+                                <p id="step2-desc">فحص حالة Git والتأكد من عدم وجود تغييرات غير محفوظة</p>
+                            </div>
+                        </div>
+                        <div class="workflow-step">
+                            <div class="step-number">3</div>
+                            <div class="step-content">
+                                <h4 id="step3-title">أرشفة الملفات</h4>
+                                <p id="step3-desc">إنشاء نسخة احتياطية مؤرشفة مع استبعاد الملفات الحساسة</p>
+                            </div>
+                        </div>
+                        <div class="workflow-step">
+                            <div class="step-number">4</div>
+                            <div class="step-content">
+                                <h4 id="step4-title">توليد التقرير</h4>
+                                <p id="step4-desc">إنشاء تقرير شامل عن حالة المشروع النهائية</p>
+                            </div>
+                        </div>
+                        <div class="workflow-step">
+                            <div class="step-number">5</div>
+                            <div class="step-content">
+                                <h4 id="step5-title">تنظيف الموارد</h4>
+                                <p id="step5-desc">إزالة الملفات المؤقتة والذاكرة المخزنة غير الضرورية</p>
+                            </div>
+                        </div>
+                        <div class="workflow-step">
+                            <div class="step-number">6</div>
+                            <div class="step-content">
+                                <h4 id="step6-title">التحقق النهائي</h4>
+                                <p id="step6-desc">التأكد من إتمام جميع الخطوات بنجاح</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Usage Section -->
+            <div class="section">
+                <h2 id="usage-title">كيفية الاستخدام</h2>
+                
+                <h3 id="interactive-title" style="color: #667eea; margin-top: 20px;">الوضع التفاعلي</h3>
+                <div class="command-box">
+                    <button class="copy-btn" onclick="copyCommand('cmd1')">نسخ</button>
+                    <code id="cmd1">./finalize_project.sh</code>
+                </div>
+
+                <h3 id="directive-title" style="color: #667eea; margin-top: 20px;">التنفيذ التلقائي</h3>
+                <div class="command-box">
+                    <button class="copy-btn" onclick="copyCommand('cmd2')">نسخ</button>
+                    <code id="cmd2">./directive_finalize.sh</code>
+                </div>
+
+                <h3 id="advanced-title" style="color: #667eea; margin-top: 20px;">خيارات متقدمة</h3>
+                <div class="command-box">
+                    <button class="copy-btn" onclick="copyCommand('cmd3')">نسخ</button>
+                    <code id="cmd3"># إظهار المساعدة
+./finalize_project.sh --help
+
+# الوضع القسري (المتابعة مع التحذيرات)
+./finalize_project.sh --force
+
+# بدون تأكيد
+./finalize_project.sh --no-confirmation
+
+# تلقائي بالكامل
+./finalize_project.sh --force --no-confirmation</code>
+                </div>
+            </div>
+
+            <!-- Benefits Section -->
+            <div class="section">
+                <h2 id="benefits-title">الفوائد</h2>
+                <div class="info-box">
+                    <h3 id="benefits-subtitle">لماذا تستخدم هذه المنصة؟</h3>
+                    <ul>
+                        <li id="benefit1">أتمتة كاملة لعملية إنهاء المشروع</li>
+                        <li id="benefit2">حفظ آمن للسجلات والتاريخ</li>
+                        <li id="benefit3">تنظيف تلقائي للموارد المؤقتة</li>
+                        <li id="benefit4">تقارير شاملة عن حالة المشروع</li>
+                        <li id="benefit5">دعم متعدد الأوضاع (تفاعلي، قسري، تلقائي)</li>
+                        <li id="benefit6">استبعاد ذكي للملفات الحساسة</li>
+                        <li id="benefit7">واجهة سهلة الاستخدام بلغتين</li>
+                        <li id="benefit8">توافق مع معايير الأمان OWASP</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Quick Actions -->
+            <div class="section">
+                <h2 id="actions-title">إجراءات سريعة</h2>
+                <div class="action-buttons">
+                    <button class="btn" onclick="window.open('https://github.com/wasalstor-web/AI-Agent-Platform', '_blank')">
+                        <span id="btn-repo">📂 المستودع على GitHub</span>
+                    </button>
+                    <button class="btn btn-secondary" onclick="alert('لتنفيذ السكريبت، قم بتشغيله من سطر الأوامر: ./finalize_project.sh')">
+                        <span id="btn-run">▶️ تشغيل الإنهاء</span>
+                    </button>
+                    <button class="btn btn-success" onclick="downloadDocs()">
+                        <span id="btn-docs">📄 تحميل التوثيق</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer">
+            <p id="footer-text">
+                © 2025 منصة وكيل الذكاء الاصطناعي | 
+                <a href="https://github.com/wasalstor-web/AI-Agent-Platform" target="_blank">GitHub</a> | 
+                <a href="mailto:support@example.com">الدعم الفني</a>
+            </p>
+        </div>
+    </div>
+
+    <script>
+        // Language Toggle Functionality
+        let currentLang = 'ar';
+
+        const translations = {
+            ar: {
+                title: 'منصة وكيل الذكاء الاصطناعي',
+                subtitle: 'بنية تحتية متقدمة لبناء ونشر وإدارة وكلاء الذكاء الاصطناعي',
+                'overview-title': 'نظرة عامة على المشروع',
+                'overview-text': 'منصة وكيل الذكاء الاصطناعي هي منصة شاملة توفر البنية التحتية والأدوات اللازمة لبناء ونشر وإدارة وكلاء الذكاء الاصطناعي بكفاءة عالية. تتضمن المنصة نظام إدارة دورة حياة المشروع بشكل تلقائي مع أدوات متقدمة للأرشفة والتنظيف.',
+                'features-title': 'الميزات الرئيسية',
+                'feature1-title': 'إدارة الوكلاء',
+                'feature1-desc': 'بناء ونشر وكلاء ذكاء اصطناعي متعددة مع إدارة كاملة لدورة حياتهم',
+                'feature2-title': 'أدوات متقدمة',
+                'feature2-desc': 'مجموعة شاملة من الأدوات لتسهيل التطوير والنشر والصيانة',
+                'feature3-title': 'الأرشفة التلقائية',
+                'feature3-desc': 'نظام تلقائي لأرشفة حالة المشروع وحفظ السجلات',
+                'feature4-title': 'الأمان',
+                'feature4-desc': 'اتباع أفضل ممارسات الأمان مع استبعاد الملفات الحساسة',
+                'feature5-title': 'التقارير الشاملة',
+                'feature5-desc': 'توليد تقارير مفصلة عن حالة المشروع والعمليات المنفذة',
+                'feature6-title': 'دعم متعدد اللغات',
+                'feature6-desc': 'واجهة وتوثيق باللغتين العربية والإنجليزية',
+                'workflow-title': 'سير عمل الإنهاء',
+                'step1-title': 'فحص حالة المشروع',
+                'step1-desc': 'التحقق من وجود التوثيق والهيكل الصحيح للمشروع',
+                'step2-title': 'التحقق من المستودع',
+                'step2-desc': 'فحص حالة Git والتأكد من عدم وجود تغييرات غير محفوظة',
+                'step3-title': 'أرشفة الملفات',
+                'step3-desc': 'إنشاء نسخة احتياطية مؤرشفة مع استبعاد الملفات الحساسة',
+                'step4-title': 'توليد التقرير',
+                'step4-desc': 'إنشاء تقرير شامل عن حالة المشروع النهائية',
+                'step5-title': 'تنظيف الموارد',
+                'step5-desc': 'إزالة الملفات المؤقتة والذاكرة المخزنة غير الضرورية',
+                'step6-title': 'التحقق النهائي',
+                'step6-desc': 'التأكد من إتمام جميع الخطوات بنجاح',
+                'usage-title': 'كيفية الاستخدام',
+                'interactive-title': 'الوضع التفاعلي',
+                'directive-title': 'التنفيذ التلقائي',
+                'advanced-title': 'خيارات متقدمة',
+                'benefits-title': 'الفوائد',
+                'benefits-subtitle': 'لماذا تستخدم هذه المنصة؟',
+                benefit1: 'أتمتة كاملة لعملية إنهاء المشروع',
+                benefit2: 'حفظ آمن للسجلات والتاريخ',
+                benefit3: 'تنظيف تلقائي للموارد المؤقتة',
+                benefit4: 'تقارير شاملة عن حالة المشروع',
+                benefit5: 'دعم متعدد الأوضاع (تفاعلي، قسري، تلقائي)',
+                benefit6: 'استبعاد ذكي للملفات الحساسة',
+                benefit7: 'واجهة سهلة الاستخدام بلغتين',
+                benefit8: 'توافق مع معايير الأمان OWASP',
+                'actions-title': 'إجراءات سريعة',
+                'btn-repo': '📂 المستودع على GitHub',
+                'btn-run': '▶️ تشغيل الإنهاء',
+                'btn-docs': '📄 تحميل التوثيق',
+                'footer-text': '© 2025 منصة وكيل الذكاء الاصطناعي'
+            },
+            en: {
+                title: 'AI Agent Platform',
+                subtitle: 'Advanced infrastructure for building, deploying, and managing AI agents',
+                'overview-title': 'Project Overview',
+                'overview-text': 'The AI Agent Platform is a comprehensive platform that provides the infrastructure and tools needed to efficiently build, deploy, and manage AI agents. The platform includes an automated project lifecycle management system with advanced archiving and cleanup tools.',
+                'features-title': 'Key Features',
+                'feature1-title': 'Agent Management',
+                'feature1-desc': 'Build and deploy multiple AI agents with complete lifecycle management',
+                'feature2-title': 'Advanced Tools',
+                'feature2-desc': 'Comprehensive set of tools to facilitate development, deployment, and maintenance',
+                'feature3-title': 'Automatic Archiving',
+                'feature3-desc': 'Automated system for archiving project state and preserving records',
+                'feature4-title': 'Security',
+                'feature4-desc': 'Following security best practices with sensitive file exclusion',
+                'feature5-title': 'Comprehensive Reports',
+                'feature5-desc': 'Generate detailed reports about project status and executed operations',
+                'feature6-title': 'Multi-language Support',
+                'feature6-desc': 'Interface and documentation in both Arabic and English',
+                'workflow-title': 'Finalization Workflow',
+                'step1-title': 'Check Project Status',
+                'step1-desc': 'Verify documentation and proper project structure',
+                'step2-title': 'Repository Validation',
+                'step2-desc': 'Check Git status and ensure no uncommitted changes',
+                'step3-title': 'Archive Artifacts',
+                'step3-desc': 'Create archived backup excluding sensitive files',
+                'step4-title': 'Generate Report',
+                'step4-desc': 'Create comprehensive report about final project status',
+                'step5-title': 'Resource Cleanup',
+                'step5-desc': 'Remove temporary files and unnecessary cache',
+                'step6-title': 'Final Verification',
+                'step6-desc': 'Ensure all steps completed successfully',
+                'usage-title': 'How to Use',
+                'interactive-title': 'Interactive Mode',
+                'directive-title': 'Automatic Execution',
+                'advanced-title': 'Advanced Options',
+                'benefits-title': 'Benefits',
+                'benefits-subtitle': 'Why use this platform?',
+                benefit1: 'Complete automation of project finalization',
+                benefit2: 'Safe preservation of records and history',
+                benefit3: 'Automatic cleanup of temporary resources',
+                benefit4: 'Comprehensive project status reports',
+                benefit5: 'Multi-mode support (interactive, force, automatic)',
+                benefit6: 'Smart exclusion of sensitive files',
+                benefit7: 'Easy-to-use bilingual interface',
+                benefit8: 'Compliance with OWASP security standards',
+                'actions-title': 'Quick Actions',
+                'btn-repo': '📂 GitHub Repository',
+                'btn-run': '▶️ Run Finalization',
+                'btn-docs': '📄 Download Documentation',
+                'footer-text': '© 2025 AI Agent Platform'
+            }
+        };
+
+        function toggleLanguage() {
+            currentLang = currentLang === 'ar' ? 'en' : 'ar';
+            const body = document.body;
+            
+            if (currentLang === 'en') {
+                body.setAttribute('dir', 'ltr');
+                body.setAttribute('lang', 'en');
+            } else {
+                body.setAttribute('dir', 'rtl');
+                body.setAttribute('lang', 'ar');
+            }
+
+            // Update all text content
+            Object.keys(translations[currentLang]).forEach(key => {
+                const element = document.getElementById(key);
+                if (element) {
+                    element.textContent = translations[currentLang][key];
+                }
+            });
+
+            // Update footer separately as it has HTML
+            const footer = document.getElementById('footer-text');
+            if (footer) {
+                if (currentLang === 'ar') {
+                    footer.innerHTML = '© 2025 منصة وكيل الذكاء الاصطناعي | <a href="https://github.com/wasalstor-web/AI-Agent-Platform" target="_blank">GitHub</a> | <a href="mailto:support@example.com">الدعم الفني</a>';
+                } else {
+                    footer.innerHTML = '© 2025 AI Agent Platform | <a href="https://github.com/wasalstor-web/AI-Agent-Platform" target="_blank">GitHub</a> | <a href="mailto:support@example.com">Support</a>';
+                }
+            }
+        }
+
+        function copyCommand(id) {
+            const code = document.getElementById(id);
+            const text = code.textContent;
+            navigator.clipboard.writeText(text).then(() => {
+                const btn = code.parentElement.querySelector('.copy-btn');
+                const originalText = btn.textContent;
+                btn.textContent = currentLang === 'ar' ? 'تم النسخ!' : 'Copied!';
+                setTimeout(() => {
+                    btn.textContent = originalText;
+                }, 2000);
+            });
+        }
+
+        function downloadDocs() {
+            // Create a simple text documentation
+            const docs = `AI Agent Platform Documentation
+========================================
+
+Project Overview:
+-----------------
+The AI Agent Platform provides infrastructure for building, deploying, 
+and managing AI agents with automated lifecycle management.
+
+Usage:
+------
+1. Interactive Mode:
+   ./finalize_project.sh
+
+2. Automatic Mode:
+   ./directive_finalize.sh
+
+3. Advanced Options:
+   ./finalize_project.sh --help
+   ./finalize_project.sh --force
+   ./finalize_project.sh --no-confirmation
+
+Features:
+---------
+- Agent Management
+- Advanced Tools
+- Automatic Archiving
+- Security Best Practices
+- Comprehensive Reporting
+- Multi-language Support
+
+For more information, visit:
+https://github.com/wasalstor-web/AI-Agent-Platform
+`;
+            
+            const blob = new Blob([docs], { type: 'text/plain' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'AI-Agent-Platform-Documentation.txt';
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+        }
+
+        // Add smooth scrolling
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth'
+                    });
+                }
+            });
+        });
+    </script>
+</body>
+</html>

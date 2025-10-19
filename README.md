@@ -6,6 +6,36 @@ An AI Agent Platform infrastructure project with automated finalization capabili
 
 This project provides a platform for building, deploying, and managing AI agents with built-in project lifecycle management tools.
 
+## Web Interface
+
+The platform now includes a comprehensive HTML interface that provides:
+- **Bilingual Support**: Full Arabic and English interface with real-time language switching
+- **Interactive Documentation**: Visual representation of all features and workflows
+- **Command Reference**: Easy-to-copy commands for all operations
+- **Modern Design**: Responsive, mobile-friendly interface with gradient styling
+
+### Accessing the Web Interface
+
+Simply open `index.html` in your web browser:
+
+```bash
+# Open directly in browser
+open index.html  # macOS
+xdg-open index.html  # Linux
+start index.html  # Windows
+
+# Or serve it with a local server
+python3 -m http.server 8080
+# Then navigate to http://localhost:8080/index.html
+```
+
+The web interface includes:
+- Project overview and features showcase
+- Step-by-step finalization workflow visualization
+- Command examples with copy-to-clipboard functionality
+- Quick action buttons for GitHub repository and documentation
+- Benefits and security information
+
 ## Project Finalization
 
 The platform includes automated scripts for finalizing projects with proper resource cleanup and archival.
