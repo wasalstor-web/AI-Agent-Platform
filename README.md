@@ -16,7 +16,17 @@ The platform now includes a comprehensive HTML interface that provides:
 
 ### Accessing the Web Interface
 
-Simply open `index.html` in your web browser:
+#### Online (GitHub Pages)
+
+The platform is hosted on GitHub Pages and can be accessed at:
+
+**🌐 [https://wasalstor-web.github.io/AI-Agent-Platform/](https://wasalstor-web.github.io/AI-Agent-Platform/)**
+
+The site is automatically deployed when changes are pushed to the main branch.
+
+#### Local Access
+
+You can also open `index.html` in your web browser locally:
 
 ```bash
 # Open directly in browser
