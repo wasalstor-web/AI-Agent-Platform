@@ -4,17 +4,17 @@
 This is an AI Agent Platform project designed to provide infrastructure and tools for building, deploying, and managing AI agents. The platform aims to facilitate the development of intelligent agents with focus on scalability, maintainability, and best practices.
 
 ## Tech Stack
-- **Language**: To be determined based on project development
 - **Architecture**: Platform-based architecture for AI agents
 - **Version Control**: Git with GitHub
+- **Languages**: Follow the conventions of the specific language being used
 
 ## Code Style Guidelines
 - Use clear and descriptive variable names that reflect their purpose
-- Follow consistent indentation (2 or 4 spaces based on the language conventions)
+- Follow consistent indentation based on language conventions (e.g., 4 spaces for Python, 2 spaces for JavaScript/TypeScript)
 - Keep functions small and focused on a single responsibility
 - Write self-documenting code with minimal but meaningful comments
 - Use camelCase for variables and functions, PascalCase for classes
-- Maximum line length: 100-120 characters
+- Maximum line length: 120 characters
 - Add blank lines to separate logical blocks of code
 
 ## Security Best Practices
