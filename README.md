@@ -46,6 +46,22 @@ The web interface includes:
 - Quick action buttons for GitHub repository and documentation
 - Benefits and security information
 
+## Deployment to Hostinger
+
+For detailed instructions on deploying this project to Hostinger hosting, please refer to the comprehensive deployment guide:
+
+**📖 [DEPLOY.md](DEPLOY.md)** - Complete deployment guide in Arabic
+
+The deployment guide includes:
+- **FTP Deployment**: Step-by-step instructions for uploading files via FTP using FileZilla
+- **File Manager Deployment**: Using Hostinger's built-in file manager for easy uploads
+- **Environment Setup**: Configuring PHP, SSL, databases, and environment variables
+- **Domain Linking**: Connecting your domain with detailed DNS configuration
+- **index.html Setup**: Ensuring your main page is correctly configured
+- **Git Integration** (Optional): Automated deployment with GitHub webhook integration
+- **Troubleshooting**: Common issues and their solutions
+- **Security Best Practices**: Comprehensive security guidelines
+
 ## Project Finalization
 
 The platform includes automated scripts for finalizing projects with proper resource cleanup and archival.
