@@ -678,7 +678,9 @@ cp -r * ~/backup/
 rm -rf *
 
 # استنساخ المستودع من GitHub
+# استبدل URL المستودع بمستودعك الفعلي
 git clone git@github.com:wasalstor-web/AI-Agent-Platform.git .
+# أو استخدم HTTPS: git clone https://github.com/wasalstor-web/AI-Agent-Platform.git .
 
 # ملاحظة: النقطة في النهاية مهمة لاستنساخ الملفات مباشرة في المجلد الحالي
 ```
@@ -1116,6 +1118,8 @@ Header always set Strict-Transport-Security "max-age=31536000; includeSubDomains
 - **المنتديات:** [https://www.hostinger.com/forum](https://www.hostinger.com/forum)
 
 ### مستودع المشروع
+
+> **ملاحظة:** الروابط التالية خاصة بمستودع المشروع الأصلي. إذا كنت تستخدم نسخة مُعدَّلة (fork)، استبدل هذه الروابط بروابط مستودعك.
 
 - **GitHub Repository:** [https://github.com/wasalstor-web/AI-Agent-Platform](https://github.com/wasalstor-web/AI-Agent-Platform)
 - **Issues:** [https://github.com/wasalstor-web/AI-Agent-Platform/issues](https://github.com/wasalstor-web/AI-Agent-Platform/issues)
