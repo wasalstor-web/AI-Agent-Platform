@@ -26,9 +26,24 @@ while [[ $# -gt 0 ]]; do
             NO_CONFIRMATION=true
             shift
             ;;
+        --help|-h)
+            echo "Usage: $0 [OPTIONS]"
+            echo ""
+            echo "Options:"
+            echo "  --force              Continue finalization even with warnings"
+            echo "  --no-confirmation    Skip user confirmation prompt"
+            echo "  --help, -h          Show this help message"
+            echo ""
+            echo "Examples:"
+            echo "  $0                                    # Interactive mode"
+            echo "  $0 --force                           # Force mode with confirmation"
+            echo "  $0 --no-confirmation                 # Auto mode without force"
+            echo "  $0 --force --no-confirmation         # Fully automated mode"
+            exit 0
+            ;;
         *)
             echo -e "${RED}Unknown option: $1${NC}"
-            echo "Usage: $0 [--force] [--no-confirmation]"
+            echo "Usage: $0 [--force] [--no-confirmation] [--help]"
             exit 1
             ;;
     esac
@@ -84,7 +99,12 @@ fi
 # Step 3: Archive project artifacts
 echo -e "${BLUE}[3/6]${NC} Archiving project artifacts..."
 TIMESTAMP=$(date +%Y%m%d_%H%M%S)
-ARCHIVE_DIR="/tmp/ai-agent-platform-archive-${TIMESTAMP}"
+# Use a more portable temp directory approach
+if [ -d "/tmp" ]; then
+    ARCHIVE_DIR="/tmp/ai-agent-platform-archive-${TIMESTAMP}"
+else
+    ARCHIVE_DIR="$(mktemp -d -t ai-agent-platform-archive-${TIMESTAMP}.XXXXXX)"
+fi
 mkdir -p "${ARCHIVE_DIR}"
 
 if [ -d ".git" ]; then
@@ -94,8 +114,14 @@ if [ -d ".git" ]; then
     echo -e "${GREEN}  ✓ Git history archived${NC}"
 fi
 
-# Copy key files
-cp -r . "${ARCHIVE_DIR}/project_snapshot" 2>/dev/null || true
+# Copy key files excluding sensitive directories
+mkdir -p "${ARCHIVE_DIR}/project_snapshot"
+if command -v rsync &> /dev/null; then
+    rsync -av --exclude='.git' --exclude='node_modules' --exclude='.env' --exclude='*.key' --exclude='*.pem' . "${ARCHIVE_DIR}/project_snapshot/" 2>/dev/null || true
+else
+    # Fallback to tar if rsync is not available
+    tar --exclude='.git' --exclude='node_modules' --exclude='.env' --exclude='*.key' --exclude='*.pem' -cf - . 2>/dev/null | (cd "${ARCHIVE_DIR}/project_snapshot" && tar -xf -) 2>/dev/null || true
+fi
 echo -e "${GREEN}  ✓ Project snapshot created at: ${ARCHIVE_DIR}${NC}"
 
 # Step 4: Generate finalization report
@@ -129,11 +155,15 @@ echo -e "${GREEN}  ✓ Finalization report generated${NC}"
 
 # Step 5: Clean up temporary resources
 echo -e "${BLUE}[5/6]${NC} Cleaning up temporary resources..."
-# Clean common temporary directories (if they exist)
-rm -rf /tmp/ai-agent-temp-* 2>/dev/null || true
-rm -rf .pytest_cache 2>/dev/null || true
-rm -rf __pycache__ 2>/dev/null || true
-rm -rf node_modules/.cache 2>/dev/null || true
+# Clean common temporary directories (if they exist) with safety checks
+if [ -d "/tmp" ]; then
+    # Only remove files matching our specific pattern and that we created
+    find /tmp -maxdepth 1 -name "ai-agent-temp-*" -type f -mtime +7 -delete 2>/dev/null || true
+fi
+# Clean project-specific cache directories
+[ -d ".pytest_cache" ] && rm -rf .pytest_cache 2>/dev/null || true
+[ -d "__pycache__" ] && rm -rf __pycache__ 2>/dev/null || true
+[ -d "node_modules/.cache" ] && rm -rf node_modules/.cache 2>/dev/null || true
 echo -e "${GREEN}  ✓ Temporary resources cleaned${NC}"
 
 # Step 6: Final verification

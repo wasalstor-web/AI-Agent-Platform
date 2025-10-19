@@ -21,7 +21,24 @@ echo ""
 
 # تنفيذ أمر الإغلاق (مثال)
 # Execute finalization command (example)
-./finalize_project.sh --force --no-confirmation
+
+# Check if finalize_project.sh exists and is executable
+FINALIZE_SCRIPT="./finalize_project.sh"
+if [ ! -f "${FINALIZE_SCRIPT}" ]; then
+    FINALIZE_SCRIPT="$(dirname "$0")/finalize_project.sh"
+fi
+
+if [ ! -f "${FINALIZE_SCRIPT}" ]; then
+    echo "❌ Error: finalize_project.sh not found"
+    exit 1
+fi
+
+if [ ! -x "${FINALIZE_SCRIPT}" ]; then
+    echo "⚠️  Making finalize_project.sh executable..."
+    chmod +x "${FINALIZE_SCRIPT}"
+fi
+
+"${FINALIZE_SCRIPT}" --force --no-confirmation
 
 echo ""
 echo "🎯 تم إرسال التوجيه. بانتظار تأكيد الإغلاق."
