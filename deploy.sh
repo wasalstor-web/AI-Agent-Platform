@@ -1,0 +1,1 @@
+Smart one-command deployment script for Hostinger VPS with auto-detection, interactive setup, full logging, backups, SSL, Nginx configuration, health checks and rollback capability
