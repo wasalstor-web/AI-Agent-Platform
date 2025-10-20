@@ -17,7 +17,7 @@ Automatically deploys the web interface to GitHub Pages on push to main branch.
 
 ### 2. Execute Hostinger Commands (`hostinger-commands.yml`) ⭐ NEW
 
-Complete integration with Hostinger server at 72.61.178.135:8000 for executing commands remotely.
+Complete integration with Hostinger server for executing commands remotely.
 
 **Triggers:**
 - **Manual Dispatch:** Execute any of the 9 command types on-demand
@@ -26,7 +26,7 @@ Complete integration with Hostinger server at 72.61.178.135:8000 for executing c
 
 **Supported Commands:**
 1. `file_create` - Create files on server
-2. `file_read` - Read files from server
+2. `file_read` - Read files from server ⚠️ Security Note: This command can read any accessible file. Ensure proper access controls and path restrictions are in place on the server.
 3. `file_update` - Update files on server
 4. `file_delete` - Delete files from server
 5. `service_restart` - Restart services (openwebui, nginx, ollama)
@@ -41,7 +41,7 @@ Complete integration with Hostinger server at 72.61.178.135:8000 for executing c
 - `scheduled-sync` - Scheduled backups and log viewing
 
 **Required Secrets:**
-- `HOSTINGER_SERVER` - Server address (default: 72.61.178.135:8000)
+- `HOSTINGER_SERVER` - Server address (format: `hostname:port` or `ip:port`)
 - `HOSTINGER_API_KEY` - API key for authentication
 
 **Setup:**
@@ -94,7 +94,7 @@ gh workflow run hostinger-commands.yml \
 
 ### Prerequisites
 - GitHub repository with Actions enabled
-- Hostinger server running at 72.61.178.135:8000 (for hostinger-commands workflow)
+- Hostinger server running with DL+ API endpoint
 - GitHub CLI installed (optional, for command-line usage)
 
 ### Configuration
@@ -160,7 +160,7 @@ echo "value" | gh secret set SECRET_NAME
 ```
 
 ### Connection Timeout
-- Verify server is running: `curl http://72.61.178.135:8000/api/health`
+- Verify server is running: `curl http://$HOSTINGER_SERVER/api/health`
 - Check firewall allows GitHub IPs
 - Verify API key is correct
 

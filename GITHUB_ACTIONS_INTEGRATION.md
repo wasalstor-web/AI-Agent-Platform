@@ -1,6 +1,6 @@
 # GitHub Actions Integration with Hostinger Server
 
-Complete guide for executing commands on Hostinger server (72.61.178.135:8000) from GitHub Actions.
+Complete guide for executing commands on Hostinger server from GitHub Actions.
 
 ## 🚀 Quick Start
 
@@ -15,7 +15,7 @@ Run the automated setup script:
 Or manually configure secrets in GitHub:
 - Go to: `Settings > Secrets and Variables > Actions`
 - Add secrets:
-  - `HOSTINGER_SERVER` = `72.61.178.135:8000`
+  - `HOSTINGER_SERVER` = `your-server-address:port` (e.g., `hostname:8000`)
   - `HOSTINGER_API_KEY` = Your API key
 
 ### 2. Trigger Workflow
@@ -244,7 +244,7 @@ The integration maintains a permanent connection through:
 
 ```bash
 # Set environment variables
-export HOSTINGER_SERVER="72.61.178.135:8000"
+export HOSTINGER_SERVER="your-server-address:port"
 export HOSTINGER_API_KEY="your-api-key"
 
 # Execute command
@@ -262,11 +262,11 @@ python3 github-commander.py
 Configure via environment variables:
 
 ```bash
-export HOSTINGER_SERVER="72.61.178.135:8000"     # Server address
-export HOSTINGER_API_KEY="your-api-key"          # API key
-export RETRY_LIMIT="5"                           # Number of retries
-export RETRY_DELAY="3"                           # Initial delay (seconds)
-export CONNECTION_TIMEOUT="30"                   # Request timeout (seconds)
+export HOSTINGER_SERVER="your-server-address:port"  # Server address
+export HOSTINGER_API_KEY="your-api-key"             # API key
+export RETRY_LIMIT="5"                              # Number of retries
+export RETRY_DELAY="3"                              # Initial delay (seconds)
+export CONNECTION_TIMEOUT="30"                      # Request timeout (seconds)
 ```
 
 ### Workflow Customization
@@ -340,7 +340,7 @@ Execution logs are automatically uploaded as artifacts:
 **Problem:** Cannot connect to Hostinger server
 
 **Solutions:**
-1. Verify server is running: `curl http://72.61.178.135:8000/api/health`
+1. Verify server is running: `curl http://$HOSTINGER_SERVER/api/health`
 2. Check firewall rules allow GitHub IPs
 3. Verify HOSTINGER_SERVER secret is correct
 4. Check server logs for errors
