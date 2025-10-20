@@ -21,19 +21,6 @@ from fastapi.responses import JSONResponse
 import httpx
 from datetime import datetime
 import uvicorn
-import sys
-from pathlib import Path
-
-# Add project root to path for importing DL+ agents
-sys.path.insert(0, str(Path(__file__).parent))
-
-# Import DL+ Agent Adapter
-try:
-    from dlplus.integration.openwebui_adapter import OpenWebUIAdapter
-    AGENTS_ENABLED = True
-except ImportError as e:
-    AGENTS_ENABLED = False
-    print(f"Warning: DL+ agents not available: {e}")
 
 # Configure logging
 logging.basicConfig(
@@ -54,15 +41,6 @@ class OpenWebUIIntegration:
         # API Credentials from problem statement
         self.jwt_token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImIxYTVmNTlkLTdhYjYtNGFkMC1hYjBlLWE5MzQ1MzA2NmUyMyIsImV4cCI6MTc2MzM4MTYyN30.lb3G5Z9Wj8cFRggiqeGPkMlthCP0yinIYjK6LMewwY8"
         self.api_key = "sk-3720ccd539704717ba9af3453500fe3c"
-        
-        # Initialize agent adapter if available
-        self.agent_adapter = None
-        if AGENTS_ENABLED:
-            try:
-                self.agent_adapter = OpenWebUIAdapter()
-                logger.info("🤖 DL+ Agents integrated successfully")
-            except Exception as e:
-                logger.warning(f"Failed to initialize agents: {e}")
         
         # OpenWebUI Configuration
         self.openwebui_url = os.getenv("OPENWEBUI_URL", "http://localhost:3000")
@@ -200,21 +178,6 @@ class OpenWebUIIntegration:
         Generate response using the model
         توليد الاستجابة باستخدام النموذج
         """
-        # If agent adapter is available, use it for intelligent processing
-        if self.agent_adapter:
-            try:
-                logger.info("🧠 Using DL+ Agent Adapter for intelligent processing")
-                response = await self.agent_adapter.process_message(
-                    message=message,
-                    model=model['id'],
-                    context=context
-                )
-                return response
-            except Exception as e:
-                logger.error(f"Error using agent adapter: {e}")
-                # Fall back to default response
-        
-        # Default response generation (fallback)
         # Arabic language detection
         is_arabic = any(ord(char) >= 0x0600 and ord(char) <= 0x06FF for char in message)
         
@@ -315,25 +278,6 @@ async def list_models():
         "models": models,
         "timestamp": datetime.now().isoformat()
     }
-
-
-@app.get("/api/agents")
-async def list_agents():
-    """List available DL+ agents"""
-    if integration.agent_adapter:
-        agents = integration.agent_adapter.get_available_agents()
-        return {
-            "success": True,
-            "count": len(agents),
-            "agents": agents,
-            "timestamp": datetime.now().isoformat()
-        }
-    else:
-        return {
-            "success": False,
-            "error": "DL+ agents not available",
-            "timestamp": datetime.now().isoformat()
-        }
 
 
 @app.post("/webhook/chat")
