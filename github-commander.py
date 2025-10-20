@@ -103,7 +103,7 @@ def send_command(command_type: str, payload: Dict[str, Any]) -> Optional[Dict[st
         except requests.exceptions.HTTPError as e:
             logging.error(f"✗ Attempt {attempt + 1} HTTP error: {e}")
             # Don't retry on 4xx errors (client errors)
-            if response.status_code < 500:
+            if hasattr(e, 'response') and e.response and e.response.status_code < 500:
                 logging.error("Client error - not retrying")
                 return None
         except requests.exceptions.RequestException as e:
