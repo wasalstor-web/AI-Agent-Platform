@@ -902,8 +902,8 @@
                             <div class="api-settings-content">
                                 <label for="api-endpoint" id="api-endpoint-label">نقطة نهاية API:</label>
                                 <input type="text" id="api-endpoint" class="api-input" 
-                                    value="http://localhost:8000/api/process" 
-                                    placeholder="http://localhost:8000/api/process">
+                                    value="http://72.61.178.135:3000/api/chat/completions" 
+                                    placeholder="http://72.61.178.135:3000/api/chat/completions">
                                 
                                 <label for="api-key" id="api-key-label">مفتاح API (اختياري):</label>
                                 <input type="password" id="api-key" class="api-input" 
@@ -947,8 +947,9 @@
         let currentLang = 'ar';
         let isConnected = false;
         let selectedModel = 'gpt-3.5-turbo';
-        let apiEndpoint = 'http://localhost:8000/api/process';
+        let apiEndpoint = 'http://72.61.178.135:3000/api/chat/completions';
         let apiKey = '';
+        let chatHistory = [];
 
         // Load saved settings from localStorage
         function loadSettings() {
@@ -994,14 +995,19 @@
             statusIndicator.className = 'status-indicator';
             
             try {
-                // Test connection with a simple health check
-                const response = await fetch(apiEndpoint.replace('/api/process', '/api/health'), {
+                // Test connection with OpenWebUI models endpoint
+                const modelsEndpoint = apiEndpoint.replace('/api/chat/completions', '/api/models');
+                const response = await fetch(modelsEndpoint, {
                     method: 'GET',
-                    headers: apiKey ? { 'X-API-Key': apiKey } : {}
+                    headers: {
+                        'Accept': 'application/json',
+                        ...(apiKey ? { 'Authorization': `Bearer ${apiKey}` } : {})
+                    }
                 });
                 
                 if (response.ok) {
                     isConnected = true;
+                    chatHistory = []; // Reset chat history on new connection
                     statusIndicator.textContent = currentLang === 'ar' ? 
                         '🟢 متصل - ' + getModelName(selectedModel) : 
                         '🟢 Connected - ' + getModelName(selectedModel);
@@ -1012,7 +1018,7 @@
                         `Successfully connected to ${getModelName(selectedModel)}! You can now start chatting.`
                     );
                 } else {
-                    throw new Error('Connection failed');
+                    throw new Error(`Connection failed: ${response.status}`);
                 }
             } catch (error) {
                 isConnected = false;
@@ -1020,8 +1026,8 @@
                 statusIndicator.className = 'status-indicator error';
                 
                 addErrorMessage(currentLang === 'ar' ? 
-                    `فشل الاتصال بالنموذج. تأكد من تشغيل الخادم على ${apiEndpoint}` :
-                    `Failed to connect to model. Make sure the server is running at ${apiEndpoint}`
+                    `فشل الاتصال بـ OpenWebUI. تأكد من أن الخادم يعمل على ${apiEndpoint.replace('/api/chat/completions', '')}` :
+                    `Failed to connect to OpenWebUI. Make sure the server is running at ${apiEndpoint.replace('/api/chat/completions', '')}`
                 );
             }
             
@@ -1062,6 +1068,12 @@
             addMessage(message, 'user');
             input.value = '';
             
+            // Add to chat history
+            chatHistory.push({
+                role: 'user',
+                content: message
+            });
+            
             // Show typing indicator
             const typingId = addTypingIndicator();
             
@@ -1074,14 +1086,13 @@
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
-                        ...(apiKey ? { 'X-API-Key': apiKey } : {})
+                        'Accept': 'application/json',
+                        ...(apiKey ? { 'Authorization': `Bearer ${apiKey}` } : {})
                     },
                     body: JSON.stringify({
-                        command: message,
-                        context: {
-                            model: selectedModel,
-                            language: currentLang
-                        }
+                        model: selectedModel,
+                        messages: chatHistory,
+                        stream: false
                     })
                 });
                 
@@ -1089,9 +1100,29 @@
                 
                 if (response.ok) {
                     const data = await response.json();
-                    addMessage(data.response || data.message || 'No response', 'assistant');
+                    
+                    // Handle OpenWebUI response format
+                    let responseText = '';
+                    if (data.choices && data.choices.length > 0) {
+                        responseText = data.choices[0].message?.content || data.choices[0].text || 'No response';
+                    } else if (data.message) {
+                        responseText = data.message;
+                    } else if (data.response) {
+                        responseText = data.response;
+                    } else {
+                        responseText = JSON.stringify(data);
+                    }
+                    
+                    addMessage(responseText, 'assistant');
+                    
+                    // Add to chat history
+                    chatHistory.push({
+                        role: 'assistant',
+                        content: responseText
+                    });
                 } else {
-                    throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+                    const errorText = await response.text();
+                    throw new Error(`HTTP ${response.status}: ${errorText || response.statusText}`);
                 }
             } catch (error) {
                 removeTypingIndicator(typingId);
