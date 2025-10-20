@@ -113,6 +113,108 @@ After finalization, an archive is created in `/tmp/ai-agent-platform-archive-[TI
 - `--force` - Continue finalization even if warnings are detected
 - `--no-confirmation` - Skip user confirmation prompt
 
+## VPS Connection Check
+
+The platform includes comprehensive VPS connection verification tools.
+
+### Deploy Script (`deploy.sh`)
+
+A bilingual (Arabic/English) script for checking VPS connectivity:
+
+**Features:**
+- DNS resolution check
+- SSH connection test
+- HTTP/HTTPS connectivity verification
+- Response time measurement
+- Comprehensive port scanning (SSH, HTTP, HTTPS, databases)
+- Colored output for better readability
+- Configurable timeouts
+
+**Usage:**
+
+```bash
+# Basic usage with command line arguments
+./deploy.sh --host your-vps.com
+
+# With custom SSH settings
+./deploy.sh --host your-vps.com --user admin --port 2222
+
+# Using environment variables
+VPS_HOST=your-vps.com ./deploy.sh
+
+# Configure via .env file
+cp .env.example .env
+# Edit .env with your VPS details
+source .env
+./deploy.sh
+
+# Show help
+./deploy.sh --help
+```
+
+**Configuration Options:**
+
+- `--host, -h` : VPS hostname or IP address
+- `--user, -u` : SSH username (default: root)
+- `--port, -p` : SSH port (default: 22)
+- `--timeout, -t` : Connection timeout in seconds (default: 5)
+
+**Environment Variables:**
+
+- `VPS_HOST` : Server hostname
+- `VPS_USER` : SSH username
+- `VPS_PORT` : SSH port
+- `HTTP_PORT` : HTTP port (default: 80)
+- `HTTPS_PORT` : HTTPS port (default: 443)
+- `TIMEOUT` : Connection timeout
+
+### Smart Deploy Script (`smart-deploy.sh`)
+
+Interactive menu-driven deployment tool with Arabic interface. The first option now integrates with the comprehensive VPS connection check.
+
+**Usage:**
+```bash
+./smart-deploy.sh
+```
+
+**Features:**
+1. Check deployment status (VPS connection check)
+2. Automated git pull deployment
+3. SSL certificate setup
+4. GitHub webhooks configuration
+5. Nginx configuration
+6. Backup system
+7. Log monitoring
+8. Performance checks
+9. Security scanning
+10. Rollback capability
+
+### Connection Check Output
+
+The VPS connection check provides detailed information:
+
+```
+✓ DNS Resolution: Shows IP address resolution
+✓ SSH Connection: Tests SSH connectivity
+✓ HTTP/HTTPS: Checks web server status
+✓ Response Time: Measures ping and HTTP response times
+✓ Port Scanning: Checks common service ports
+```
+
+**Output Example:**
+
+```
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  فحص شامل لاتصال VPS / Comprehensive VPS Connection Check
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+✓ DNS resolved: your-vps.com → 123.456.789.0
+✓ SSH connection successful
+✓ HTTP server is responding
+✓ Average response time: 45ms
+✓ Port 22 is open
+```
+
 ## Security and Best Practices
 
 Following the platform's security guidelines:
@@ -121,6 +223,15 @@ Following the platform's security guidelines:
 - ✅ Resource cleanup automated
 - ✅ Comprehensive logging and reporting
 - ✅ Clear user communication in multiple languages
+- ✅ Secure VPS connection verification
+- ✅ Environment variable support for sensitive configuration
+
+**Security Notes:**
+- Never commit `.env` file to the repository
+- Use SSH keys for authentication instead of passwords
+- Configure firewall rules to restrict SSH access
+- Use non-standard SSH ports when possible
+- Keep SSH and web server software up to date
 
 ## License
 
