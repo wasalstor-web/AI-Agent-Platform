@@ -73,7 +73,10 @@ The site is automatically deployed when changes are pushed to the main branch.
 You can also open `index.html` in your web browser locally:
 
 ```bash
-# Open directly in browser
+# Quick test (opens browser automatically)
+./test-local.sh
+
+# Or open directly in browser
 open index.html  # macOS
 xdg-open index.html  # Linux
 start index.html  # Windows
