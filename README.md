@@ -117,6 +117,8 @@ After finalization, an archive is created in `/tmp/ai-agent-platform-archive-[TI
 
 The platform includes a comprehensive deployment system with support for multiple deployment targets.
 
+📖 **[Quick Reference Guide](DEPLOYMENT.md)** - Essential deployment commands and troubleshooting
+
 ### Deployment Script (`full-deploy.sh`)
 
 A production-ready deployment script with the following features:

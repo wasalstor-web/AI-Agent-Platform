@@ -72,3 +72,9 @@ Desktop.ini
 # Project specific
 ai-agent-platform-archive-*
 finalization_report*.txt
+
+# Deployment
+.last_backup
+deploy_*.log
+backup_*.tar.gz
+
