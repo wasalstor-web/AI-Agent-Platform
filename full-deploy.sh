@@ -7,7 +7,8 @@
 REPO_URL="https://github.com/wasalstor-web/AI-Agent-Platform.git"
 DEPLOY_PATH="/var/www/html/AI-Agent-Platform"
 NGINX_CONF="/etc/nginx/sites-available/ai-agent-platform"
-DOMAIN="your-domain.com"  # قم بتغيير هذا بنطاقك
+DOMAIN="${DOMAIN:-your-domain.com}"  # قم بتغيير هذا بنطاقك أو تعيينه كمتغير بيئة
+EMAIL="${EMAIL:-your-email@domain.com}"  # قم بتعيين البريد الإلكتروني كمتغير بيئة
 
 # دالة عرض الحالة
 show_status() {
@@ -25,6 +26,15 @@ show_error() {
     exit 1
 }
 
+# التحقق من تعيين المتغيرات المطلوبة
+if [ "$DOMAIN" = "your-domain.com" ]; then
+    show_error "يجب تعيين متغير DOMAIN قبل التشغيل. مثال: export DOMAIN=example.com"
+fi
+
+if [ "$EMAIL" = "your-email@domain.com" ]; then
+    show_error "يجب تعيين متغير EMAIL قبل التشغيل. مثال: export EMAIL=admin@example.com"
+fi
+
 # التحقق من صلاحيات المستخدم
 if [ "$EUID" -ne 0 ]; then
     show_error "يجب تشغيل السكربت كمستخدم root"
@@ -32,8 +42,9 @@ fi
 
 # تحديث النظام وتثبيت المتطلبات
 show_status "جاري تحديث النظام وتثبيت المتطلبات..."
-apt update && apt upgrade -y
-apt install -y nginx certbot python3-certbot-nginx git
+apt update || show_error "فشل تحديث قائمة الحزم"
+apt upgrade -y || show_error "فشل في ترقية النظام"
+apt install -y nginx certbot python3-certbot-nginx git || show_error "فشل في تثبيت المتطلبات"
 
 # إنشاء مجلد النشر
 show_status "جاري إعداد مجلد النشر..."
@@ -73,11 +84,12 @@ EOF
 
 # إنشاء رابط رمزي وإعادة تحميل Nginx
 ln -sf $NGINX_CONF /etc/nginx/sites-enabled/
-nginx -t && systemctl reload nginx
+nginx -t || show_error "فشل في تكوين Nginx"
+systemctl reload nginx || show_error "فشل في إعادة تحميل Nginx"
 
 # إعداد SSL
 show_status "جاري إعداد شهادة SSL..."
-certbot --nginx -d $DOMAIN --non-interactive --agree-tos --email your-email@domain.com
+certbot --nginx -d $DOMAIN --non-interactive --agree-tos --email $EMAIL || show_error "فشل في إعداد شهادة SSL"
 
 # إعداد النسخ الاحتياطي
 show_status "جاري إعداد نظام النسخ الاحتياطي..."
@@ -95,7 +107,8 @@ EOF
 chmod +x /usr/local/bin/backup-ai-platform
 
 # إضافة مهمة النسخ الاحتياطي لـ cron
-(crontab -l 2>/dev/null; echo "0 2 * * * /usr/local/bin/backup-ai-platform") | crontab -
+CRON_JOB="0 2 * * * /usr/local/bin/backup-ai-platform"
+(crontab -l 2>/dev/null | grep -v "backup-ai-platform"; echo "$CRON_JOB") | crontab - || show_error "فشل في إضافة مهمة cron"
 
 # تعيين الصلاحيات
 show_status "جاري ضبط الصلاحيات..."
@@ -104,8 +117,10 @@ chmod -R 755 $DEPLOY_PATH
 
 # فحص الأمان
 show_status "جاري إجراء فحص الأمان..."
+# السماح بـ SSH أولاً لتجنب قطع الاتصال
+ufw allow OpenSSH || ufw allow 22/tcp
 ufw allow 'Nginx Full'
-ufw enable
+echo "y" | ufw enable
 
 # إظهار معلومات النشر
 show_success "تم نشر المنصة بنجاح!"
