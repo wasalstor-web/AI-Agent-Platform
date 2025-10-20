@@ -87,3 +87,8 @@ ssh_config
 docker-compose.override.yml
 .docker/
 backup-*/
+
+# Test results
+test-results-*.json
+test-results-*.html
+*.test.log
