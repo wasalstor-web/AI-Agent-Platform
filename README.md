@@ -165,6 +165,9 @@ After installation, OpenWebUI will be available at:
 - `http://your-vps-ip:3000`
 - Or via your configured domain if Nginx is setup
 
+**📖 Complete Documentation:**
+For detailed information about OpenWebUI integration, installation, configuration, troubleshooting, and advanced usage, see [OPENWEBUI.md](OPENWEBUI.md)
+
 ## VPS Connection Check
 
 The platform includes comprehensive VPS connection verification tools with OpenWebUI service checks.
