@@ -1,10 +1,17 @@
 # AI-Agent-Platform
 
-An AI Agent Platform infrastructure project with automated finalization capabilities.
+An AI Agent Platform infrastructure project with automated finalization capabilities and OpenWebUI integration.
+
+## 🚀 Quick Start
+
+**The platform is live and accessible at:**
+**🌐 [https://wasalstor-web.github.io/AI-Agent-Platform/](https://wasalstor-web.github.io/AI-Agent-Platform/)**
+
+For complete deployment information, see **[DEPLOYMENT.md](DEPLOYMENT.md)**.
 
 ## Overview
 
-This project provides a platform for building, deploying, and managing AI agents with built-in project lifecycle management tools.
+This project provides a platform for building, deploying, and managing AI agents with built-in project lifecycle management tools and OpenWebUI integration for running large language models.
 
 ## Web Interface
 
@@ -45,6 +52,14 @@ The web interface includes:
 - Command examples with copy-to-clipboard functionality
 - Quick action buttons for GitHub repository and documentation
 - Benefits and security information
+
+## Deployment Status
+
+✅ **OpenWebUI has been successfully added and integrated**
+✅ **Project is deployed and accessible via GitHub Pages**
+✅ **Temporary domain active:** https://wasalstor-web.github.io/AI-Agent-Platform/
+
+📖 **For complete deployment information, see [DEPLOYMENT.md](DEPLOYMENT.md)**
 
 ## Project Finalization
 
