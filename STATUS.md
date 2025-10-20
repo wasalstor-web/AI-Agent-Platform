@@ -57,7 +57,7 @@ https://wasalstor-web.github.io/AI-Agent-Platform/
 - ✅ آمن (HTTPS) / Secure (HTTPS)
 - ✅ سريع (GitHub CDN) / Fast (GitHub CDN)
 - ✅ مجاني تماماً / Completely free
-- ✅ يتحدث تلقائياً مع كل تغيير / Auto-updates with changes
+- ✅ يُحدث تلقائياً مع كل تغيير / Auto-updates with changes
 - ✅ دومين مؤقت دائم / Permanent temporary domain
 
 ### دومينات إضافية ممكنة / Additional Possible Domains
