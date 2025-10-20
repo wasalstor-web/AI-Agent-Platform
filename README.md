@@ -19,7 +19,8 @@ The platform now includes DL+, a complete Arabic-first AI system that integrates
 
 📖 **Key Documentation:**
 - **[Complete DL+ Documentation](DLPLUS_README.md)**
-- **[Hostinger Command Execution Guide](HOSTINGER_COMMAND_EXECUTION.md)** ⭐ NEW!
+- **[GitHub Actions Integration](GITHUB_ACTIONS_INTEGRATION.md)** ⭐ NEW!
+- **[Hostinger Command Execution Guide](HOSTINGER_COMMAND_EXECUTION.md)**
 - **[Command Examples](examples/hostinger_command_examples.py)**
 
 ---

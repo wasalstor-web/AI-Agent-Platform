@@ -1,7 +1,23 @@
 # GITHUB_INTEGRATION_GUIDE.md
 
+## ⭐ NEW: Complete GitHub Actions Integration
+
+**For the complete GitHub Actions integration with Hostinger server at 72.61.178.135:8000, see:**
+### **[GitHub Actions Integration Guide →](GITHUB_ACTIONS_INTEGRATION.md)**
+
+This includes:
+- ✅ Workflow for executing 9 command types
+- ✅ Setup script for configuring secrets
+- ✅ Updated commander script with retry logic
+- ✅ Permanent connection for continuous command execution
+- ✅ Comprehensive documentation and examples
+
+---
+
+# Basic GitHub Integration Guide
+
 ## Introduction
-This guide provides complete documentation on how to use GitHub Actions to send commands to your Hostinger server.
+This guide provides basic documentation on how to use GitHub Actions to send commands to your Hostinger server.
 
 ## إعداد GitHub Actions مع Hostinger
 هذا الدليل يوفر توثيقًا كاملاً حول كيفية استخدام GitHub Actions لإرسال الأوامر إلى خادم Hostinger.
