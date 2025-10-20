@@ -113,6 +113,89 @@ After finalization, an archive is created in `/tmp/ai-agent-platform-archive-[TI
 - `--force` - Continue finalization even if warnings are detected
 - `--no-confirmation` - Skip user confirmation prompt
 
+## Deployment
+
+The platform includes comprehensive deployment automation for Hostinger VPS.
+
+### Production Deployment Script (`final-deploy.sh`)
+
+Full automation script for Hostinger VPS deployment with:
+
+**Features:**
+- ✅ Complete VPS setup and configuration
+- ✅ Nginx web server installation and configuration
+- ✅ Automatic SSL certificate with Let's Encrypt
+- ✅ SSL auto-renewal (twice daily)
+- ✅ Automated backup system (daily at 2 AM)
+- ✅ Deployment status monitoring (every 15 minutes)
+- ✅ Firewall configuration (UFW)
+- ✅ Security headers and best practices
+- ✅ Comprehensive logging and reporting
+
+**Configuration:**
+- User: wasalstor-web
+- Timestamp: 2025-10-20 04:00:22
+- Automated monitoring and maintenance
+
+**Usage:**
+```bash
+# Run with sudo (requires root access)
+sudo ./final-deploy.sh
+```
+
+The script will:
+1. Install required dependencies (Nginx, Certbot, etc.)
+2. Configure firewall rules
+3. Set up Nginx with security headers
+4. Install SSL certificate from Let's Encrypt
+5. Configure automatic SSL renewal
+6. Set up daily backup system (30-day retention)
+7. Configure status monitoring
+8. Generate comprehensive deployment report
+
+**Automated Tasks:**
+- SSL renewal: Runs twice daily (midnight and noon)
+- Backups: Daily at 2 AM with 30-day retention
+- Monitoring: Status checks every 15 minutes
+
+**Log Files:**
+All logs are stored in `/var/log/AI-Agent-Platform/`:
+- `deployment_[timestamp].log` - Deployment process log
+- `nginx_access.log` - Nginx access log
+- `nginx_error.log` - Nginx error log
+- `backup_cron.log` - Backup execution log
+- `monitoring.log` - Status monitoring log
+- `ssl_renewal.log` - SSL renewal log
+
+**Status Monitoring:**
+Real-time status available at: `/var/log/AI-Agent-Platform/status.json`
+
+Contains:
+- Nginx service status
+- SSL certificate expiry
+- Disk usage
+- HTTP status code
+- Overall deployment health
+
+### Smart Deploy Script (`smart-deploy.sh`)
+
+Interactive deployment menu in Arabic with options for:
+1. Deployment status checking
+2. Git pull automation
+3. SSL certificate setup
+4. GitHub webhooks configuration
+5. Nginx configuration
+6. Backup system
+7. Log monitoring
+8. Performance checks
+9. Security scanning
+10. Rollback capability
+
+**Usage:**
+```bash
+./smart-deploy.sh
+```
+
 ## Security and Best Practices
 
 Following the platform's security guidelines:
@@ -121,6 +204,10 @@ Following the platform's security guidelines:
 - ✅ Resource cleanup automated
 - ✅ Comprehensive logging and reporting
 - ✅ Clear user communication in multiple languages
+- ✅ Automated SSL certificate management
+- ✅ Security headers configured
+- ✅ Firewall rules implemented
+- ✅ Regular backups with retention policy
 
 ## License
 
