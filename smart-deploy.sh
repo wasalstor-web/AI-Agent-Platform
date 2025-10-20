@@ -12,7 +12,8 @@ display_menu() {
     echo "7) مراقبة السجلات"
     echo "8) فحص الأداء"
     echo "9) فحص الأمان"
-    echo "10) العودة"
+    echo "10) إدارة OpenWebUI"
+    echo "11) العودة"
 }
 
 # Function to check deployment status
@@ -103,6 +104,30 @@ rollback() {
     # Add your rollback commands here
 }
 
+# Function for OpenWebUI management
+manage_openwebui() {
+    echo "إدارة OpenWebUI / Managing OpenWebUI..."
+    echo ""
+    
+    # Check if setup-openwebui.sh exists
+    if [ -f "./setup-openwebui.sh" ]; then
+        # Make it executable if needed
+        chmod +x ./setup-openwebui.sh
+        
+        # Run the OpenWebUI management script
+        ./setup-openwebui.sh
+    else
+        echo "✗ ملف setup-openwebui.sh غير موجود"
+        echo "✗ setup-openwebui.sh script not found"
+        echo ""
+        echo "يرجى التأكد من وجود ملف setup-openwebui.sh في نفس المجلد"
+        echo "Please ensure setup-openwebui.sh exists in the same directory"
+    fi
+    
+    echo ""
+    read -p "اضغط Enter للمتابعة / Press Enter to continue..."
+}
+
 # Main program loop
 while true; do
     display_menu
@@ -117,7 +142,8 @@ while true; do
         7) monitor_logs ;; 
         8) performance_checks ;; 
         9) security_scanning ;; 
-        10) rollback ;; 
+        10) manage_openwebui ;;
+        11) echo "إنهاء... / Exiting..."; exit 0 ;; 
         *) echo "خيار غير صالح. حاول مرة أخرى." ;;
     esac
 done

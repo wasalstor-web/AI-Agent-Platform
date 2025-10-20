@@ -81,3 +81,9 @@ finalization_report*.txt
 *.pem
 *.crt
 ssh_config
+
+# OpenWebUI and Docker
+/opt/openwebui/
+docker-compose.override.yml
+.docker/
+backup-*/
