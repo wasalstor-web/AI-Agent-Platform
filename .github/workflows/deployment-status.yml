@@ -1,0 +1,110 @@
+name: Deployment Status Check
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+  schedule:
+    # Run every 6 hours
+    - cron: '0 */6 * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  deployment-status:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      
+      - name: Make deployment script executable
+        run: chmod +x full-deploy.sh
+      
+      - name: Check deployment status
+        id: status
+        run: |
+          echo "Running deployment status check..."
+          ./full-deploy.sh --status
+          
+      - name: Check if GitHub Pages is enabled
+        id: pages-check
+        run: |
+          if [ -f "index.html" ]; then
+            echo "pages_ready=true" >> $GITHUB_OUTPUT
+            echo "✓ GitHub Pages content detected"
+          else
+            echo "pages_ready=false" >> $GITHUB_OUTPUT
+            echo "⚠ No index.html found"
+          fi
+      
+      - name: Verify required files
+        run: |
+          echo "Checking required deployment files..."
+          required_files=(
+            "README.md"
+            "full-deploy.sh"
+            "index.html"
+            ".github/workflows/deploy-pages.yml"
+          )
+          
+          missing_files=()
+          for file in "${required_files[@]}"; do
+            if [ -f "$file" ]; then
+              echo "✓ Found: $file"
+            else
+              echo "✗ Missing: $file"
+              missing_files+=("$file")
+            fi
+          done
+          
+          if [ ${#missing_files[@]} -gt 0 ]; then
+            echo "⚠ Warning: Some required files are missing"
+            echo "Missing files: ${missing_files[*]}"
+          else
+            echo "✓ All required files present"
+          fi
+      
+      - name: Check deployment script syntax
+        run: |
+          echo "Verifying deployment script syntax..."
+          bash -n full-deploy.sh
+          echo "✓ Deployment script syntax is valid"
+      
+      - name: Test deployment script help
+        run: |
+          echo "Testing deployment script help..."
+          ./full-deploy.sh --help
+          echo "✓ Deployment script help is working"
+      
+      - name: Deployment Status Summary
+        if: always()
+        run: |
+          echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+          echo "Deployment Status Summary"
+          echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+          echo "Repository: ${{ github.repository }}"
+          echo "Branch: ${{ github.ref_name }}"
+          echo "Commit: ${{ github.sha }}"
+          echo "Workflow: ${{ github.workflow }}"
+          echo "Run Number: ${{ github.run_number }}"
+          echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+          
+          if [ "${{ steps.pages-check.outputs.pages_ready }}" = "true" ]; then
+            echo "✓ Deployment status: READY"
+            echo "✓ GitHub Pages content is available"
+          else
+            echo "⚠ Deployment status: INCOMPLETE"
+            echo "⚠ Some deployment components may be missing"
+          fi
+      
+      - name: Upload deployment logs
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: deployment-status-logs
+          path: /tmp/deploy_*.log
+          retention-days: 7
