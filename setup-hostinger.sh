@@ -62,7 +62,7 @@ echo -e "${GREEN}Environment file created. Please edit .env with your settings.$
 # Create FastAPI application
 echo -e "${YELLOW}Creating FastAPI application...${NC}"
 cat > main.py << 'EOF'
-from fastapi import FastAPI, HTTPException, Header
+from fastapi import FastAPI, HTTPException, Header, Depends
 from typing import Optional
 import os
 from dotenv import load_dotenv
