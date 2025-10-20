@@ -18,7 +18,35 @@ display_menu() {
 # Function to check deployment status
 check_deployment() {
     echo "التحقق من حالة النشر..."
-    # Add your curl command here
+    echo "Checking deployment status..."
+    echo ""
+    
+    # Check if VPS_HOST is configured
+    if [ -z "$VPS_HOST" ]; then
+        echo "⚠ لم يتم تكوين عنوان VPS"
+        echo "⚠ VPS host not configured"
+        echo ""
+        read -p "أدخل عنوان VPS / Enter VPS host: " VPS_HOST
+        export VPS_HOST
+    fi
+    
+    # Check if deploy.sh exists and is executable
+    if [ -f "./deploy.sh" ]; then
+        # Make it executable if needed
+        chmod +x ./deploy.sh
+        
+        # Run the comprehensive VPS check
+        ./deploy.sh
+    else
+        echo "✗ ملف deploy.sh غير موجود"
+        echo "✗ deploy.sh script not found"
+        echo ""
+        echo "يرجى التأكد من وجود ملف deploy.sh في نفس المجلد"
+        echo "Please ensure deploy.sh exists in the same directory"
+    fi
+    
+    echo ""
+    read -p "اضغط Enter للمتابعة / Press Enter to continue..."
 }
 
 # Function for automated git pull deployment

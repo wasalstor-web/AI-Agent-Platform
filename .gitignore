@@ -72,3 +72,12 @@ Desktop.ini
 # Project specific
 ai-agent-platform-archive-*
 finalization_report*.txt
+
+# VPS Configuration (sensitive)
+.env
+.env.local
+.env.*.local
+*.key
+*.pem
+*.crt
+ssh_config
