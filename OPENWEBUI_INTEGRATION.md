@@ -7,6 +7,13 @@
 
 The AI Agent Platform now integrates directly with OpenWebUI instances, allowing you to interact with AI models through a beautiful web interface. The platform is pre-configured to work with an OpenWebUI instance at `http://72.61.178.135:3000/`.
 
+> **⚠️ Security Note**: The IP address `72.61.178.135:3000` is hardcoded as requested. In production environments, you should:
+> - Replace this with your own OpenWebUI server address
+> - Use HTTPS for secure communication
+> - Configure proper CORS settings
+> - Use API keys for authentication when available
+> - Consider using environment variables or a configuration file for sensitive information
+
 ### Features
 
 1. **Direct OpenWebUI Connection**
@@ -142,6 +149,13 @@ Expected response from OpenWebUI:
 ### نظرة عامة
 
 تتكامل منصة وكيل الذكاء الاصطناعي الآن مباشرةً مع نسخ OpenWebUI، مما يتيح لك التفاعل مع نماذج الذكاء الاصطناعي من خلال واجهة ويب جميلة. المنصة مُعدة مسبقًا للعمل مع نسخة OpenWebUI على `http://72.61.178.135:3000/`.
+
+> **⚠️ ملاحظة أمنية**: عنوان IP `72.61.178.135:3000` مُعين مسبقًا كما هو مطلوب. في بيئات الإنتاج، يجب عليك:
+> - استبدال هذا بعنوان خادم OpenWebUI الخاص بك
+> - استخدام HTTPS للاتصال الآمن
+> - تكوين إعدادات CORS المناسبة
+> - استخدام مفاتيح API للمصادقة عند توفرها
+> - النظر في استخدام متغيرات البيئة أو ملف تكوين للمعلومات الحساسة
 
 ### الميزات
 
@@ -302,10 +316,22 @@ Expected response from OpenWebUI:
 
 ### Security Considerations
 
-1. **API Keys**: Store API keys securely in browser localStorage
+1. **API Keys**: 
+   - API keys are stored in browser localStorage for convenience
+   - ⚠️ **Warning**: localStorage is accessible via JavaScript and persists across sessions
+   - For sensitive environments, consider using sessionStorage (cleared on tab close)
+   - Never share API keys or commit them to version control
+   
 2. **HTTPS**: Use HTTPS in production to encrypt data in transit
+
 3. **CORS**: Configure OpenWebUI CORS settings appropriately
+
 4. **Input Validation**: All user inputs are validated before sending to API
+
+5. **IP Address Configuration**:
+   - The default IP `72.61.178.135:3000` should be changed to your own server
+   - Use the API Settings to configure your own OpenWebUI instance
+   - In production, use domain names with SSL certificates instead of IP addresses
 
 ### Browser Compatibility
 
@@ -316,9 +342,10 @@ Expected response from OpenWebUI:
 
 ### Performance
 
-- Chat history is stored in memory (cleared on page refresh)
+- Chat history is stored in memory (cleared on page refresh or reconnection)
+- ⚠️ **Note**: Context persistence is limited to the current session - refreshing the page will clear chat history
 - API requests use `fetch` API with async/await
-- No caching of responses (ensures fresh data)
+- No caching of responses (ensures fresh data from the model)
 
 ---
 
