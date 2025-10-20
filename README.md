@@ -53,6 +53,28 @@ The platform now includes DL+, a complete Arabic-first AI system that integrates
 **The platform is live and accessible at:**
 **🌐 [https://wasalstor-web.github.io/AI-Agent-Platform/](https://wasalstor-web.github.io/AI-Agent-Platform/)**
 
+### ⚡ Instant Deployment (NEW!)
+
+Deploy OpenWebUI with DL+ Backend in seconds:
+
+```bash
+# 1. Configure your deployment
+cp .env.instant-deploy.example .env.instant-deploy
+# Edit .env.instant-deploy with your secure keys
+
+# 2. Run instant deployment
+./quick-deploy-openwebui.sh
+```
+
+**📖 [Complete Quick Deploy Guide](QUICK_DEPLOY_GUIDE.md)**
+
+**Features:**
+- ✅ One-command deployment
+- ✅ Secure key management via environment variables
+- ✅ Integrated DL+ Backend + OpenWebUI
+- ✅ Automatic dashboard creation
+- ✅ No hardcoded credentials
+
 ### 💬 Interactive Chat Interface
 
 The platform now features a **live chat interface** where you can directly communicate with AI models:
