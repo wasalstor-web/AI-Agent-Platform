@@ -1,0 +1,69 @@
+version: '3.8'
+
+services:
+  # Supreme Agent API Service
+  supreme-agent:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: supreme-agent-api
+    restart: unless-stopped
+    ports:
+      - "5000:5000"    # API Server
+      - "8080:8080"    # Web Interface
+      - "11434:11434"  # Ollama
+    environment:
+      - OLLAMA_HOST=http://localhost:11434
+      - API_HOST=0.0.0.0
+      - API_PORT=5000
+      - WEB_PORT=8080
+      - SUPREME_MODEL=supreme-executor
+    volumes:
+      - ./models:/app/models
+      - ollama_data:/root/.ollama
+      - agent_logs:/app/logs
+      - agent_data:/app/data
+    networks:
+      - supreme-network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:5000/api/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+  # OpenWebUI (Optional)
+  openwebui:
+    image: ghcr.io/open-webui/open-webui:latest
+    container_name: supreme-openwebui
+    restart: unless-stopped
+    ports:
+      - "3000:8080"
+    environment:
+      - OLLAMA_API_BASE_URL=http://supreme-agent:11434
+      - WEBUI_SECRET_KEY=${WEBUI_SECRET_KEY:-change-me-to-a-secure-key}
+      - WEBUI_AUTH=true
+    volumes:
+      - openwebui_data:/app/backend/data
+    networks:
+      - supreme-network
+    depends_on:
+      - supreme-agent
+    profiles:
+      - with-openwebui
+
+# Volumes
+volumes:
+  ollama_data:
+    driver: local
+  openwebui_data:
+    driver: local
+  agent_logs:
+    driver: local
+  agent_data:
+    driver: local
+
+# Networks
+networks:
+  supreme-network:
+    driver: bridge

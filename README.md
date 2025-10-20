@@ -1,17 +1,179 @@
 # AI-Agent-Platform
 
-An AI Agent Platform infrastructure project with automated finalization capabilities and OpenWebUI integration.
+An AI Agent Platform infrastructure project with **Supreme Agent** - a comprehensive, bilingual AI assistant with advanced capabilities for chat, command execution, file analysis, and code generation.
 
 ## 🚀 Quick Start
 
-**The platform is live and accessible at:**
+### Online Demo
 **🌐 [https://wasalstor-web.github.io/AI-Agent-Platform/](https://wasalstor-web.github.io/AI-Agent-Platform/)**
+
+### One-Command Installation
+```bash
+./scripts/quick-start.sh
+```
+
+This will install Supreme Agent, start the API server, and launch the web interface.
 
 For complete deployment information, see **[DEPLOYMENT.md](DEPLOYMENT.md)**.
 
+## 🤖 Supreme Agent
+
+Supreme Agent (الوكيل الأعلى) is an integrated AI system that combines multiple capabilities:
+
+- 💬 **Intelligent Chat**: Natural bilingual (Arabic/English) conversations
+- ⚡ **Command Execution**: Execute any task or command
+- 📊 **File Analysis**: Comprehensive file and code analysis
+- 💻 **Code Generation**: Generate code in any programming language
+- 🎯 **Model Management**: Support for multiple AI models (llama3, aya, mistral, deepseek-coder, qwen2)
+- 🌐 **Modern Web UI**: Beautiful, responsive interface with dark/light themes
+- 🔗 **OpenWebUI Integration**: Seamless integration with OpenWebUI
+- 🐳 **Docker Support**: Easy deployment with Docker and Docker Compose
+
+### Quick Usage
+
+```bash
+# Chat with the agent
+supreme-agent chat "مرحباً! كيف يمكنني مساعدتك؟"
+
+# Execute a command
+supreme-agent execute "Create a Python script for data processing"
+
+# Analyze a file
+supreme-agent analyze-file script.py
+
+# Generate code
+supreme-agent generate-code "A REST API for user management" --lang python
+
+# Check system health
+supreme-agent health
+
+# List available models
+supreme-agent models
+```
+
+### Web Interface
+
+Open the modern web interface:
+```bash
+# Navigate to web directory
+cd web
+
+# Start web server
+python3 -m http.server 8080
+
+# Open http://localhost:8080 in your browser
+```
+
+The web interface includes:
+- Interactive chat with quick actions
+- Command execution panel
+- File analysis with upload support
+- Code generation with syntax highlighting
+- Model management dashboard
+- Conversation history with export
+- Settings with theme and language toggle
+
+### API Server
+
+Start the API server:
+```bash
+python3 api/server.py
+```
+
+Access the API at:
+- Main: http://localhost:5000
+- Docs: http://localhost:5000/api/docs
+- Health: http://localhost:5000/api/health
+
+See [docs/API.md](docs/API.md) for complete API documentation.
+
+### Docker Deployment
+
+```bash
+# Build and run with Docker Compose
+docker-compose up -d
+
+# With OpenWebUI
+docker-compose --profile with-openwebui up -d
+
+# Access services:
+# - Supreme Agent API: http://localhost:5000
+# - Web Interface: http://localhost:8080
+# - OpenWebUI: http://localhost:3000
+```
+
 ## Overview
 
-This project provides a platform for building, deploying, and managing AI agents with built-in project lifecycle management tools and OpenWebUI integration for running large language models.
+This project provides a comprehensive platform for building, deploying, and managing AI agents with built-in project lifecycle management tools and OpenWebUI integration for running large language models.
+
+## 🎯 Supreme Agent Features
+
+### Core Capabilities
+
+1. **Bilingual AI Assistant** (عربي/English)
+   - Natural conversations in Arabic and English
+   - Context-aware responses
+   - Continuous learning from interactions
+
+2. **Command Execution**
+   - Execute complex tasks and commands
+   - Generate scripts and automation tools
+   - Problem-solving assistance
+
+3. **File Analysis**
+   - Comprehensive code analysis
+   - Documentation review
+   - Security scanning
+   - Performance recommendations
+
+4. **Code Generation**
+   - Support for 20+ programming languages
+   - Clean, documented, production-ready code
+   - Best practices implementation
+   - Error handling and validation
+
+5. **Model Management**
+   - Multiple AI model support
+   - Custom model creation
+   - Model comparison and selection
+   - Performance optimization
+
+### Supported Models
+
+- **supreme-executor**: Custom bilingual model (Arabic/English) ⭐
+- **llama3**: General-purpose foundation model
+- **aya**: Multilingual specialist with excellent Arabic support
+- **mistral**: Fast and efficient model
+- **deepseek-coder**: Programming specialist
+- **qwen2**: Advanced model with long context
+
+See [docs/MODELS.md](docs/MODELS.md) for detailed model comparison and usage guide.
+
+### Architecture
+
+```
+┌─────────────────────────────────────────────────┐
+│                Supreme Agent                    │
+│                                                 │
+│  ┌──────────┐  ┌──────────┐  ┌──────────┐    │
+│  │   Web    │  │   API    │  │ CLI Tool │    │
+│  │    UI    │  │  Server  │  │          │    │
+│  └────┬─────┘  └────┬─────┘  └────┬─────┘    │
+│       │             │             │            │
+│       └─────────────┴─────────────┘            │
+│                     │                          │
+│            ┌────────▼────────┐                 │
+│            │  Supreme Agent  │                 │
+│            │    Core Class   │                 │
+│            └────────┬────────┘                 │
+│                     │                          │
+│            ┌────────▼────────┐                 │
+│            │     Ollama      │                 │
+│            │   (AI Models)   │                 │
+│            └─────────────────┘                 │
+│                                                 │
+└─────────────────────────────────────────────────┘
+```
 
 ## Web Interface
 
@@ -55,11 +217,140 @@ The web interface includes:
 
 ## Deployment Status
 
+✅ **Supreme Agent has been successfully integrated**
 ✅ **OpenWebUI has been successfully added and integrated**
 ✅ **Project is deployed and accessible via GitHub Pages**
 ✅ **Temporary domain active:** https://wasalstor-web.github.io/AI-Agent-Platform/
 
 📖 **For complete deployment information, see [DEPLOYMENT.md](DEPLOYMENT.md)**
+
+## Installation
+
+### Prerequisites
+
+- Ubuntu/Debian-based system (or macOS/Windows with WSL)
+- Python 3.8 or higher
+- 8GB+ RAM recommended
+- 20GB+ free disk space
+- Internet connection for model downloads
+
+### Quick Installation
+
+#### Method 1: One-Command Setup (Recommended)
+
+```bash
+./scripts/quick-start.sh
+```
+
+This script will:
+1. Install Ollama
+2. Download required AI models
+3. Create the supreme-executor custom model
+4. Install Python dependencies
+5. Start the API server
+6. Launch the web interface
+
+#### Method 2: Step-by-Step Installation
+
+```bash
+# 1. Install Supreme Agent
+./scripts/install-supreme-agent.sh
+
+# 2. Start API Server
+python3 api/server.py &
+
+# 3. Start Web Interface
+cd web && python3 -m http.server 8080 &
+
+# 4. (Optional) Integrate with OpenWebUI
+./scripts/integrate-openwebui.sh
+```
+
+#### Method 3: Docker Installation
+
+```bash
+# Build and run
+docker-compose up -d
+
+# Or with OpenWebUI
+docker-compose --profile with-openwebui up -d
+```
+
+### Manual Installation
+
+```bash
+# 1. Install Ollama
+curl -fsSL https://ollama.ai/install.sh | sh
+
+# 2. Start Ollama
+ollama serve &
+
+# 3. Pull models
+ollama pull llama3
+ollama pull aya
+ollama pull mistral
+ollama pull deepseek-coder
+ollama pull qwen2
+
+# 4. Create custom model
+cd models
+ollama create supreme-executor -f Modelfile
+
+# 5. Install Python dependencies
+pip3 install requests flask flask-cors
+
+# 6. Create supreme-agent command
+sudo ln -s $(pwd)/scripts/supreme_agent.py /usr/local/bin/supreme-agent
+sudo chmod +x /usr/local/bin/supreme-agent
+
+# 7. Start the API server
+python3 api/server.py &
+
+# 8. Start the web interface
+cd web && python3 -m http.server 8080 &
+```
+
+### Verify Installation
+
+```bash
+# Check health
+supreme-agent health
+
+# Test chat
+supreme-agent chat "Hello!"
+
+# List models
+supreme-agent models
+
+# Check API
+curl http://localhost:5000/api/health
+
+# Open web interface
+# Navigate to http://localhost:8080
+```
+
+## Documentation
+
+### Core Documentation
+
+- **[README.md](README.md)** - This file (main documentation)
+- **[docs/API.md](docs/API.md)** - Complete API reference with examples
+- **[docs/MODELS.md](docs/MODELS.md)** - AI models guide and comparison
+- **[DEPLOYMENT.md](DEPLOYMENT.md)** - Deployment guide
+- **[OPENWEBUI.md](OPENWEBUI.md)** - OpenWebUI integration guide
+
+### Configuration Files
+
+- **config/settings.json** - Main configuration
+- **.env.example** - Environment variables template
+- **models/Modelfile** - Custom model definition
+
+### Scripts
+
+- **scripts/install-supreme-agent.sh** - Installation script
+- **scripts/quick-start.sh** - One-command setup
+- **scripts/integrate-openwebui.sh** - OpenWebUI integration
+- **setup-openwebui.sh** - OpenWebUI setup
 
 ## Project Finalization
 

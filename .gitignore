@@ -65,6 +65,13 @@ package-lock.json
 logs/
 *.log
 
+# Supreme Agent specific
+supreme_agent.log
+conversation_history.json
+/tmp/supreme-*.log
+/tmp/supreme-*.pid
+supreme-agent-backup-*.tar.gz
+
 # OS
 Thumbs.db
 Desktop.ini

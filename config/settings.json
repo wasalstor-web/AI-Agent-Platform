@@ -1,0 +1,68 @@
+{
+  "agent": {
+    "default_model": "supreme-executor",
+    "fallback_model": "aya",
+    "temperature": 0.7,
+    "max_tokens": 4096,
+    "timeout": 120
+  },
+  "ollama": {
+    "host": "http://localhost:11434",
+    "timeout": 120,
+    "models": [
+      "llama3",
+      "aya",
+      "mistral",
+      "deepseek-coder",
+      "qwen2",
+      "supreme-executor"
+    ]
+  },
+  "openwebui": {
+    "enabled": true,
+    "port": 3000,
+    "integration": "full",
+    "sync_models": true
+  },
+  "api": {
+    "host": "0.0.0.0",
+    "port": 5000,
+    "cors": true,
+    "auth": false,
+    "rate_limit": {
+      "enabled": false,
+      "requests_per_minute": 60
+    }
+  },
+  "web": {
+    "port": 8080,
+    "theme": "auto",
+    "language": "auto",
+    "features": {
+      "code_editor": true,
+      "file_upload": true,
+      "history": true,
+      "export": true
+    }
+  },
+  "hostinger": {
+    "domain": "your-domain.com",
+    "ssl": true,
+    "nginx": true,
+    "paths": {
+      "web": "/public_html",
+      "api": "/opt/supreme-agent"
+    }
+  },
+  "logging": {
+    "level": "INFO",
+    "file": "supreme_agent.log",
+    "max_size": "10MB",
+    "backup_count": 5
+  },
+  "security": {
+    "api_key_required": false,
+    "allowed_origins": ["*"],
+    "max_file_size": "10MB"
+  }
+}
