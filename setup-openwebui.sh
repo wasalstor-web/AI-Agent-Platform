@@ -164,7 +164,7 @@ install_openwebui() {
     print_info "جاري إنشاء مجلد OpenWebUI / Creating OpenWebUI directory..."
     mkdir -p /opt/openwebui
     cd /opt/openwebui || {
-        print_error "فشل الانتقال إلى مجلد OpenWebUI / Failed to change to OpenWebUI directory"
+        print_error "فشل في الانتقال إلى مجلد OpenWebUI / Failed to change to OpenWebUI directory"
         return 1
     }
     
