@@ -32,13 +32,17 @@ The platform now includes DL+, a complete Arabic-first AI system that integrates
 ### 💬 Interactive Chat Interface
 
 The platform now features a **live chat interface** where you can directly communicate with AI models:
+- **Pre-configured OpenWebUI Integration** - Connect to `http://72.61.178.135:3000/` out of the box
 - Select from 8 different AI models (GPT-4, Claude 3, LLaMA 3, Qwen Arabic, AraBERT, and more)
+- **Dynamic Model Loading** - Automatically fetches available models from your OpenWebUI instance
 - Real-time messaging with typing indicators
 - Bilingual support (Arabic/English)
 - Configurable API endpoints
 - Mobile-responsive design
+- **Direct OpenWebUI Access** - One-click button to open OpenWebUI interface
 
 **[Read the Chat Interface Guide →](CHAT_INTERFACE.md)**
+**[Read the OpenWebUI Integration Guide →](OPENWEBUI_INTEGRATION.md)** ⭐ NEW!
 
 For complete deployment information, see **[DEPLOYMENT.md](DEPLOYMENT.md)**.
 
