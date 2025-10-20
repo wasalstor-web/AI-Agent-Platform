@@ -85,7 +85,7 @@ async def validate_integration():
         result = await manager.inference('arabert', 'مرحباً')
         test(
             "Model inference",
-            result.get('success') == True,
+            result.get('success'),
             "Model can process Arabic text"
         )
         
@@ -131,7 +131,7 @@ async def validate_integration():
         )
         test(
             "Model-only execution",
-            result.get('success') == True,
+            result.get('success'),
             f"Mode: {result.get('mode')}"
         )
         
@@ -144,7 +144,7 @@ async def validate_integration():
         )
         test(
             "Collaborative execution",
-            result.get('success') == True,
+            result.get('success'),
             f"Models and agents worked together"
         )
         
@@ -158,7 +158,7 @@ async def validate_integration():
         )
         test(
             "Sequential execution",
-            result.get('success') == True,
+            result.get('success'),
             f"Executed {len(result.get('steps', []))} steps"
         )
         
@@ -169,7 +169,7 @@ async def validate_integration():
         
         test(
             "DLPlusCore initialization",
-            core.initialized == True,
+            core.initialized,
             "System fully initialized"
         )
         
@@ -195,7 +195,7 @@ async def validate_integration():
         result = await core.process_command('اكتب دالة بسيطة')
         test(
             "Command processing",
-            result.get('success') == True,
+            result.get('success'),
             "Arabic command processed successfully"
         )
         
@@ -222,7 +222,7 @@ async def validate_integration():
         # Note: Core has its own model manager instance
         test(
             "System shutdown",
-            core.initialized == False,
+            not core.initialized,
             "Core properly shut down"
         )
         
