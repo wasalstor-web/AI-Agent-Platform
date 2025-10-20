@@ -56,10 +56,10 @@ OPENWEBUI_ENABLED=true
 OPENWEBUI_PORT=3000
 OPENWEBUI_HOST=0.0.0.0
 OPENWEBUI_URL=http://localhost:3000
-OPENWEBUI_JWT_TOKEN=eyJhbGc...
-OPENWEBUI_API_KEY=sk-3720ccd...
+OPENWEBUI_JWT_TOKEN=your-jwt-token-here
+OPENWEBUI_API_KEY=your-api-key-here
 WEBHOOK_BASE_URL=https://wasalstor-web.github.io/AI-Agent-Platform
-FASTAPI_SECRET_KEY=sk-3720ccd...
+FASTAPI_SECRET_KEY=your-secret-key-here
 ```
 
 **Total Files:** 3  
