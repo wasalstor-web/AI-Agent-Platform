@@ -133,11 +133,18 @@ print_step "[5/6] نسخ معلومات النماذج / Backing up model inform
 
 if command -v ollama &> /dev/null; then
     # حفظ قائمة النماذج / Save model list
-    ollama list > "$BACKUP_DIR/ollama_models.txt" 2>/dev/null || true
-    print_success "قائمة النماذج / Model list saved"
+    if ollama list > "$BACKUP_DIR/ollama_models.txt" 2>&1; then
+        print_success "قائمة النماذج / Model list saved"
+    else
+        print_info "فشل حفظ قائمة النماذج / Failed to save model list"
+    fi
     
-    # حفظ معلومات supreme-executor / Save supreme-executor info
-    ollama show supreme-executor > "$BACKUP_DIR/supreme-executor-info.txt" 2>/dev/null || true
+    # حفظ معلومات supreme-executor إذا كان موجوداً / Save supreme-executor info if it exists
+    if ollama list 2>/dev/null | grep -q "supreme-executor"; then
+        if ollama show supreme-executor > "$BACKUP_DIR/supreme-executor-info.txt" 2>&1; then
+            print_success "معلومات supreme-executor / supreme-executor info saved"
+        fi
+    fi
 else
     print_info "Ollama غير متوفر / Ollama not available"
 fi
