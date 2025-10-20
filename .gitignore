@@ -87,3 +87,4 @@ ssh_config
 docker-compose.override.yml
 .docker/
 backup-*/
+openwebui-integration.py.backup

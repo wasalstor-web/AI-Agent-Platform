@@ -2,6 +2,35 @@
 
 An AI Agent Platform infrastructure project with automated finalization capabilities, OpenWebUI integration, and the **DL+ Unified Arabic Intelligence System**.
 
+## 🆕 NEW: Fully Automated OpenWebUI Setup with DL+ Agents
+
+**⚡ Zero-Configuration Installation - Just One Command!**
+
+```bash
+sudo bash auto-setup-openwebui.sh
+```
+
+This automated script installs and configures everything with **ZERO manual intervention**:
+
+✅ **Docker & Docker Compose** - Container infrastructure  
+✅ **Ollama** - AI model server  
+✅ **OpenWebUI** - Interactive web interface  
+✅ **DL+ Agents** - WebRetrievalAgent & CodeGeneratorAgent integrated  
+✅ **6 AI Models** - LLaMA 3, Qwen, Mistral, DeepSeek, Phi-3, AraBERT  
+✅ **All API Keys** - JWT & API key authentication configured  
+✅ **Auto-Start** - Systemd service for automatic startup  
+
+**📖 Quick Start Guides:**
+- **[Quick Start - Automated Setup](QUICKSTART_AUTO.md)** ⭐ NEW! **START HERE**
+- **[Complete Setup Documentation](AUTO_SETUP_README.md)** 📚 Comprehensive guide
+- **[Test Your Installation](test-integration.sh)** 🧪 Verify everything works
+
+**⏱️ Installation Time:** 15-45 minutes (mostly downloading models)  
+**💾 Required Space:** 50+ GB  
+**🧠 Required RAM:** 8+ GB (16 GB recommended)
+
+---
+
 ## 🆕 NEW: OpenWebUI Integration with Open-Source AI Models
 
 **دمج OpenWebUI مع نماذج الذكاء الصناعي المفتوحة المصدر**
