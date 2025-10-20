@@ -26,6 +26,17 @@ The platform now includes DL+, a complete Arabic-first AI system that integrates
 **The platform is live and accessible at:**
 **🌐 [https://wasalstor-web.github.io/AI-Agent-Platform/](https://wasalstor-web.github.io/AI-Agent-Platform/)**
 
+### 💬 Interactive Chat Interface
+
+The platform now features a **live chat interface** where you can directly communicate with AI models:
+- Select from 8 different AI models (GPT-4, Claude 3, LLaMA 3, Qwen Arabic, AraBERT, and more)
+- Real-time messaging with typing indicators
+- Bilingual support (Arabic/English)
+- Configurable API endpoints
+- Mobile-responsive design
+
+**[Read the Chat Interface Guide →](CHAT_INTERFACE.md)**
+
 For complete deployment information, see **[DEPLOYMENT.md](DEPLOYMENT.md)**.
 
 ## Overview
@@ -39,10 +50,13 @@ This project provides a comprehensive platform for building, deploying, and mana
 ## Web Interface
 
 The platform now includes a comprehensive HTML interface that provides:
+- **Interactive Chat**: Direct communication with AI models through a live chat interface
+- **Model Selection**: Choose from 8 different AI models including GPT-4, Claude 3, LLaMA 3, and Arabic-specialized models
 - **Bilingual Support**: Full Arabic and English interface with real-time language switching
 - **Interactive Documentation**: Visual representation of all features and workflows
 - **Command Reference**: Easy-to-copy commands for all operations
 - **Modern Design**: Responsive, mobile-friendly interface with gradient styling
+- **API Configuration**: Customizable API endpoints and authentication
 
 ### Accessing the Web Interface
 
