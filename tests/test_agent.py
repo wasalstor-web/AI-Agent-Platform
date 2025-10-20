@@ -71,19 +71,24 @@ def test_save_load_history():
         {"type": "test", "message": "test2"}
     ]
     
-    # Save
-    test_file = "/tmp/test_history.json"
-    agent.save_history(test_file)
+    # Save to temporary file
+    import tempfile
+    with tempfile.NamedTemporaryFile(mode='w', suffix='.json', delete=False) as f:
+        test_file = f.name
     
-    # Load in new agent
-    agent2 = SupremeAgent()
-    agent2.load_history(test_file)
-    
-    assert len(agent2.conversation_history) == 2
-    print("✓ Save/load history test passed")
-    
-    # Cleanup
-    os.remove(test_file)
+    try:
+        agent.save_history(test_file)
+        
+        # Load in new agent
+        agent2 = SupremeAgent()
+        agent2.load_history(test_file)
+        
+        assert len(agent2.conversation_history) == 2
+        print("✓ Save/load history test passed")
+    finally:
+        # Cleanup
+        if os.path.exists(test_file):
+            os.remove(test_file)
 
 def run_all_tests():
     """Run all tests / تشغيل جميع الاختبارات"""

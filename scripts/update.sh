@@ -80,12 +80,23 @@ if command -v ollama &> /dev/null; then
     read -p "هل تريد تحديث النماذج؟ / Update models? (y/n): " -n 1 -r
     echo
     if [[ $REPLY =~ ^[Yy]$ ]]; then
-        # تحديث كل نموذج / Update each model
-        for model in $(ollama list | tail -n +2 | awk '{print $1}'); do
-            print_info "تحديث / Updating: $model"
-            ollama pull "$model" || print_error "فشل تحديث / Failed to update: $model"
-        done
-        print_success "تم تحديث النماذج / Models updated"
+        # Get list of installed models, skipping header
+        models=$(ollama list 2>/dev/null | tail -n +2 | awk '{print $1}')
+        
+        if [ -z "$models" ]; then
+            print_info "لا توجد نماذج مثبتة / No models installed"
+        else
+            # Update each model with error handling
+            while IFS= read -r model; do
+                if [ -n "$model" ]; then
+                    print_info "تحديث / Updating: $model"
+                    if ! ollama pull "$model" 2>&1; then
+                        print_error "فشل تحديث / Failed to update: $model"
+                    fi
+                fi
+            done <<< "$models"
+            print_success "تم تحديث النماذج / Models updated"
+        fi
     else
         print_info "تم تخطي تحديث النماذج / Model update skipped"
     fi

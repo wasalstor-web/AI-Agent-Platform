@@ -83,8 +83,8 @@ echo
 print_step "[2/6] نسخ النماذج المخصصة / Backing up custom models..."
 mkdir -p "$BACKUP_DIR/models"
 
-if [ -d "models" ]; then
-    cp -r models/* "$BACKUP_DIR/models/" 2>/dev/null || true
+if [ -d "models" ] && [ "$(ls -A models 2>/dev/null)" ]; then
+    cp -r models/* "$BACKUP_DIR/models/"
     print_success "تم نسخ النماذج / Models backed up"
 else
     print_info "لا توجد نماذج مخصصة / No custom models"
