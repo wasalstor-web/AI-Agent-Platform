@@ -21,8 +21,15 @@ The platform now features a complete OpenWebUI integration with **6 open-source 
 
 📖 **Integration Documentation:**
 - **[OpenWebUI Integration Guide](OPENWEBUI_INTEGRATION.md)** ⭐ NEW!
+- **[Quick Setup Guide](OPENWEBUI_SETUP_GUIDE.md)** ⭐ NEW!
+- **[Models Configuration](MODELS_CONFIG.md)** ⭐ NEW!
 - **[Interactive Demo Page](openwebui-demo.html)**
 - **Webhook URL:** `https://wasalstor-web.github.io/AI-Agent-Platform`
+
+**Testing:**
+```bash
+./test-openwebui.sh  # Run comprehensive test suite
+```
 
 ---
 
