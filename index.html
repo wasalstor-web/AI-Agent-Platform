@@ -481,6 +481,8 @@
             color: #721c24;
             max-width: 100%;
             border: 1px solid #f5c6cb;
+            white-space: pre-wrap;
+            font-family: inherit;
         }
 
         .message-timestamp {
@@ -874,6 +876,7 @@
                             <option value="deepseek">DeepSeek Coder</option>
                         </select>
                         <button class="btn-small" onclick="connectToModel()" id="connect-btn">اتصل</button>
+                        <button class="btn-small" onclick="openOpenWebUI()" id="open-webui-btn" title="فتح OpenWebUI في نافذة جديدة">🔗 OpenWebUI</button>
                         <span id="status-indicator" class="status-indicator">⚫ غير متصل</span>
                     </div>
 
@@ -966,23 +969,6 @@
             }
         }
 
-        // Save API settings
-        function saveApiSettings() {
-            const endpoint = document.getElementById('api-endpoint').value;
-            const key = document.getElementById('api-key').value;
-            
-            apiEndpoint = endpoint;
-            apiKey = key;
-            
-            localStorage.setItem('apiEndpoint', endpoint);
-            localStorage.setItem('apiKey', key);
-            
-            addSystemMessage(currentLang === 'ar' ? 
-                'تم حفظ الإعدادات بنجاح' : 
-                'Settings saved successfully'
-            );
-        }
-
         // Connect to model
         async function connectToModel() {
             const modelSelect = document.getElementById('model-select');
@@ -1025,10 +1011,19 @@
                 statusIndicator.textContent = currentLang === 'ar' ? '🔴 خطأ في الاتصال' : '🔴 Connection Error';
                 statusIndicator.className = 'status-indicator error';
                 
-                addErrorMessage(currentLang === 'ar' ? 
-                    `فشل الاتصال بـ OpenWebUI. تأكد من أن الخادم يعمل على ${apiEndpoint.replace('/api/chat/completions', '')}` :
-                    `Failed to connect to OpenWebUI. Make sure the server is running at ${apiEndpoint.replace('/api/chat/completions', '')}`
-                );
+                let errorMessage = '';
+                if (error.name === 'TypeError' && error.message.includes('fetch')) {
+                    // Network error - likely CORS or connection refused
+                    errorMessage = currentLang === 'ar' ? 
+                        `فشل الاتصال بـ OpenWebUI على ${apiEndpoint.replace('/api/chat/completions', '')}.\n\nالأسباب المحتملة:\n1. الخادم غير متاح أو لا يعمل\n2. مشكلة CORS - قد تحتاج إلى الوصول مباشرة إلى ${apiEndpoint.replace('/api/chat/completions', '')}\n3. عنوان URL غير صحيح\n\nجرب فتح ${apiEndpoint.replace('/api/chat/completions', '')} في متصفح جديد للتحقق.` :
+                        `Failed to connect to OpenWebUI at ${apiEndpoint.replace('/api/chat/completions', '')}.\n\nPossible reasons:\n1. Server is unavailable or not running\n2. CORS issue - you may need to access ${apiEndpoint.replace('/api/chat/completions', '')} directly\n3. Incorrect URL\n\nTry opening ${apiEndpoint.replace('/api/chat/completions', '')} in a new browser tab to verify.`;
+                } else {
+                    errorMessage = currentLang === 'ar' ? 
+                        `فشل الاتصال بـ OpenWebUI. تأكد من أن الخادم يعمل على ${apiEndpoint.replace('/api/chat/completions', '')}\n\nخطأ: ${error.message}` :
+                        `Failed to connect to OpenWebUI. Make sure the server is running at ${apiEndpoint.replace('/api/chat/completions', '')}\n\nError: ${error.message}`;
+                }
+                
+                addErrorMessage(errorMessage);
             }
             
             connectBtn.disabled = false;
@@ -1213,8 +1208,114 @@
             }
         }
 
+        // Validate API endpoint format
+        function validateApiEndpoint(endpoint) {
+            try {
+                const url = new URL(endpoint);
+                return url.protocol === 'http:' || url.protocol === 'https:';
+            } catch (e) {
+                return false;
+            }
+        }
+
+        // Enhanced save API settings with validation
+        function saveApiSettings() {
+            const endpoint = document.getElementById('api-endpoint').value.trim();
+            const key = document.getElementById('api-key').value.trim();
+            
+            // Validate endpoint
+            if (!validateApiEndpoint(endpoint)) {
+                addErrorMessage(currentLang === 'ar' ? 
+                    'عنوان URL غير صالح. يرجى إدخال عنوان صحيح يبدأ بـ http:// أو https://' : 
+                    'Invalid URL. Please enter a valid URL starting with http:// or https://'
+                );
+                return;
+            }
+            
+            apiEndpoint = endpoint;
+            apiKey = key;
+            
+            localStorage.setItem('apiEndpoint', endpoint);
+            localStorage.setItem('apiKey', key);
+            
+            addSystemMessage(currentLang === 'ar' ? 
+                'تم حفظ الإعدادات بنجاح. يرجى إعادة الاتصال بالنموذج.' : 
+                'Settings saved successfully. Please reconnect to the model.'
+            );
+            
+            // Reset connection status
+            if (isConnected) {
+                isConnected = false;
+                const statusIndicator = document.getElementById('status-indicator');
+                statusIndicator.textContent = currentLang === 'ar' ? '⚫ غير متصل' : '⚫ Not Connected';
+                statusIndicator.className = 'status-indicator';
+            }
+            
+            // Reload available models
+            loadAvailableModels();
+        }
+
         // Load settings on page load
-        window.addEventListener('DOMContentLoaded', loadSettings);
+        window.addEventListener('DOMContentLoaded', function() {
+            loadSettings();
+            loadAvailableModels();
+        });
+
+        // Open OpenWebUI in new tab
+        function openOpenWebUI() {
+            const baseUrl = apiEndpoint.replace('/api/chat/completions', '');
+            window.open(baseUrl, '_blank');
+        }
+
+        // Load available models from OpenWebUI
+        async function loadAvailableModels() {
+            try {
+                const modelsEndpoint = apiEndpoint.replace('/api/chat/completions', '/api/models');
+                const response = await fetch(modelsEndpoint, {
+                    method: 'GET',
+                    headers: {
+                        'Accept': 'application/json',
+                        ...(apiKey ? { 'Authorization': `Bearer ${apiKey}` } : {})
+                    }
+                });
+                
+                if (response.ok) {
+                    const data = await response.json();
+                    const modelSelect = document.getElementById('model-select');
+                    
+                    // Clear existing options except the first few defaults
+                    const defaultModels = ['gpt-3.5-turbo', 'gpt-4', 'claude-3', 'llama-3', 'qwen-arabic', 'arabert', 'mistral', 'deepseek'];
+                    
+                    // Add models from OpenWebUI
+                    if (data.data && Array.isArray(data.data)) {
+                        // OpenAI format: { data: [{id: "model-name"}] }
+                        data.data.forEach(model => {
+                            const modelId = model.id || model.name;
+                            if (modelId && !defaultModels.includes(modelId)) {
+                                const option = document.createElement('option');
+                                option.value = modelId;
+                                option.textContent = model.name || modelId;
+                                modelSelect.appendChild(option);
+                            }
+                        });
+                    } else if (data.models && Array.isArray(data.models)) {
+                        // Alternative format: { models: [{name: "model-name"}] }
+                        data.models.forEach(model => {
+                            const modelId = model.name || model.id;
+                            if (modelId && !defaultModels.includes(modelId)) {
+                                const option = document.createElement('option');
+                                option.value = modelId;
+                                option.textContent = model.name || modelId;
+                                modelSelect.appendChild(option);
+                            }
+                        });
+                    }
+                }
+            } catch (error) {
+                console.log('Could not load models from OpenWebUI:', error.message);
+                // Silently fail - default models will be available
+            }
+        }
 
         const translations = {
             ar: {
