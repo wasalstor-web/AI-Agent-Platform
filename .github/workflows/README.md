@@ -26,7 +26,13 @@ Complete integration with Hostinger server for executing commands remotely.
 
 **Supported Commands:**
 1. `file_create` - Create files on server
-2. `file_read` - Read files from server ⚠️ Security Note: This command can read any accessible file. Ensure proper access controls and path restrictions are in place on the server.
+2. `file_read` - Read files from server  
+   ⚠️ **Security Note:** This command can read any accessible file. Important considerations:
+   - Implement allowlists for readable paths on the server
+   - Validate and sanitize all file path inputs
+   - Restrict access to sensitive files (credentials, keys, configs)
+   - Monitor and log all file read operations
+   - Use proper file permissions and access controls
 3. `file_update` - Update files on server
 4. `file_delete` - Delete files from server
 5. `service_restart` - Restart services (openwebui, nginx, ollama)
@@ -166,12 +172,23 @@ echo "value" | gh secret set SECRET_NAME
 
 ## Best Practices
 
-1. **Use workflow_dispatch for sensitive commands** - Manual approval prevents accidents
-2. **Monitor workflow logs regularly** - Stay informed of execution status
-3. **Download artifacts for analysis** - Logs help debug issues
-4. **Test in development first** - Use different secrets for dev/prod
-5. **Rotate API keys periodically** - Enhance security
-6. **Review workflow runs** - Ensure automation is working as expected
+### Security
+1. **Protect API Keys** - Store in GitHub Secrets, never in code
+2. **Use workflow_dispatch for sensitive commands** - Manual approval prevents accidents
+3. **Implement server-side validation** - Validate all inputs on the server
+4. **Use allowlists for file operations** - Restrict accessible paths
+5. **Monitor and audit** - Log all command executions and review regularly
+6. **Rotate credentials** - Periodically update API keys and secrets
+7. **Limit permissions** - Use least privilege principle for service accounts
+8. **Review file_read usage** - Carefully control which files can be read
+
+### Operational
+1. **Monitor workflow logs regularly** - Stay informed of execution status
+2. **Download artifacts for analysis** - Logs help debug issues
+3. **Test in development first** - Use different secrets for dev/prod
+4. **Review workflow runs** - Ensure automation is working as expected
+5. **Set up notifications** - Get alerted on failures
+6. **Document custom workflows** - Make it easy for team to understand
 
 ## Support
 
