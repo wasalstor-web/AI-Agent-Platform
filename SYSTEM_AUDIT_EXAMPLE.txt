@@ -64,8 +64,8 @@
    - https://github.com
    - github.com
    - wasalstor-web.github.io
-   - your-vps-hostname.com
-   - your-vps.com
+   - example.com
+   - example.io
 
 🔌 النقاط النهائية المحلية / Local Endpoints:
    - DL+ API: ❌ غير نشط / Inactive (Start with: ./start-dlplus.sh)
