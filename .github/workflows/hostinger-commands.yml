@@ -1,0 +1,173 @@
+name: Execute Hostinger Commands
+
+on:
+  workflow_dispatch:
+    inputs:
+      command_type:
+        description: 'Command Type'
+        required: true
+        type: choice
+        options:
+          - file_create
+          - file_read
+          - file_update
+          - file_delete
+          - service_restart
+          - openwebui_manage
+          - log_view
+          - status_check
+          - backup_create
+      payload:
+        description: 'Command Payload (JSON)'
+        required: true
+        default: '{}'
+  
+  # Also trigger on push for continuous monitoring
+  push:
+    branches:
+      - main
+      - develop
+    paths:
+      - 'dlplus/**'
+      - 'api/**'
+      - '.github/workflows/hostinger-commands.yml'
+
+permissions:
+  contents: read
+  issues: write
+  pull-requests: write
+
+jobs:
+  execute-command:
+    runs-on: ubuntu-latest
+    name: Execute Command on Hostinger
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: 'pip'
+      
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install requests
+      
+      - name: Execute Status Check (Auto-triggered)
+        if: github.event_name == 'push'
+        env:
+          HOSTINGER_SERVER: ${{ secrets.HOSTINGER_SERVER || '72.61.178.135:8000' }}
+          HOSTINGER_API_KEY: ${{ secrets.HOSTINGER_API_KEY }}
+        run: |
+          echo "🔍 Checking Hostinger server status after push..."
+          python github-commander.py status_check '{}'
+      
+      - name: Execute Manual Command
+        if: github.event_name == 'workflow_dispatch'
+        env:
+          HOSTINGER_SERVER: ${{ secrets.HOSTINGER_SERVER || '72.61.178.135:8000' }}
+          HOSTINGER_API_KEY: ${{ secrets.HOSTINGER_API_KEY }}
+        run: |
+          echo "🚀 Executing command: ${{ github.event.inputs.command_type }}"
+          python github-commander.py "${{ github.event.inputs.command_type }}" '${{ github.event.inputs.payload }}'
+      
+      - name: Upload execution logs
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: command-execution-logs-${{ github.run_number }}
+          path: github-commander.log
+          retention-days: 30
+
+  # Continuous connection for monitoring
+  continuous-monitor:
+    runs-on: ubuntu-latest
+    name: Continuous Server Monitor
+    if: github.event_name == 'push'
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: 'pip'
+      
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install requests
+      
+      - name: Monitor Server Health
+        env:
+          HOSTINGER_SERVER: ${{ secrets.HOSTINGER_SERVER || '72.61.178.135:8000' }}
+          HOSTINGER_API_KEY: ${{ secrets.HOSTINGER_API_KEY }}
+        run: |
+          echo "🏥 Continuous Health Monitoring"
+          echo "================================"
+          
+          # Check health 5 times with 10 second intervals
+          for i in {1..5}; do
+            echo "Health Check #$i at $(date)"
+            python github-commander.py status_check '{}' || true
+            
+            if [ $i -lt 5 ]; then
+              echo "Waiting 10 seconds..."
+              sleep 10
+            fi
+          done
+          
+          echo "================================"
+          echo "✓ Monitoring complete"
+      
+      - name: Upload monitoring logs
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: monitoring-logs-${{ github.run_number }}
+          path: github-commander.log
+          retention-days: 7
+
+  # Scheduled deployment and sync
+  scheduled-sync:
+    runs-on: ubuntu-latest
+    name: Scheduled Deployment Sync
+    # Run only on schedule or manual trigger
+    if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch'
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: 'pip'
+      
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install requests
+      
+      - name: Create Backup
+        env:
+          HOSTINGER_SERVER: ${{ secrets.HOSTINGER_SERVER || '72.61.178.135:8000' }}
+          HOSTINGER_API_KEY: ${{ secrets.HOSTINGER_API_KEY }}
+        run: |
+          echo "💾 Creating scheduled backup..."
+          python github-commander.py backup_create '{"type": "scheduled"}'
+      
+      - name: View Recent Logs
+        env:
+          HOSTINGER_SERVER: ${{ secrets.HOSTINGER_SERVER || '72.61.178.135:8000' }}
+          HOSTINGER_API_KEY: ${{ secrets.HOSTINGER_API_KEY }}
+        run: |
+          echo "📋 Viewing recent logs..."
+          python github-commander.py log_view '{"log_type": "execution", "lines": 50}'
