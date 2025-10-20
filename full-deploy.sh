@@ -108,7 +108,7 @@ chmod +x /usr/local/bin/backup-ai-platform
 
 # إضافة مهمة النسخ الاحتياطي لـ cron
 CRON_JOB="0 2 * * * /usr/local/bin/backup-ai-platform"
-(crontab -l 2>/dev/null | grep -v "backup-ai-platform"; echo "$CRON_JOB") | crontab - || show_error "فشل في إضافة مهمة cron"
+(crontab -l 2>/dev/null || true | grep -v "backup-ai-platform"; echo "$CRON_JOB") | crontab - || show_error "فشل في إضافة مهمة cron"
 
 # تعيين الصلاحيات
 show_status "جاري ضبط الصلاحيات..."
@@ -118,9 +118,9 @@ chmod -R 755 $DEPLOY_PATH
 # فحص الأمان
 show_status "جاري إجراء فحص الأمان..."
 # السماح بـ SSH أولاً لتجنب قطع الاتصال
-ufw allow OpenSSH || ufw allow 22/tcp
+ufw allow OpenSSH 2>/dev/null || ufw allow 22/tcp
 ufw allow 'Nginx Full'
-echo "y" | ufw enable
+ufw --force enable
 
 # إظهار معلومات النشر
 show_success "تم نشر المنصة بنجاح!"
