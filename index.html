@@ -404,6 +404,16 @@
                         <h3 id="feature6-title">دعم متعدد اللغات</h3>
                         <p id="feature6-desc">واجهة وتوثيق باللغتين العربية والإنجليزية</p>
                     </div>
+                    <div class="feature-card">
+                        <div class="icon">🤖</div>
+                        <h3 id="feature7-title">تكامل OpenWebUI</h3>
+                        <p id="feature7-desc">واجهة ويب قوية للتفاعل مع نماذج الذكاء الاصطناعي</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="icon">🚀</div>
+                        <h3 id="feature8-title">نشر سهل على VPS</h3>
+                        <p id="feature8-desc">أدوات تلقائية لنشر المشروع على الخوادم الافتراضية</p>
+                    </div>
                 </div>
             </div>
 
@@ -455,6 +465,51 @@
                             </div>
                         </div>
                     </div>
+                </div>
+            </div>
+
+            <!-- OpenWebUI Section -->
+            <div class="section">
+                <h2 id="openwebui-title">تكامل OpenWebUI</h2>
+                <p id="openwebui-text">
+                    OpenWebUI هي واجهة ويب قوية مفتوحة المصدر للتفاعل مع نماذج الذكاء الاصطناعي الكبيرة مثل Ollama. توفر المنصة أدوات كاملة لتثبيت وإدارة OpenWebUI على خادمك.
+                </p>
+                
+                <h3 id="openwebui-install-title" style="color: #667eea; margin-top: 20px;">تثبيت OpenWebUI</h3>
+                <div class="command-box">
+                    <button class="copy-btn" onclick="copyCommand('cmd-openwebui1')">نسخ</button>
+                    <code id="cmd-openwebui1"># التثبيت التفاعلي
+./setup-openwebui.sh
+
+# أو التثبيت التلقائي
+./setup-openwebui.sh install</code>
+                </div>
+
+                <h3 id="openwebui-manage-title" style="color: #667eea; margin-top: 20px;">إدارة OpenWebUI</h3>
+                <div class="command-box">
+                    <button class="copy-btn" onclick="copyCommand('cmd-openwebui2')">نسخ</button>
+                    <code id="cmd-openwebui2"># عرض الحالة
+./setup-openwebui.sh status
+
+# عرض السجلات
+./setup-openwebui.sh logs
+
+# إعادة التشغيل
+./setup-openwebui.sh restart
+
+# أو استخدم القائمة الذكية
+./smart-deploy.sh</code>
+                </div>
+
+                <h3 id="openwebui-access-title" style="color: #667eea; margin-top: 20px;">الوصول إلى OpenWebUI</h3>
+                <div class="info-box">
+                    <h3 id="openwebui-access-subtitle">بعد التثبيت، يمكنك الوصول إلى OpenWebUI عبر:</h3>
+                    <ul>
+                        <li id="openwebui-access1">http://your-vps-ip:3000</li>
+                        <li id="openwebui-access2">أو عبر النطاق الخاص بك إذا تم إعداد Nginx</li>
+                        <li id="openwebui-access3">إنشاء حساب مستخدم عند الدخول الأول</li>
+                        <li id="openwebui-access4">البدء في المحادثة مع نماذج الذكاء الاصطناعي</li>
+                    </ul>
                 </div>
             </div>
 
@@ -558,6 +613,10 @@
                 'feature5-desc': 'توليد تقارير مفصلة عن حالة المشروع والعمليات المنفذة',
                 'feature6-title': 'دعم متعدد اللغات',
                 'feature6-desc': 'واجهة وتوثيق باللغتين العربية والإنجليزية',
+                'feature7-title': 'تكامل OpenWebUI',
+                'feature7-desc': 'واجهة ويب قوية للتفاعل مع نماذج الذكاء الاصطناعي',
+                'feature8-title': 'نشر سهل على VPS',
+                'feature8-desc': 'أدوات تلقائية لنشر المشروع على الخوادم الافتراضية',
                 'workflow-title': 'سير عمل الإنهاء',
                 'step1-title': 'فحص حالة المشروع',
                 'step1-desc': 'التحقق من وجود التوثيق والهيكل الصحيح للمشروع',
@@ -571,6 +630,16 @@
                 'step5-desc': 'إزالة الملفات المؤقتة والذاكرة المخزنة غير الضرورية',
                 'step6-title': 'التحقق النهائي',
                 'step6-desc': 'التأكد من إتمام جميع الخطوات بنجاح',
+                'openwebui-title': 'تكامل OpenWebUI',
+                'openwebui-text': 'OpenWebUI هي واجهة ويب قوية مفتوحة المصدر للتفاعل مع نماذج الذكاء الاصطناعي الكبيرة مثل Ollama. توفر المنصة أدوات كاملة لتثبيت وإدارة OpenWebUI على خادمك.',
+                'openwebui-install-title': 'تثبيت OpenWebUI',
+                'openwebui-manage-title': 'إدارة OpenWebUI',
+                'openwebui-access-title': 'الوصول إلى OpenWebUI',
+                'openwebui-access-subtitle': 'بعد التثبيت، يمكنك الوصول إلى OpenWebUI عبر:',
+                'openwebui-access1': 'http://your-vps-ip:3000',
+                'openwebui-access2': 'أو عبر النطاق الخاص بك إذا تم إعداد Nginx',
+                'openwebui-access3': 'إنشاء حساب مستخدم عند الدخول الأول',
+                'openwebui-access4': 'البدء في المحادثة مع نماذج الذكاء الاصطناعي',
                 'usage-title': 'كيفية الاستخدام',
                 'interactive-title': 'الوضع التفاعلي',
                 'directive-title': 'التنفيذ التلقائي',
@@ -609,6 +678,10 @@
                 'feature5-desc': 'Generate detailed reports about project status and executed operations',
                 'feature6-title': 'Multi-language Support',
                 'feature6-desc': 'Interface and documentation in both Arabic and English',
+                'feature7-title': 'OpenWebUI Integration',
+                'feature7-desc': 'Powerful web interface for interacting with AI models',
+                'feature8-title': 'Easy VPS Deployment',
+                'feature8-desc': 'Automated tools for deploying to virtual private servers',
                 'workflow-title': 'Finalization Workflow',
                 'step1-title': 'Check Project Status',
                 'step1-desc': 'Verify documentation and proper project structure',
@@ -622,6 +695,16 @@
                 'step5-desc': 'Remove temporary files and unnecessary cache',
                 'step6-title': 'Final Verification',
                 'step6-desc': 'Ensure all steps completed successfully',
+                'openwebui-title': 'OpenWebUI Integration',
+                'openwebui-text': 'OpenWebUI is a powerful open-source web interface for interacting with large language models like Ollama. The platform provides complete tools for installing and managing OpenWebUI on your server.',
+                'openwebui-install-title': 'Installing OpenWebUI',
+                'openwebui-manage-title': 'Managing OpenWebUI',
+                'openwebui-access-title': 'Accessing OpenWebUI',
+                'openwebui-access-subtitle': 'After installation, you can access OpenWebUI at:',
+                'openwebui-access1': 'http://your-vps-ip:3000',
+                'openwebui-access2': 'Or via your domain if Nginx is configured',
+                'openwebui-access3': 'Create a user account on first login',
+                'openwebui-access4': 'Start chatting with AI models',
                 'usage-title': 'How to Use',
                 'interactive-title': 'Interactive Mode',
                 'directive-title': 'Automatic Execution',

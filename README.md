@@ -113,9 +113,61 @@ After finalization, an archive is created in `/tmp/ai-agent-platform-archive-[TI
 - `--force` - Continue finalization even if warnings are detected
 - `--no-confirmation` - Skip user confirmation prompt
 
+## OpenWebUI Integration
+
+The platform now includes full integration with OpenWebUI, a powerful open-source web interface for large language models (LLMs) like Ollama.
+
+### Setup OpenWebUI Script (`setup-openwebui.sh`)
+
+A comprehensive bilingual script for installing and managing OpenWebUI on your VPS:
+
+**Features:**
+- Automated Docker and Docker Compose installation
+- OpenWebUI container deployment
+- Optional Ollama installation
+- Nginx reverse proxy configuration
+- SSL certificate support
+- Service management (start, stop, restart, logs)
+- Interactive menu interface
+
+**Quick Installation:**
+
+```bash
+# Interactive mode
+./setup-openwebui.sh
+
+# Or automated installation
+./setup-openwebui.sh install
+
+# Check status
+./setup-openwebui.sh status
+
+# View logs
+./setup-openwebui.sh logs
+```
+
+**What is OpenWebUI?**
+
+OpenWebUI is an extensible, feature-rich, and user-friendly web interface designed to operate entirely offline. It supports various LLM runners including Ollama and OpenAI-compatible APIs.
+
+**Key Features:**
+- 🎨 Intuitive web interface for chat interactions
+- 🔌 Support for Ollama and OpenAI-compatible APIs
+- 📱 Responsive design for mobile and desktop
+- 🔐 User authentication and management
+- 💬 Multiple chat sessions
+- 📝 Markdown and code syntax highlighting
+- 🌐 Multi-language support
+
+**Access OpenWebUI:**
+
+After installation, OpenWebUI will be available at:
+- `http://your-vps-ip:3000`
+- Or via your configured domain if Nginx is setup
+
 ## VPS Connection Check
 
-The platform includes comprehensive VPS connection verification tools.
+The platform includes comprehensive VPS connection verification tools with OpenWebUI service checks.
 
 ### Deploy Script (`deploy.sh`)
 
@@ -126,7 +178,8 @@ A bilingual (Arabic/English) script for checking VPS connectivity:
 - SSH connection test
 - HTTP/HTTPS connectivity verification
 - Response time measurement
-- Comprehensive port scanning (SSH, HTTP, HTTPS, databases)
+- Comprehensive port scanning (SSH, HTTP, HTTPS, OpenWebUI, Ollama, databases)
+- OpenWebUI and Ollama service checks
 - Colored output for better readability
 - Configurable timeouts
 
@@ -167,6 +220,10 @@ source .env
 - `HTTP_PORT` : HTTP port (default: 80)
 - `HTTPS_PORT` : HTTPS port (default: 443)
 - `TIMEOUT` : Connection timeout
+- `OPENWEBUI_PORT` : OpenWebUI port (default: 3000)
+- `OPENWEBUI_VERSION` : OpenWebUI Docker image version (default: latest)
+- `OLLAMA_API_BASE_URL` : Ollama API URL (default: http://localhost:11434)
+- `WEBUI_SECRET_KEY` : Secret key for OpenWebUI (generate with: `openssl rand -hex 32`)
 
 ### Smart Deploy Script (`smart-deploy.sh`)
 
@@ -187,7 +244,8 @@ Interactive menu-driven deployment tool with Arabic interface. The first option 
 7. Log monitoring
 8. Performance checks
 9. Security scanning
-10. Rollback capability
+10. **OpenWebUI Management** (New!)
+11. Rollback capability
 
 ### Connection Check Output
 
@@ -213,6 +271,9 @@ The VPS connection check provides detailed information:
 ✓ HTTP server is responding
 ✓ Average response time: 45ms
 ✓ Port 22 is open
+✓ Port 3000 (OpenWebUI) is open
+✓ OpenWebUI is running
+✓ Ollama is running
 ```
 
 ## Security and Best Practices

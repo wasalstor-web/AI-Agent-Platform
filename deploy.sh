@@ -181,12 +181,45 @@ comprehensive_port_check() {
         return 1
     fi
     
-    local ports=("22:SSH" "80:HTTP" "443:HTTPS" "3306:MySQL" "5432:PostgreSQL" "27017:MongoDB" "6379:Redis" "8080:Alt-HTTP")
+    local ports=("22:SSH" "80:HTTP" "443:HTTPS" "3000:OpenWebUI" "3306:MySQL" "5432:PostgreSQL" "8080:Alt-HTTP" "11434:Ollama")
     
     for port_service in "${ports[@]}"; do
         IFS=':' read -r port service <<< "$port_service"
         check_port "$port" "$service"
     done
+}
+
+# Check OpenWebUI specific services
+check_openwebui_services() {
+    print_header "فحص خدمات OpenWebUI / OpenWebUI Services Check"
+    
+    if [ -z "$VPS_HOST" ]; then
+        print_error "لم يتم تحديد عنوان VPS / VPS host not specified"
+        return 1
+    fi
+    
+    local openwebui_port="${OPENWEBUI_PORT:-3000}"
+    local ollama_port="11434"
+    
+    # Check OpenWebUI
+    print_info "جاري فحص OpenWebUI على المنفذ $openwebui_port / Checking OpenWebUI on port $openwebui_port"
+    if curl -s -o /dev/null -w "%{http_code}" --connect-timeout "$TIMEOUT" \
+        "http://$VPS_HOST:$openwebui_port" | grep -q "^[2-3][0-9][0-9]"; then
+        print_success "OpenWebUI يعمل / OpenWebUI is running"
+    else
+        print_warning "OpenWebUI لا يستجيب / OpenWebUI not responding"
+        print_info "للتثبيت، استخدم: ./setup-openwebui.sh install"
+        print_info "To install, use: ./setup-openwebui.sh install"
+    fi
+    
+    # Check Ollama
+    print_info "جاري فحص Ollama على المنفذ $ollama_port / Checking Ollama on port $ollama_port"
+    if curl -s -o /dev/null -w "%{http_code}" --connect-timeout "$TIMEOUT" \
+        "http://$VPS_HOST:$ollama_port" | grep -q "^[2-3][0-9][0-9]"; then
+        print_success "Ollama يعمل / Ollama is running"
+    else
+        print_warning "Ollama لا يستجيب / Ollama not responding"
+    fi
 }
 
 # Check DNS resolution
@@ -262,6 +295,9 @@ run_full_check() {
     
     # Comprehensive Port Check
     comprehensive_port_check
+    
+    # OpenWebUI Services Check
+    check_openwebui_services
     
     # Summary
     print_header "ملخص النتائج / Results Summary"
