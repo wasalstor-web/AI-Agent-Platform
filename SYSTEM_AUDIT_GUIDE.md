@@ -89,6 +89,8 @@ A detailed, human-readable report in Arabic and English containing:
 - حالة الاتصالات / Connection status
 - ملخص شامل / Comprehensive summary
 
+**[See Example Report →](SYSTEM_AUDIT_EXAMPLE.txt)**
+
 ### 2. تقرير JSON / JSON Report
 **الملف / File:** `system_audit_report.json`
 
