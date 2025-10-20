@@ -77,6 +77,10 @@ create_backup() {
         --exclude='.git' \
         --exclude='*.log' \
         --exclude='.env' \
+        --exclude='*.key' \
+        --exclude='*.pem' \
+        --exclude='*.p12' \
+        --exclude='*.pfx' \
         -C "${SCRIPT_DIR}" . 2>/dev/null; then
         print_success "Backup created successfully"
         echo "${BACKUP_PATH}" > "${SCRIPT_DIR}/.last_backup"
