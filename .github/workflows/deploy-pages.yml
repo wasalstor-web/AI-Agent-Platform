@@ -26,7 +26,25 @@ jobs:
         uses: actions/checkout@v4
       
       - name: Setup Pages
+        id: setup-pages
         uses: actions/configure-pages@v4
+        continue-on-error: true
+      
+      - name: Check if Pages is enabled
+        if: steps.setup-pages.outcome == 'failure'
+        run: |
+          echo "::error::GitHub Pages is not enabled for this repository"
+          echo "::error::Please enable GitHub Pages in repository settings:"
+          echo "::error::https://github.com/${{ github.repository }}/settings/pages"
+          echo "::error::Under 'Source', select 'GitHub Actions'"
+          echo ""
+          echo "Alternatively, deploy to a temporary hosting service:"
+          echo "- Run: ./quick-deploy.sh"
+          echo "- Or use: vercel --prod"
+          echo "- Or use: netlify deploy --prod"
+          echo ""
+          echo "For detailed instructions, see: GITHUB_PAGES_SETUP.md"
+          exit 1
       
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3

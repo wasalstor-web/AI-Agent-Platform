@@ -4,8 +4,31 @@ An AI Agent Platform infrastructure project with automated finalization capabili
 
 ## 🚀 Quick Start
 
-**The platform is live and accessible at:**
-**🌐 [https://wasalstor-web.github.io/AI-Agent-Platform/](https://wasalstor-web.github.io/AI-Agent-Platform/)**
+### ⚠️ GitHub Pages Setup Required
+
+To access the site at `https://wasalstor-web.github.io/AI-Agent-Platform/`, you need to enable GitHub Pages first:
+
+1. Go to [Repository Settings > Pages](https://github.com/wasalstor-web/AI-Agent-Platform/settings/pages)
+2. Under "Source", select "GitHub Actions"
+3. Wait a few minutes for deployment
+
+**📖 For detailed instructions, see [GITHUB_PAGES_SETUP.md](GITHUB_PAGES_SETUP.md)**
+
+### 🚀 Quick Deploy (Alternative Options)
+
+If you want to deploy the site immediately without waiting:
+
+```bash
+# Interactive deployment menu
+./quick-deploy.sh
+
+# Options available:
+# 1. Vercel - Fast & Free
+# 2. Netlify - Fast & Free  
+# 3. Surge.sh - Very Simple
+# 4. VPS Deployment
+# 5. Local Server
+```
 
 For complete deployment information, see **[DEPLOYMENT.md](DEPLOYMENT.md)**.
 
