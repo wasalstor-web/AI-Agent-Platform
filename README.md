@@ -19,8 +19,30 @@ The platform now includes DL+, a complete Arabic-first AI system that integrates
 
 📖 **Key Documentation:**
 - **[Complete DL+ Documentation](DLPLUS_README.md)**
-- **[Hostinger Command Execution Guide](HOSTINGER_COMMAND_EXECUTION.md)** ⭐ NEW!
+- **[System Audit Guide](SYSTEM_AUDIT_GUIDE.md)** 🔍 NEW!
+- **[Hostinger Command Execution Guide](HOSTINGER_COMMAND_EXECUTION.md)**
 - **[Command Examples](examples/hostinger_command_examples.py)**
+
+---
+
+## 🔍 NEW: Full System Audit Tool
+
+**نظام الفحص الشامل للذكاء الاصطناعي**
+
+Comprehensive system auditing tool that provides detailed reports on:
+- ✅ System status and resource usage (CPU, RAM, Disk)
+- 🧠 Active AI models (LLaMA, Qwen, GPT-4, Claude, etc.)
+- 🌐 Connected websites and SSL certificates
+- 🔗 API/ABI/Webhook status
+- 📄 Pages and forms validation
+- 🔌 External integrations (GitHub, Hostinger, Cloudflare)
+
+**Quick Audit:**
+```bash
+./run-system-audit.sh
+```
+
+**[Read the Complete Audit Guide →](SYSTEM_AUDIT_GUIDE.md)**
 
 ---
 

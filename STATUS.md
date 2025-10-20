@@ -179,6 +179,28 @@ If you want another domain:
 
 ---
 
+## 🔍 جديد: أداة الفحص الشامل للنظام / NEW: System Audit Tool
+
+تم إضافة أداة فحص شاملة للنظام توفر:
+
+A comprehensive system audit tool has been added providing:
+
+- ✅ **فحص حالة النظام** / System status check (CPU, RAM, Disk)
+- 🧠 **كشف نماذج الذكاء الاصطناعي** / AI model detection (7+ models)
+- 🌐 **فحص المواقع والشهادات** / Website and SSL verification
+- 🔗 **فحص APIs و Webhooks** / API and webhook status
+- 📄 **فحص الصفحات والنماذج** / Page and form validation
+- 🔌 **تحليل الارتباطات الخارجية** / External integration analysis
+
+**التشغيل / Run:**
+```bash
+./run-system-audit.sh
+```
+
+**التوثيق / Documentation:** [SYSTEM_AUDIT_GUIDE.md](SYSTEM_AUDIT_GUIDE.md)
+
+---
+
 ## 🌟 شكراً! / Thank You!
 
 المشروع مكتمل ومتاح للجميع!
@@ -189,5 +211,5 @@ The project is complete and available to everyone!
 ---
 
 **تاريخ التحديث / Last Updated:** 2025-10-20  
-**الإصدار / Version:** 1.0.0  
+**الإصدار / Version:** 1.1.0  
 **الحالة / Status:** ✅ مكتمل ومنشور / Complete and Published

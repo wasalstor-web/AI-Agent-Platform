@@ -72,6 +72,8 @@ Desktop.ini
 # Project specific
 ai-agent-platform-archive-*
 finalization_report*.txt
+system_audit_report.txt
+system_audit_report.json
 
 # VPS Configuration (sensitive)
 .env
