@@ -155,7 +155,8 @@ check_response_time() {
     
     # Ping test
     if command -v ping >/dev/null 2>&1; then
-        local ping_result=$(ping -c 4 -W "$TIMEOUT" "$VPS_HOST" 2>/dev/null | tail -1 | awk '{print $4}' | cut -d '/' -f 2)
+        local ping_result
+        ping_result=$(ping -c 4 -W "$TIMEOUT" "$VPS_HOST" 2>/dev/null | tail -1 | awk '{print $4}' | cut -d '/' -f 2)
         if [ -n "$ping_result" ]; then
             print_success "متوسط وقت الاستجابة: ${ping_result}ms / Average response time: ${ping_result}ms"
         else
@@ -165,7 +166,8 @@ check_response_time() {
     
     # HTTP response time
     if command -v curl >/dev/null 2>&1; then
-        local http_time=$(curl -o /dev/null -s -w '%{time_total}\n' --connect-timeout "$TIMEOUT" "http://$VPS_HOST" 2>/dev/null)
+        local http_time
+        http_time=$(curl -o /dev/null -s -w '%{time_total}\n' --connect-timeout "$TIMEOUT" "http://$VPS_HOST" 2>/dev/null)
         if [ -n "$http_time" ]; then
             print_success "وقت استجابة HTTP: ${http_time}s / HTTP response time: ${http_time}s"
         fi
@@ -234,7 +236,8 @@ check_dns() {
     print_info "جاري فحص DNS لـ $VPS_HOST / Resolving DNS for $VPS_HOST"
     
     if command -v nslookup >/dev/null 2>&1; then
-        local ip_address=$(nslookup "$VPS_HOST" 2>/dev/null | awk '/^Address: / { print $2 }' | tail -1)
+        local ip_address
+        ip_address=$(nslookup "$VPS_HOST" 2>/dev/null | awk '/^Address: / { print $2 }' | tail -1)
         if [ -n "$ip_address" ]; then
             print_success "DNS resolved: $VPS_HOST → $ip_address"
             echo "  عنوان IP / IP Address: $ip_address"
@@ -243,7 +246,8 @@ check_dns() {
             return 1
         fi
     elif command -v host >/dev/null 2>&1; then
-        local ip_address=$(host "$VPS_HOST" 2>/dev/null | awk '/has address/ { print $4 }' | head -1)
+        local ip_address
+        ip_address=$(host "$VPS_HOST" 2>/dev/null | awk '/has address/ { print $4 }' | head -1)
         if [ -n "$ip_address" ]; then
             print_success "DNS resolved: $VPS_HOST → $ip_address"
             echo "  عنوان IP / IP Address: $ip_address"
