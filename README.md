@@ -2,7 +2,21 @@
 
 An AI Agent Platform infrastructure project with automated finalization capabilities and OpenWebUI integration.
 
+## 🚨 Getting 404 Error? / تحصل على خطأ 404؟
+
+**➡️ [دليل الحل السريع بالعربية / Quick Fix Guide in Arabic](QUICK_START_ARABIC.md) ⬅️**
+
+**Quick Solutions:**
+- 🟢 Enable GitHub Pages: [Settings → Pages → Select "GitHub Actions"](https://github.com/wasalstor-web/AI-Agent-Platform/settings/pages)
+- 🟢 Or deploy instantly: `./quick-deploy.sh` (Vercel/Netlify/Surge)
+- 🟢 Full instructions: [GITHUB_PAGES_SETUP.md](GITHUB_PAGES_SETUP.md)
+
 ## 🚀 Quick Start
+
+### 🌟 دليل البدء السريع بالعربية / Arabic Quick Start Guide
+**📖 [اضغط هنا لحل مشكلة 404 والنشر السريع / Click here to fix 404 and deploy quickly](QUICK_START_ARABIC.md)**
+
+---
 
 ### ⚠️ GitHub Pages Setup Required
 
