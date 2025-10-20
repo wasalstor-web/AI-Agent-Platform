@@ -17,7 +17,10 @@ The platform now includes DL+, a complete Arabic-first AI system that integrates
 ./start-dlplus.sh
 ```
 
-📖 **[Read the complete DL+ documentation](DLPLUS_README.md)**
+📖 **Key Documentation:**
+- **[Complete DL+ Documentation](DLPLUS_README.md)**
+- **[Hostinger Command Execution Guide](HOSTINGER_COMMAND_EXECUTION.md)** ⭐ NEW!
+- **[Command Examples](examples/hostinger_command_examples.py)**
 
 ---
 
@@ -154,6 +157,7 @@ curl -X POST http://localhost:8000/api/process \
 
 - 📖 [Complete DL+ Documentation](dlplus/docs/DLPLUS_SYSTEM.md)
 - 🚀 [Quick Start Guide](DLPLUS_README.md)
+- ⚙️ [Hostinger Command Execution](HOSTINGER_COMMAND_EXECUTION.md) ⭐ NEW!
 - 💡 [Examples](examples/)
 - 🧪 [Tests](tests/)
 
