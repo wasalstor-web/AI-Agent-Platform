@@ -1,6 +1,25 @@
 # AI-Agent-Platform
 
-An AI Agent Platform infrastructure project with automated finalization capabilities and OpenWebUI integration.
+An AI Agent Platform infrastructure project with automated finalization capabilities, OpenWebUI integration, and the **DL+ Unified Arabic Intelligence System**.
+
+## 🧠 NEW: DL+ Arabic Intelligence System
+
+**نظام DL+ للذكاء الصناعي العربي الموحد**
+
+The platform now includes DL+, a complete Arabic-first AI system that integrates:
+- 🧠 **GitHub Intelligence Core** - AI models and reasoning
+- ⚙️ **Hostinger Integration** - Execution and deployment
+- 💬 **OpenWebUI** - Interactive user interface
+- 🔗 **FastAPI Bridge** - Seamless communication layer
+
+**Quick Start DL+:**
+```bash
+./start-dlplus.sh
+```
+
+📖 **[Read the complete DL+ documentation](DLPLUS_README.md)**
+
+---
 
 ## 🚀 Quick Start
 
@@ -11,7 +30,11 @@ For complete deployment information, see **[DEPLOYMENT.md](DEPLOYMENT.md)**.
 
 ## Overview
 
-This project provides a platform for building, deploying, and managing AI agents with built-in project lifecycle management tools and OpenWebUI integration for running large language models.
+This project provides a comprehensive platform for building, deploying, and managing AI agents with:
+- **DL+ Arabic Intelligence System** - Native Arabic AI with deep language understanding
+- **Automated finalization capabilities** - Built-in project lifecycle management
+- **OpenWebUI integration** - Interactive interface for large language models
+- **Multi-agent orchestration** - Coordinate multiple AI agents seamlessly
 
 ## Web Interface
 
@@ -53,10 +76,103 @@ The web interface includes:
 - Quick action buttons for GitHub repository and documentation
 - Benefits and security information
 
+## 🧠 DL+ Unified Arabic Intelligence System
+
+### نظام DL+ للذكاء الصناعي العربي الموحد
+
+DL+ is a comprehensive Arabic-first AI system that brings together intelligence, execution, and interaction in a unified platform.
+
+### Key Components
+
+**1. GitHub Intelligence Core** (`dlplus/core/`)
+- `intelligence_core.py` - Main AI engine coordinating all models
+- `arabic_processor.py` - Advanced Arabic language processing with classical Arabic support
+- `context_analyzer.py` - Context-aware conversation management
+
+**2. API Layer** (`dlplus/api/`)
+- `fastapi_connector.py` - Gateway between GitHub and Hostinger
+- `internal_api.py` - Secure command execution API with whitelisting
+
+**3. Configuration** (`dlplus/config/`)
+- `settings.py` - System configuration
+- `models_config.py` - AI model configurations (AraBERT, LLaMA 3, Qwen, etc.)
+- `agents_config.py` - Agent definitions and capabilities
+
+**4. Agents** (`dlplus/agents/`)
+- `WebRetrievalAgent` - Web search and information retrieval
+- `CodeGeneratorAgent` - Code generation in multiple languages
+- `BaseAgent` - Abstract base class for custom agents
+
+### Quick Start with DL+
+
+```bash
+# 1. Clone the repository
+git clone https://github.com/wasalstor-web/AI-Agent-Platform.git
+cd AI-Agent-Platform
+
+# 2. Start DL+ system
+./start-dlplus.sh
+
+# The system will be available at http://localhost:8000
+```
+
+### API Endpoints
+
+- `GET /` - System information
+- `GET /api/health` - Health check
+- `GET /api/status` - System status
+- `POST /api/process` - Process commands in Arabic
+- `POST /api/github/execute` - Execute commands from GitHub
+- `GET /api/docs` - Interactive API documentation
+
+### Example Usage
+
+**Python:**
+```python
+import asyncio
+from dlplus import DLPlusCore
+
+async def main():
+    core = DLPlusCore()
+    await core.initialize()
+    
+    result = await core.process_command("اشرح لي ما هو الذكاء الصناعي")
+    print(result['response'])
+
+asyncio.run(main())
+```
+
+**cURL:**
+```bash
+curl -X POST http://localhost:8000/api/process \
+  -H "X-API-Key: your-secret-key" \
+  -H "Content-Type: application/json" \
+  -d '{"command": "مرحباً"}'
+```
+
+### Documentation
+
+- 📖 [Complete DL+ Documentation](dlplus/docs/DLPLUS_SYSTEM.md)
+- 🚀 [Quick Start Guide](DLPLUS_README.md)
+- 💡 [Examples](examples/)
+- 🧪 [Tests](tests/)
+
+### Supported AI Models
+
+- **AraBERT** - Arabic language understanding
+- **CAMeLBERT** - Arabic NLP and NER
+- **Qwen 2.5 Arabic** - Arabic text generation and reasoning
+- **LLaMA 3** - General reasoning and coding
+- **DeepSeek** - Advanced code generation
+- **Mistral** - Multilingual support
+
+---
+
 ## Deployment Status
 
 ✅ **OpenWebUI has been successfully added and integrated**
 ✅ **Project is deployed and accessible via GitHub Pages**
+✅ **DL+ Arabic Intelligence System implemented**
 ✅ **Temporary domain active:** https://wasalstor-web.github.io/AI-Agent-Platform/
 
 📖 **For complete deployment information, see [DEPLOYMENT.md](DEPLOYMENT.md)**
