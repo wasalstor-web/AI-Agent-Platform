@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Supreme Agent - الوكيل الأعلى المتكامل</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🤖</text></svg>">
+</head>
+<body>
+    <!-- Header / الترويسة -->
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    <span class="logo-icon">🤖</span>
+                    <h1 class="logo-text">Supreme Agent</h1>
+                </div>
+                <div class="header-actions">
+                    <button class="btn-icon" id="themeToggle" title="تبديل الوضع / Toggle theme">
+                        <span class="icon">🌙</span>
+                    </button>
+                    <button class="btn-icon" id="langToggle" title="تبديل اللغة / Toggle language">
+                        <span class="icon">🌐</span>
+                    </button>
+                    <button class="btn-icon" id="settingsBtn" title="الإعدادات / Settings">
+                        <span class="icon">⚙️</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Container / الحاوية الرئيسية -->
+    <div class="container main-container">
+        <!-- Sidebar / الشريط الجانبي -->
+        <aside class="sidebar">
+            <nav class="sidebar-nav">
+                <button class="nav-item active" data-tab="chat">
+                    <span class="icon">💬</span>
+                    <span class="text" data-en="Chat" data-ar="محادثة">محادثة</span>
+                </button>
+                <button class="nav-item" data-tab="execute">
+                    <span class="icon">⚡</span>
+                    <span class="text" data-en="Execute" data-ar="تنفيذ">تنفيذ</span>
+                </button>
+                <button class="nav-item" data-tab="analyze">
+                    <span class="icon">📊</span>
+                    <span class="text" data-en="Analyze" data-ar="تحليل">تحليل</span>
+                </button>
+                <button class="nav-item" data-tab="generate">
+                    <span class="icon">💻</span>
+                    <span class="text" data-en="Generate Code" data-ar="توليد كود">توليد كود</span>
+                </button>
+                <button class="nav-item" data-tab="models">
+                    <span class="icon">🎯</span>
+                    <span class="text" data-en="Models" data-ar="النماذج">النماذج</span>
+                </button>
+                <button class="nav-item" data-tab="history">
+                    <span class="icon">📜</span>
+                    <span class="text" data-en="History" data-ar="السجل">السجل</span>
+                </button>
+            </nav>
+            
+            <!-- Status / الحالة -->
+            <div class="sidebar-footer">
+                <div class="status-indicator">
+                    <span class="status-dot" id="statusDot"></span>
+                    <span class="status-text" id="statusText" data-en="Connecting..." data-ar="جاري الاتصال...">جاري الاتصال...</span>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Content Area / منطقة المحتوى -->
+        <main class="content">
+            <!-- Chat Tab / تبويب المحادثة -->
+            <div class="tab-content active" id="tab-chat">
+                <div class="chat-container">
+                    <div class="messages" id="chatMessages">
+                        <div class="welcome-message">
+                            <h2 data-en="Welcome to Supreme Agent" data-ar="مرحباً بك في الوكيل الأعلى">مرحباً بك في الوكيل الأعلى</h2>
+                            <p data-en="Your intelligent AI assistant for chat, analysis, code generation, and more." 
+                               data-ar="مساعدك الذكي للمحادثة والتحليل وتوليد الأكواد والمزيد.">
+                                مساعدك الذكي للمحادثة والتحليل وتوليد الأكواد والمزيد.
+                            </p>
+                            <div class="quick-actions">
+                                <button class="quick-action" onclick="sendQuickMessage('مرحباً! كيف يمكنني مساعدتك؟')">
+                                    <span>👋</span> مرحباً
+                                </button>
+                                <button class="quick-action" onclick="sendQuickMessage('اكتب لي برنامج بايثون بسيط')">
+                                    <span>🐍</span> برنامج بايثون
+                                </button>
+                                <button class="quick-action" onclick="sendQuickMessage('ساعدني في تصميم قاعدة بيانات')">
+                                    <span>🗄️</span> قاعدة بيانات
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="chat-input-container">
+                        <textarea id="chatInput" class="chat-input" rows="3" 
+                                  placeholder="اكتب رسالتك هنا... / Type your message..."></textarea>
+                        <button id="chatSendBtn" class="btn-send">
+                            <span class="icon">📤</span>
+                            <span class="text" data-en="Send" data-ar="إرسال">إرسال</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Execute Tab / تبويب التنفيذ -->
+            <div class="tab-content" id="tab-execute">
+                <div class="panel">
+                    <h2 data-en="Execute Command" data-ar="تنفيذ أمر">تنفيذ أمر</h2>
+                    <p data-en="Tell the agent what to do and it will execute it." 
+                       data-ar="أخبر الوكيل بما تريد فعله وسيقوم بتنفيذه.">
+                        أخبر الوكيل بما تريد فعله وسيقوم بتنفيذه.
+                    </p>
+                    <textarea id="executeInput" class="command-input" rows="5" 
+                              placeholder="مثال: اكتب سكريبت لنسخ الملفات من مجلد إلى آخر"></textarea>
+                    <button id="executeBtn" class="btn-primary">
+                        <span class="icon">⚡</span>
+                        <span class="text" data-en="Execute" data-ar="تنفيذ">تنفيذ</span>
+                    </button>
+                    <div id="executeResult" class="result-container"></div>
+                </div>
+            </div>
+
+            <!-- Analyze Tab / تبويب التحليل -->
+            <div class="tab-content" id="tab-analyze">
+                <div class="panel">
+                    <h2 data-en="Analyze File" data-ar="تحليل ملف">تحليل ملف</h2>
+                    <p data-en="Upload or specify a file path to analyze." 
+                       data-ar="ارفع ملف أو حدد مساره لتحليله.">
+                        ارفع ملف أو حدد مساره لتحليله.
+                    </p>
+                    <div class="file-input-group">
+                        <input type="text" id="analyzeFilepath" class="text-input" 
+                               placeholder="مسار الملف / File path">
+                        <input type="file" id="analyzeFileUpload" class="file-input" accept="*">
+                        <label for="analyzeFileUpload" class="btn-secondary">
+                            <span class="icon">📁</span>
+                            <span class="text" data-en="Browse" data-ar="تصفح">تصفح</span>
+                        </label>
+                    </div>
+                    <button id="analyzeBtn" class="btn-primary">
+                        <span class="icon">📊</span>
+                        <span class="text" data-en="Analyze" data-ar="تحليل">تحليل</span>
+                    </button>
+                    <div id="analyzeResult" class="result-container"></div>
+                </div>
+            </div>
+
+            <!-- Generate Code Tab / تبويب توليد الكود -->
+            <div class="tab-content" id="tab-generate">
+                <div class="panel">
+                    <h2 data-en="Generate Code" data-ar="توليد كود">توليد كود</h2>
+                    <p data-en="Describe what code you need and the agent will generate it." 
+                       data-ar="صف الكود الذي تحتاجه وسيقوم الوكيل بتوليده.">
+                        صف الكود الذي تحتاجه وسيقوم الوكيل بتوليده.
+                    </p>
+                    <div class="form-group">
+                        <label for="codeLanguage" data-en="Programming Language" data-ar="لغة البرمجة">لغة البرمجة</label>
+                        <select id="codeLanguage" class="select-input">
+                            <option value="python">Python</option>
+                            <option value="javascript">JavaScript</option>
+                            <option value="java">Java</option>
+                            <option value="cpp">C++</option>
+                            <option value="csharp">C#</option>
+                            <option value="go">Go</option>
+                            <option value="rust">Rust</option>
+                            <option value="php">PHP</option>
+                        </select>
+                    </div>
+                    <textarea id="generateInput" class="command-input" rows="5" 
+                              placeholder="مثال: برنامج حاسبة بسيط مع واجهة مستخدم"></textarea>
+                    <button id="generateBtn" class="btn-primary">
+                        <span class="icon">💻</span>
+                        <span class="text" data-en="Generate" data-ar="توليد">توليد</span>
+                    </button>
+                    <div id="generateResult" class="result-container"></div>
+                </div>
+            </div>
+
+            <!-- Models Tab / تبويب النماذج -->
+            <div class="tab-content" id="tab-models">
+                <div class="panel">
+                    <h2 data-en="Available Models" data-ar="النماذج المتاحة">النماذج المتاحة</h2>
+                    <p data-en="Manage and view available AI models." 
+                       data-ar="إدارة وعرض نماذج الذكاء الاصطناعي المتاحة.">
+                        إدارة وعرض نماذج الذكاء الاصطناعي المتاحة.
+                    </p>
+                    <button id="refreshModelsBtn" class="btn-secondary">
+                        <span class="icon">🔄</span>
+                        <span class="text" data-en="Refresh" data-ar="تحديث">تحديث</span>
+                    </button>
+                    <div id="modelsList" class="models-list"></div>
+                </div>
+            </div>
+
+            <!-- History Tab / تبويب السجل -->
+            <div class="tab-content" id="tab-history">
+                <div class="panel">
+                    <h2 data-en="Conversation History" data-ar="سجل المحادثات">سجل المحادثات</h2>
+                    <p data-en="View and manage your interaction history." 
+                       data-ar="عرض وإدارة سجل تفاعلاتك.">
+                        عرض وإدارة سجل تفاعلاتك.
+                    </p>
+                    <div class="history-actions">
+                        <button id="exportHistoryBtn" class="btn-secondary">
+                            <span class="icon">💾</span>
+                            <span class="text" data-en="Export" data-ar="تصدير">تصدير</span>
+                        </button>
+                        <button id="clearHistoryBtn" class="btn-danger">
+                            <span class="icon">🗑️</span>
+                            <span class="text" data-en="Clear All" data-ar="مسح الكل">مسح الكل</span>
+                        </button>
+                    </div>
+                    <div id="historyList" class="history-list"></div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Settings Modal / نافذة الإعدادات -->
+    <div id="settingsModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 data-en="Settings" data-ar="الإعدادات">الإعدادات</h2>
+                <button class="modal-close">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label data-en="API URL" data-ar="عنوان API">عنوان API</label>
+                    <input type="text" id="apiUrl" class="text-input" value="http://localhost:5000">
+                </div>
+                <div class="form-group">
+                    <label data-en="Default Model" data-ar="النموذج الافتراضي">النموذج الافتراضي</label>
+                    <input type="text" id="defaultModel" class="text-input" value="supreme-executor">
+                </div>
+                <div class="form-group">
+                    <label data-en="Temperature" data-ar="درجة الإبداع">درجة الإبداع</label>
+                    <input type="range" id="temperature" min="0" max="1" step="0.1" value="0.7">
+                    <span id="temperatureValue">0.7</span>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button id="saveSettingsBtn" class="btn-primary" data-en="Save" data-ar="حفظ">حفظ</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
