@@ -225,8 +225,8 @@ python3 -m http.server 8000
 
 ### س: كيف أحدث الموقع؟
 **ج:** 
-- GitHub Pages: يتحدث تلقائياً مع كل push
-- Vercel/Netlify: يتحدث تلقائياً إذا ربطته بـ GitHub
+- GitHub Pages: يتحدّث تلقائياً مع كل push
+- Vercel/Netlify: يتحدّث تلقائياً إذا ربطته بـ GitHub
 - Surge: أعد تشغيل أمر `surge`
 - VPS: git pull + نسخ الملفات
 
