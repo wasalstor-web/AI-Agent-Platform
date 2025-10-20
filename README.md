@@ -2,7 +2,31 @@
 
 An AI Agent Platform infrastructure project with automated finalization capabilities, OpenWebUI integration, and the **DL+ Unified Arabic Intelligence System**.
 
-## 🧠 NEW: DL+ Arabic Intelligence System
+## 🆕 NEW: OpenWebUI Integration with Open-Source AI Models
+
+**دمج OpenWebUI مع نماذج الذكاء الصناعي المفتوحة المصدر**
+
+The platform now features a complete OpenWebUI integration with **6 open-source AI models**:
+- 🤖 **LLaMA 3 8B** (Meta) - General purpose
+- 🇸🇦 **Qwen 2.5 Arabic** (Alibaba) - Arabic specialized
+- 📝 **AraBERT** (AUB) - Arabic NLP
+- 🌐 **Mistral 7B** (Mistral AI) - Multilingual
+- 💻 **DeepSeek Coder** (DeepSeek) - Code generation
+- ⚡ **Phi-3 Mini** (Microsoft) - Compact & efficient
+
+**Quick Start OpenWebUI Integration:**
+```bash
+./deploy-openwebui-integration.sh
+```
+
+📖 **Integration Documentation:**
+- **[OpenWebUI Integration Guide](OPENWEBUI_INTEGRATION.md)** ⭐ NEW!
+- **[Interactive Demo Page](openwebui-demo.html)**
+- **Webhook URL:** `https://wasalstor-web.github.io/AI-Agent-Platform`
+
+---
+
+## 🧠 DL+ Arabic Intelligence System
 
 **نظام DL+ للذكاء الصناعي العربي الموحد**
 
@@ -19,7 +43,7 @@ The platform now includes DL+, a complete Arabic-first AI system that integrates
 
 📖 **Key Documentation:**
 - **[Complete DL+ Documentation](DLPLUS_README.md)**
-- **[Hostinger Command Execution Guide](HOSTINGER_COMMAND_EXECUTION.md)** ⭐ NEW!
+- **[Hostinger Command Execution Guide](HOSTINGER_COMMAND_EXECUTION.md)**
 - **[Command Examples](examples/hostinger_command_examples.py)**
 
 ---
