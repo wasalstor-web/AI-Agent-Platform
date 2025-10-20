@@ -41,7 +41,8 @@ sudo apt-get install python3 python3-pip python3-venv
 #### Step 1: Clone the Repository | استنساخ المستودع
 
 ```bash
-# Clone the repository
+# Clone the repository (replace with your fork if needed)
+# استنسخ المستودع (استبدل بنسختك إذا لزم الأمر)
 git clone https://github.com/wasalstor-web/AI-Agent-Platform.git
 cd AI-Agent-Platform
 ```
@@ -104,8 +105,12 @@ ls -lh .env.instant-deploy
 git status | grep .env.instant-deploy
 # Should show nothing (file is ignored)
 
-# View the configuration (optional - be careful not to share this!)
-cat .env.instant-deploy
+# View the configuration (CAREFUL: Contains sensitive data!)
+# Only view first few lines to verify structure without exposing all keys
+head -n 5 .env.instant-deploy
+
+# ⚠️  WARNING: Never share the full contents or take screenshots!
+# ⚠️  تحذير: لا تشارك المحتويات الكاملة أو تلتقط لقطات شاشة!
 ```
 
 #### Step 5: Run Deployment | تشغيل النشر
@@ -263,6 +268,7 @@ docker restart open-webui
 
 # Restart DL+ Backend
 pkill -f "python.*dlplus/main.py"
+chmod +x start-dlplus.sh  # Make executable if needed
 ./start-dlplus.sh
 ```
 
@@ -356,8 +362,9 @@ curl http://127.0.0.1:3000
 
 4. **Read full documentation**
    - [Quick Deploy Guide](QUICK_DEPLOY_GUIDE.md)
-   - [OpenWebUI Documentation](OPENWEBUI.md)
+   - [OpenWebUI Integration Guide](OPENWEBUI_INTEGRATION.md)
    - [DL+ System Documentation](DLPLUS_README.md)
+   - [Main README](README.md)
 
 ## Summary | الملخص
 
