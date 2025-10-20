@@ -350,6 +350,297 @@
             left: auto;
             right: 10px;
         }
+
+        /* Chat Interface Styles */
+        .chat-container {
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 20px;
+            margin-top: 20px;
+        }
+
+        .model-selector {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 20px;
+            padding: 15px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            flex-wrap: wrap;
+        }
+
+        .model-selector label {
+            font-weight: bold;
+            color: #667eea;
+        }
+
+        .model-dropdown {
+            flex: 1;
+            min-width: 200px;
+            padding: 10px;
+            border: 2px solid #667eea;
+            border-radius: 8px;
+            font-size: 1em;
+            background: white;
+            color: #333;
+            cursor: pointer;
+        }
+
+        .btn-small {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-size: 1em;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: bold;
+        }
+
+        .btn-small:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .status-indicator {
+            font-size: 0.9em;
+            padding: 5px 15px;
+            border-radius: 20px;
+            background: #f0f0f0;
+            font-weight: bold;
+        }
+
+        .status-indicator.connected {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .status-indicator.error {
+            background: #f8d7da;
+            color: #721c24;
+        }
+
+        .chat-messages {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            min-height: 400px;
+            max-height: 600px;
+            overflow-y: auto;
+            margin-bottom: 20px;
+            box-shadow: inset 0 2px 10px rgba(0, 0, 0, 0.05);
+        }
+
+        .message {
+            margin-bottom: 15px;
+            padding: 12px 16px;
+            border-radius: 10px;
+            max-width: 80%;
+            word-wrap: break-word;
+            animation: slideIn 0.3s ease-out;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .message.user {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            margin-right: auto;
+            border-bottom-right-radius: 3px;
+        }
+
+        .message.assistant {
+            background: #e9ecef;
+            color: #333;
+            margin-left: auto;
+            border-bottom-left-radius: 3px;
+        }
+
+        .message.system-message {
+            background: #fff3cd;
+            color: #856404;
+            text-align: center;
+            max-width: 100%;
+            border: 1px solid #ffeaa7;
+        }
+
+        .message.error-message {
+            background: #f8d7da;
+            color: #721c24;
+            max-width: 100%;
+            border: 1px solid #f5c6cb;
+        }
+
+        .message-timestamp {
+            font-size: 0.75em;
+            opacity: 0.7;
+            margin-top: 5px;
+        }
+
+        .chat-input-container {
+            display: flex;
+            gap: 10px;
+            align-items: flex-end;
+        }
+
+        .chat-input {
+            flex: 1;
+            padding: 12px;
+            border: 2px solid #667eea;
+            border-radius: 10px;
+            font-size: 1em;
+            font-family: inherit;
+            resize: vertical;
+            min-height: 60px;
+        }
+
+        .chat-input:focus {
+            outline: none;
+            border-color: #764ba2;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .btn-send {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 10px;
+            font-size: 1em;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: bold;
+            white-space: nowrap;
+        }
+
+        .btn-send:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(79, 172, 254, 0.4);
+        }
+
+        .btn-send:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .api-config {
+            margin-top: 20px;
+            background: white;
+            border-radius: 10px;
+            padding: 15px;
+        }
+
+        .api-config details {
+            cursor: pointer;
+        }
+
+        .api-config summary {
+            font-weight: bold;
+            color: #667eea;
+            padding: 10px;
+            user-select: none;
+        }
+
+        .api-settings-content {
+            padding: 15px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .api-input {
+            padding: 10px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 1em;
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        .api-input:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .typing-indicator {
+            display: flex;
+            gap: 5px;
+            padding: 15px;
+        }
+
+        .typing-indicator span {
+            width: 8px;
+            height: 8px;
+            background: #667eea;
+            border-radius: 50%;
+            animation: typing 1.4s infinite;
+        }
+
+        .typing-indicator span:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+
+        .typing-indicator span:nth-child(3) {
+            animation-delay: 0.4s;
+        }
+
+        @keyframes typing {
+            0%, 60%, 100% {
+                transform: translateY(0);
+            }
+            30% {
+                transform: translateY(-10px);
+            }
+        }
+
+        body[dir="ltr"] .message.user {
+            margin-left: auto;
+            margin-right: 0;
+            border-bottom-right-radius: 10px;
+            border-bottom-left-radius: 3px;
+        }
+
+        body[dir="ltr"] .message.assistant {
+            margin-right: auto;
+            margin-left: 0;
+            border-bottom-left-radius: 10px;
+            border-bottom-right-radius: 3px;
+        }
+
+        @media (max-width: 768px) {
+            .model-selector {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .model-dropdown {
+                width: 100%;
+            }
+
+            .chat-input-container {
+                flex-direction: column;
+            }
+
+            .btn-send {
+                width: 100%;
+            }
+
+            .message {
+                max-width: 90%;
+            }
+        }
     </style>
 </head>
 <body>
@@ -564,6 +855,67 @@
                 </div>
             </div>
 
+            <!-- Interactive Chat Section -->
+            <div class="section">
+                <h2 id="chat-title">💬 تواصل مع النماذج مباشرة</h2>
+                <p id="chat-subtitle">تفاعل مع نماذج الذكاء الاصطناعي بشكل مباشر من خلال هذه الواجهة</p>
+                
+                <div class="chat-container">
+                    <div class="model-selector">
+                        <label for="model-select" id="model-label">اختر النموذج:</label>
+                        <select id="model-select" class="model-dropdown">
+                            <option value="gpt-3.5-turbo">GPT-3.5 Turbo</option>
+                            <option value="gpt-4">GPT-4</option>
+                            <option value="claude-3">Claude 3</option>
+                            <option value="llama-3">LLaMA 3</option>
+                            <option value="qwen-arabic">Qwen Arabic</option>
+                            <option value="arabert">AraBERT</option>
+                            <option value="mistral">Mistral</option>
+                            <option value="deepseek">DeepSeek Coder</option>
+                        </select>
+                        <button class="btn-small" onclick="connectToModel()" id="connect-btn">اتصل</button>
+                        <span id="status-indicator" class="status-indicator">⚫ غير متصل</span>
+                    </div>
+
+                    <div class="chat-messages" id="chat-messages">
+                        <div class="system-message">
+                            <p id="welcome-msg">مرحباً! اختر نموذج الذكاء الاصطناعي واضغط "اتصل" للبدء في المحادثة.</p>
+                        </div>
+                    </div>
+
+                    <div class="chat-input-container">
+                        <textarea 
+                            id="chat-input" 
+                            class="chat-input" 
+                            placeholder="اكتب رسالتك هنا..." 
+                            rows="3"
+                            onkeydown="handleChatKeydown(event)"
+                        ></textarea>
+                        <button class="btn-send" onclick="sendMessage()" id="send-btn">
+                            <span>إرسال 📤</span>
+                        </button>
+                    </div>
+
+                    <div class="api-config" id="api-config">
+                        <details>
+                            <summary id="api-settings-title">⚙️ إعدادات API</summary>
+                            <div class="api-settings-content">
+                                <label for="api-endpoint" id="api-endpoint-label">نقطة نهاية API:</label>
+                                <input type="text" id="api-endpoint" class="api-input" 
+                                    value="http://localhost:8000/api/process" 
+                                    placeholder="http://localhost:8000/api/process">
+                                
+                                <label for="api-key" id="api-key-label">مفتاح API (اختياري):</label>
+                                <input type="password" id="api-key" class="api-input" 
+                                    placeholder="أدخل مفتاح API إذا كان مطلوباً">
+                                
+                                <button class="btn-small" onclick="saveApiSettings()" id="save-settings-btn">حفظ الإعدادات</button>
+                            </div>
+                        </details>
+                    </div>
+                </div>
+            </div>
+
             <!-- Quick Actions -->
             <div class="section">
                 <h2 id="actions-title">إجراءات سريعة</h2>
@@ -593,6 +945,245 @@
     <script>
         // Language Toggle Functionality
         let currentLang = 'ar';
+        let isConnected = false;
+        let selectedModel = 'gpt-3.5-turbo';
+        let apiEndpoint = 'http://localhost:8000/api/process';
+        let apiKey = '';
+
+        // Load saved settings from localStorage
+        function loadSettings() {
+            const savedEndpoint = localStorage.getItem('apiEndpoint');
+            const savedApiKey = localStorage.getItem('apiKey');
+            
+            if (savedEndpoint) {
+                apiEndpoint = savedEndpoint;
+                document.getElementById('api-endpoint').value = savedEndpoint;
+            }
+            if (savedApiKey) {
+                apiKey = savedApiKey;
+                document.getElementById('api-key').value = savedApiKey;
+            }
+        }
+
+        // Save API settings
+        function saveApiSettings() {
+            const endpoint = document.getElementById('api-endpoint').value;
+            const key = document.getElementById('api-key').value;
+            
+            apiEndpoint = endpoint;
+            apiKey = key;
+            
+            localStorage.setItem('apiEndpoint', endpoint);
+            localStorage.setItem('apiKey', key);
+            
+            addSystemMessage(currentLang === 'ar' ? 
+                'تم حفظ الإعدادات بنجاح' : 
+                'Settings saved successfully'
+            );
+        }
+
+        // Connect to model
+        async function connectToModel() {
+            const modelSelect = document.getElementById('model-select');
+            selectedModel = modelSelect.value;
+            const statusIndicator = document.getElementById('status-indicator');
+            const connectBtn = document.getElementById('connect-btn');
+            
+            connectBtn.disabled = true;
+            statusIndicator.textContent = currentLang === 'ar' ? '⚡ جاري الاتصال...' : '⚡ Connecting...';
+            statusIndicator.className = 'status-indicator';
+            
+            try {
+                // Test connection with a simple health check
+                const response = await fetch(apiEndpoint.replace('/api/process', '/api/health'), {
+                    method: 'GET',
+                    headers: apiKey ? { 'X-API-Key': apiKey } : {}
+                });
+                
+                if (response.ok) {
+                    isConnected = true;
+                    statusIndicator.textContent = currentLang === 'ar' ? 
+                        '🟢 متصل - ' + getModelName(selectedModel) : 
+                        '🟢 Connected - ' + getModelName(selectedModel);
+                    statusIndicator.className = 'status-indicator connected';
+                    
+                    addSystemMessage(currentLang === 'ar' ? 
+                        `تم الاتصال بنجاح بنموذج ${getModelName(selectedModel)}! يمكنك الآن بدء المحادثة.` :
+                        `Successfully connected to ${getModelName(selectedModel)}! You can now start chatting.`
+                    );
+                } else {
+                    throw new Error('Connection failed');
+                }
+            } catch (error) {
+                isConnected = false;
+                statusIndicator.textContent = currentLang === 'ar' ? '🔴 خطأ في الاتصال' : '🔴 Connection Error';
+                statusIndicator.className = 'status-indicator error';
+                
+                addErrorMessage(currentLang === 'ar' ? 
+                    `فشل الاتصال بالنموذج. تأكد من تشغيل الخادم على ${apiEndpoint}` :
+                    `Failed to connect to model. Make sure the server is running at ${apiEndpoint}`
+                );
+            }
+            
+            connectBtn.disabled = false;
+        }
+
+        // Get model display name
+        function getModelName(model) {
+            const names = {
+                'gpt-3.5-turbo': 'GPT-3.5 Turbo',
+                'gpt-4': 'GPT-4',
+                'claude-3': 'Claude 3',
+                'llama-3': 'LLaMA 3',
+                'qwen-arabic': 'Qwen Arabic',
+                'arabert': 'AraBERT',
+                'mistral': 'Mistral',
+                'deepseek': 'DeepSeek Coder'
+            };
+            return names[model] || model;
+        }
+
+        // Send message
+        async function sendMessage() {
+            const input = document.getElementById('chat-input');
+            const message = input.value.trim();
+            
+            if (!message) return;
+            
+            if (!isConnected) {
+                addErrorMessage(currentLang === 'ar' ? 
+                    'يرجى الاتصال بنموذج أولاً' : 
+                    'Please connect to a model first'
+                );
+                return;
+            }
+            
+            // Add user message to chat
+            addMessage(message, 'user');
+            input.value = '';
+            
+            // Show typing indicator
+            const typingId = addTypingIndicator();
+            
+            // Disable send button
+            const sendBtn = document.getElementById('send-btn');
+            sendBtn.disabled = true;
+            
+            try {
+                const response = await fetch(apiEndpoint, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        ...(apiKey ? { 'X-API-Key': apiKey } : {})
+                    },
+                    body: JSON.stringify({
+                        command: message,
+                        context: {
+                            model: selectedModel,
+                            language: currentLang
+                        }
+                    })
+                });
+                
+                removeTypingIndicator(typingId);
+                
+                if (response.ok) {
+                    const data = await response.json();
+                    addMessage(data.response || data.message || 'No response', 'assistant');
+                } else {
+                    throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+                }
+            } catch (error) {
+                removeTypingIndicator(typingId);
+                addErrorMessage(currentLang === 'ar' ? 
+                    `خطأ في إرسال الرسالة: ${error.message}` :
+                    `Error sending message: ${error.message}`
+                );
+            }
+            
+            sendBtn.disabled = false;
+        }
+
+        // Add message to chat
+        function addMessage(text, type) {
+            const messagesContainer = document.getElementById('chat-messages');
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `message ${type}`;
+            
+            const textP = document.createElement('p');
+            textP.textContent = text;
+            messageDiv.appendChild(textP);
+            
+            const timestamp = document.createElement('div');
+            timestamp.className = 'message-timestamp';
+            timestamp.textContent = new Date().toLocaleTimeString(currentLang === 'ar' ? 'ar-SA' : 'en-US');
+            messageDiv.appendChild(timestamp);
+            
+            messagesContainer.appendChild(messageDiv);
+            messagesContainer.scrollTop = messagesContainer.scrollHeight;
+        }
+
+        // Add system message
+        function addSystemMessage(text) {
+            const messagesContainer = document.getElementById('chat-messages');
+            const messageDiv = document.createElement('div');
+            messageDiv.className = 'message system-message';
+            
+            const textP = document.createElement('p');
+            textP.textContent = text;
+            messageDiv.appendChild(textP);
+            
+            messagesContainer.appendChild(messageDiv);
+            messagesContainer.scrollTop = messagesContainer.scrollHeight;
+        }
+
+        // Add error message
+        function addErrorMessage(text) {
+            const messagesContainer = document.getElementById('chat-messages');
+            const messageDiv = document.createElement('div');
+            messageDiv.className = 'message error-message';
+            
+            const textP = document.createElement('p');
+            textP.textContent = text;
+            messageDiv.appendChild(textP);
+            
+            messagesContainer.appendChild(messageDiv);
+            messagesContainer.scrollTop = messagesContainer.scrollHeight;
+        }
+
+        // Add typing indicator
+        function addTypingIndicator() {
+            const messagesContainer = document.getElementById('chat-messages');
+            const typingDiv = document.createElement('div');
+            const id = 'typing-' + Date.now();
+            typingDiv.id = id;
+            typingDiv.className = 'message assistant';
+            typingDiv.innerHTML = '<div class="typing-indicator"><span></span><span></span><span></span></div>';
+            
+            messagesContainer.appendChild(typingDiv);
+            messagesContainer.scrollTop = messagesContainer.scrollHeight;
+            
+            return id;
+        }
+
+        // Remove typing indicator
+        function removeTypingIndicator(id) {
+            const indicator = document.getElementById(id);
+            if (indicator) {
+                indicator.remove();
+            }
+        }
+
+        // Handle chat input keydown
+        function handleChatKeydown(event) {
+            if (event.key === 'Enter' && !event.shiftKey) {
+                event.preventDefault();
+                sendMessage();
+            }
+        }
+
+        // Load settings on page load
+        window.addEventListener('DOMContentLoaded', loadSettings);
 
         const translations = {
             ar: {
@@ -658,7 +1249,17 @@
                 'btn-repo': '📂 المستودع على GitHub',
                 'btn-run': '▶️ تشغيل الإنهاء',
                 'btn-docs': '📄 تحميل التوثيق',
-                'footer-text': '© 2025 منصة وكيل الذكاء الاصطناعي'
+                'footer-text': '© 2025 منصة وكيل الذكاء الاصطناعي',
+                'chat-title': '💬 تواصل مع النماذج مباشرة',
+                'chat-subtitle': 'تفاعل مع نماذج الذكاء الاصطناعي بشكل مباشر من خلال هذه الواجهة',
+                'model-label': 'اختر النموذج:',
+                'connect-btn': 'اتصل',
+                'welcome-msg': 'مرحباً! اختر نموذج الذكاء الاصطناعي واضغط "اتصل" للبدء في المحادثة.',
+                'send-btn': 'إرسال 📤',
+                'api-settings-title': '⚙️ إعدادات API',
+                'api-endpoint-label': 'نقطة نهاية API:',
+                'api-key-label': 'مفتاح API (اختياري):',
+                'save-settings-btn': 'حفظ الإعدادات'
             },
             en: {
                 title: 'AI Agent Platform',
@@ -723,7 +1324,17 @@
                 'btn-repo': '📂 GitHub Repository',
                 'btn-run': '▶️ Run Finalization',
                 'btn-docs': '📄 Download Documentation',
-                'footer-text': '© 2025 AI Agent Platform'
+                'footer-text': '© 2025 AI Agent Platform',
+                'chat-title': '💬 Chat with Models Directly',
+                'chat-subtitle': 'Interact with AI models directly through this interface',
+                'model-label': 'Select Model:',
+                'connect-btn': 'Connect',
+                'welcome-msg': 'Welcome! Choose an AI model and click "Connect" to start chatting.',
+                'send-btn': 'Send 📤',
+                'api-settings-title': '⚙️ API Settings',
+                'api-endpoint-label': 'API Endpoint:',
+                'api-key-label': 'API Key (optional):',
+                'save-settings-btn': 'Save Settings'
             }
         };
 
@@ -743,9 +1354,37 @@
             Object.keys(translations[currentLang]).forEach(key => {
                 const element = document.getElementById(key);
                 if (element) {
-                    element.textContent = translations[currentLang][key];
+                    if (element.tagName === 'BUTTON' || element.tagName === 'SPAN') {
+                        element.innerHTML = translations[currentLang][key];
+                    } else {
+                        element.textContent = translations[currentLang][key];
+                    }
                 }
             });
+
+            // Update chat input placeholder
+            const chatInput = document.getElementById('chat-input');
+            if (chatInput) {
+                chatInput.placeholder = currentLang === 'ar' ? 
+                    'اكتب رسالتك هنا...' : 
+                    'Type your message here...';
+            }
+
+            // Update API key input placeholder
+            const apiKeyInput = document.getElementById('api-key');
+            if (apiKeyInput) {
+                apiKeyInput.placeholder = currentLang === 'ar' ? 
+                    'أدخل مفتاح API إذا كان مطلوباً' : 
+                    'Enter API key if required';
+            }
+
+            // Update status indicator if connected
+            if (isConnected) {
+                const statusIndicator = document.getElementById('status-indicator');
+                statusIndicator.textContent = currentLang === 'ar' ? 
+                    '🟢 متصل - ' + getModelName(selectedModel) : 
+                    '🟢 Connected - ' + getModelName(selectedModel);
+            }
 
             // Update footer separately as it has HTML
             const footer = document.getElementById('footer-text');
