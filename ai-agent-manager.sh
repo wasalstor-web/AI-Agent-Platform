@@ -10,6 +10,31 @@ YELLOW="\e[33m"
 BLUE="\e[34m"
 RESET="\e[0m"
 
+# Configuration
+AUTO_MODE=false
+WARM_MODE=false
+PROJECT_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+
+# Parse command line arguments
+for arg in "$@"; do
+    case $arg in
+        --auto)
+            AUTO_MODE=true
+            ;;
+        --warm)
+            WARM_MODE=true
+            ;;
+        --help|-h)
+            echo "AI Agent Manager - Usage:"
+            echo "  $0                Run in interactive mode"
+            echo "  $0 --auto         Run in automatic mode (non-interactive)"
+            echo "  $0 --warm         Enable model warm-up"
+            echo "  $0 --auto --warm  Run automatically with model warm-up"
+            exit 0
+            ;;
+    esac
+done
+
 # Function to display the menu
 function show_menu() {
     echo -e "${BLUE}AI Agent Manager Menu:${RESET}"
@@ -54,18 +79,151 @@ function handle_option() {
 
 # Placeholder functions for each feature
 function check_installation_status() {
-    echo "Checking installation status..."
-    # Implementation here
+    echo -e "${BLUE}Checking installation status...${RESET}"
+    
+    # Check for key files
+    local status_ok=true
+    
+    if [ -d "$PROJECT_ROOT/dlplus" ]; then
+        echo -e "${GREEN}✓ DL+ system found${RESET}"
+    else
+        echo -e "${RED}✗ DL+ system not found${RESET}"
+        status_ok=false
+    fi
+    
+    if [ -f "$PROJECT_ROOT/requirements.txt" ]; then
+        echo -e "${GREEN}✓ Requirements file found${RESET}"
+    else
+        echo -e "${YELLOW}⚠ Requirements file not found${RESET}"
+    fi
+    
+    # Check Python dependencies
+    if command -v python3 &> /dev/null; then
+        echo -e "${GREEN}✓ Python 3 installed${RESET}"
+    else
+        echo -e "${RED}✗ Python 3 not installed${RESET}"
+        status_ok=false
+    fi
+    
+    # Check for models
+    if [ -f "$PROJECT_ROOT/dlplus/config/models_config.py" ]; then
+        echo -e "${GREEN}✓ Models configuration found${RESET}"
+    else
+        echo -e "${YELLOW}⚠ Models configuration not found${RESET}"
+    fi
+    
+    if $status_ok; then
+        echo -e "${GREEN}Installation status: OK${RESET}"
+    else
+        echo -e "${RED}Installation status: Issues detected${RESET}"
+    fi
 }
 
 function smart_installation() {
-    echo "Starting smart installation..."
-    # Implementation here
+    echo -e "${BLUE}Starting smart installation...${RESET}"
+    
+    # Install Python dependencies
+    if [ -f "$PROJECT_ROOT/requirements.txt" ]; then
+        echo -e "${YELLOW}Installing Python dependencies...${RESET}"
+        pip install -q -r "$PROJECT_ROOT/requirements.txt" && \
+            echo -e "${GREEN}✓ Dependencies installed${RESET}" || \
+            echo -e "${RED}✗ Failed to install dependencies${RESET}"
+    fi
+    
+    # Check and install Ollama if needed
+    if ! command -v ollama &> /dev/null; then
+        echo -e "${YELLOW}Ollama not found. Consider installing from https://ollama.ai${RESET}"
+    else
+        echo -e "${GREEN}✓ Ollama installed${RESET}"
+    fi
+    
+    echo -e "${GREEN}Smart installation completed${RESET}"
 }
 
 function manage_services() {
-    echo "Managing services..."
-    # Implementation here
+    echo -e "${BLUE}Managing services...${RESET}"
+    
+    echo "1) Start all services"
+    echo "2) Stop all services"
+    echo "3) Restart all services"
+    echo "4) Check service status"
+    
+    if ! $AUTO_MODE; then
+        read -p "Select option: " choice
+    else
+        choice=1  # Auto-start services
+    fi
+    
+    case $choice in
+        1)
+            echo -e "${GREEN}Starting services...${RESET}"
+            # Start services logic here
+            ;;
+        2)
+            echo -e "${YELLOW}Stopping services...${RESET}"
+            # Stop services logic here
+            ;;
+        3)
+            echo -e "${YELLOW}Restarting services...${RESET}"
+            # Restart services logic here
+            ;;
+        4)
+            echo -e "${BLUE}Checking service status...${RESET}"
+            # Check status logic here
+            ;;
+    esac
+}
+
+function warm_up_models() {
+    echo -e "${BLUE}Warming up AI models...${RESET}"
+    
+    # Check if Ollama is available
+    if ! command -v ollama &> /dev/null; then
+        echo -e "${YELLOW}⚠ Ollama not found, skipping warm-up${RESET}"
+        return
+    fi
+    
+    # List of models to warm up
+    local models=("llama3" "qwen2.5" "mistral")
+    
+    for model in "${models[@]}"; do
+        echo -e "${YELLOW}Warming up $model...${RESET}"
+        # Send a test prompt to warm up the model
+        echo "Hello" | ollama run "$model" --verbose=false 2>/dev/null && \
+            echo -e "${GREEN}✓ $model warmed up${RESET}" || \
+            echo -e "${YELLOW}⚠ $model not available${RESET}"
+    done
+    
+    echo -e "${GREEN}Model warm-up completed${RESET}"
+}
+
+function auto_mode_execution() {
+    echo -e "${BLUE}════════════════════════════════════════════════════${RESET}"
+    echo -e "${GREEN}Running AI Agent Manager in AUTO mode${RESET}"
+    echo -e "${BLUE}════════════════════════════════════════════════════${RESET}"
+    echo ""
+    
+    # Execute auto mode steps
+    check_installation_status
+    echo ""
+    
+    smart_installation
+    echo ""
+    
+    manage_services
+    echo ""
+    
+    if $WARM_MODE; then
+        warm_up_models
+        echo ""
+    fi
+    
+    health_monitoring
+    echo ""
+    
+    echo -e "${GREEN}════════════════════════════════════════════════════${RESET}"
+    echo -e "${GREEN}AUTO mode execution completed${RESET}"
+    echo -e "${GREEN}════════════════════════════════════════════════════${RESET}"
 }
 
 function configuration_management() {
@@ -89,8 +247,21 @@ function backup_restore() {
 }
 
 function health_monitoring() {
-    echo "Monitoring health..."
-    # Implementation here
+    echo -e "${BLUE}Monitoring health...${RESET}"
+    
+    # Check various service ports
+    local services=("8000:Gateway" "8080:OpenWebUI" "11434:Ollama" "6333:Qdrant")
+    
+    for service in "${services[@]}"; do
+        local port="${service%%:*}"
+        local name="${service##*:}"
+        
+        if curl -s -o /dev/null -w "%{http_code}" "http://localhost:$port" 2>/dev/null | grep -q "200\|404"; then
+            echo -e "${GREEN}✓ $name (port $port): operational${RESET}"
+        else
+            echo -e "${YELLOW}⚠ $name (port $port): not responding${RESET}"
+        fi
+    done
 }
 
 function ssl_setup() {
@@ -119,6 +290,11 @@ function troubleshooting_wizard() {
 }
 
 # Main script execution
+if $AUTO_MODE; then
+    auto_mode_execution
+    exit 0
+fi
+
 while true; do
     show_menu
 done
