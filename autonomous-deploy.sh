@@ -352,7 +352,7 @@ eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImIxYTVmNTlkLTdhYjYtNGFkMC1hYjBlLWE
 
 ### API Key
 \`\`\`
-sk-3720ccd539704717ba9af3453500fe3c
+YOUR_API_KEY_HERE
 \`\`\`
 
 **Note:** These are configured in \`.env\` file. Do not commit to repository.
