@@ -1,0 +1,28 @@
+name: DL+ Smart VPS Auto Verify & Deploy
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Deploy to VPS
+        env:
+          VPS_HOST: ${{ secrets.VPS_HOST }}
+          VPS_USER: ${{ secrets.VPS_USER }}
+          VPS_KEY: ${{ secrets.VPS_KEY }}
+        run: |
+          echo "$VPS_KEY" > key.pem
+          chmod 600 key.pem
+          ssh -o StrictHostKeyChecking=no -i key.pem ${VPS_USER}@${VPS_HOST} "
+            cd /root || exit;
+            nohup bash -c \"curl -fsSL https://raw.githubusercontent.com/${{ github.repository }}/main/scripts/verify-and-deploy-smart.sh | bash\" >/tmp/dlplus_auto.log 2>&1 &
+          "
+
+      - name: Confirm Deployment Triggered
+        run: echo "✅ DL+ Auto Deployment triggered on VPS"
