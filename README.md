@@ -78,7 +78,36 @@ The platform now includes DL+, a complete Arabic-first AI system that integrates
 **The platform is live and accessible at:**
 **🌐 [https://wasalstor-web.github.io/AI-Agent-Platform/](https://wasalstor-web.github.io/AI-Agent-Platform/)**
 
-### ⚡ Instant Deployment (NEW!)
+### ⚡ Autonomous Deployment (RECOMMENDED!)
+
+**One-command deployment - fully autonomous:**
+
+```bash
+# Clone the repository
+git clone https://github.com/wasalstor-web/AI-Agent-Platform.git
+cd AI-Agent-Platform
+
+# Run autonomous deployment (discovers models, agents, and sets up everything)
+bash autonomous-deploy.sh
+
+# OR run complete smart execution (all steps in order)
+bash smart-autonomous-execution.sh
+```
+
+**What it does automatically:**
+- ✅ Discovers 7 AI models from configuration
+- ✅ Detects 3 AI agents from agents directory
+- ✅ Installs all dependencies
+- ✅ Configures all services
+- ✅ Runs health checks
+- ✅ Generates comprehensive DEPLOY.md report
+
+**📖 Complete Guides:**
+- **[Autonomous Deployment Guide](AUTONOMOUS_DEPLOYMENT.md)** ⭐ FULL GUIDE
+- **[Quick Reference](QUICK_REFERENCE.md)** 📋 QUICK COMMANDS
+- **[Generated Report](DEPLOY.md)** 📊 AFTER DEPLOYMENT
+
+### ⚡ Alternative: Instant Deployment
 
 Deploy OpenWebUI with DL+ Backend in seconds:
 
