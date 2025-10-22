@@ -1,0 +1,38 @@
+version: "3.8"
+
+services:
+  dlplus:
+    build: .
+    image: wasalstor-web/ai-agent-platform-dlplus:latest
+    container_name: dlplus
+    env_file:
+      - .env.instant-deploy
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./:/app:cached
+      - ./logs:/app/logs
+    restart: unless-stopped
+
+  openwebui:
+    image: ghcr.io/open-webui/open-webui:latest
+    container_name: openwebui
+    env_file:
+      - .env.instant-deploy
+    environment:
+      - OPENAI_API_BASE_URL=${OPENAI_API_BASE_URL:-http://host.docker.internal:8000/api}
+      - OPENAI_API_KEY=${DLPLUS_API_KEY}
+      - WEBUI_SECRET_KEY=${WEBUI_SECRET_KEY}
+      - WEBUI_JWT_SECRET_KEY=${DLPLUS_JWT_TOKEN}
+      - ENABLE_SIGNUP=${ENABLE_SIGNUP:-true}
+      - ENABLE_API_KEY=${ENABLE_API_KEY:-true}
+    ports:
+      - "3000:8080"
+    volumes:
+      - openwebui_data:/app/backend/data
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    restart: unless-stopped
+
+volumes:
+  openwebui_data:
