@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="AI Agent Platform - منصة وكيل الذكاء الاصطناعي مع دعم متعدد اللغات وتكامل OpenWebUI">
     <title>منصة وكيل الذكاء الاصطناعي - AI Agent Platform</title>
     <style>
         * {
@@ -65,6 +66,27 @@
             color: #667eea;
         }
 
+        .lang-toggle:focus {
+            outline: 3px solid #FFD700;
+            outline-offset: 2px;
+        }
+
+        .skip-to-content {
+            position: absolute;
+            left: -9999px;
+            z-index: 999;
+            padding: 10px 20px;
+            background: #667eea;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+        }
+
+        .skip-to-content:focus {
+            left: 20px;
+            top: 20px;
+        }
+
         .content {
             padding: 40px;
         }
@@ -100,6 +122,11 @@
         .feature-card:hover {
             transform: translateY(-5px);
             box-shadow: 0 10px 30px rgba(102, 126, 234, 0.3);
+        }
+
+        .feature-card:focus-within {
+            outline: 3px solid #667eea;
+            outline-offset: 3px;
         }
 
         .feature-card .icon {
@@ -208,6 +235,11 @@
             background: #764ba2;
         }
 
+        .copy-btn:focus {
+            outline: 3px solid #FFD700;
+            outline-offset: 2px;
+        }
+
         .action-buttons {
             display: flex;
             gap: 15px;
@@ -232,6 +264,11 @@
         .btn:hover {
             transform: translateY(-2px);
             box-shadow: 0 10px 30px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn:focus {
+            outline: 3px solid #FFD700;
+            outline-offset: 2px;
         }
 
         .btn-secondary {
@@ -388,6 +425,12 @@
             cursor: pointer;
         }
 
+        .model-dropdown:focus {
+            outline: 3px solid #FFD700;
+            outline-offset: 2px;
+            border-color: #764ba2;
+        }
+
         .btn-small {
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
@@ -403,6 +446,11 @@
         .btn-small:hover {
             transform: translateY(-2px);
             box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-small:focus {
+            outline: 3px solid #FFD700;
+            outline-offset: 2px;
         }
 
         .status-indicator {
@@ -507,6 +555,12 @@
         }
 
         .chat-input:focus {
+            outline: 3px solid #FFD700;
+            outline-offset: 2px;
+            border-color: #764ba2;
+        }
+
+        .chat-input:focus {
             outline: none;
             border-color: #764ba2;
             box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
@@ -528,6 +582,11 @@
         .btn-send:hover {
             transform: translateY(-2px);
             box-shadow: 0 5px 15px rgba(79, 172, 254, 0.4);
+        }
+
+        .btn-send:focus {
+            outline: 3px solid #FFD700;
+            outline-offset: 2px;
         }
 
         .btn-send:disabled {
@@ -570,8 +629,9 @@
         }
 
         .api-input:focus {
-            outline: none;
-            border-color: #667eea;
+            outline: 3px solid #FFD700;
+            outline-offset: 2px;
+            border-color: #764ba2;
         }
 
         .typing-indicator {
@@ -644,15 +704,16 @@
     </style>
 </head>
 <body>
-    <button class="lang-toggle" onclick="toggleLanguage()">English / عربي</button>
+    <a href="#main-content" class="skip-to-content">Skip to main content / الانتقال إلى المحتوى الرئيسي</a>
+    <button class="lang-toggle" onclick="toggleLanguage()" aria-label="Toggle language between Arabic and English">English / عربي</button>
 
     <div class="container">
-        <div class="header">
+        <header class="header" role="banner">
             <h1 id="title">منصة وكيل الذكاء الاصطناعي</h1>
             <p id="subtitle">بنية تحتية متقدمة لبناء ونشر وإدارة وكلاء الذكاء الاصطناعي</p>
-        </div>
+        </header>
 
-        <div class="content">
+        <main id="main-content" class="content" role="main">
             <!-- Overview Section -->
             <div class="section">
                 <h2 id="overview-title">نظرة عامة على المشروع</h2>
@@ -662,51 +723,51 @@
             </div>
 
             <!-- Features Section -->
-            <div class="section">
+            <section class="section" aria-labelledby="features-title">
                 <h2 id="features-title">الميزات الرئيسية</h2>
-                <div class="feature-grid">
-                    <div class="feature-card">
-                        <div class="icon">🤖</div>
+                <div class="feature-grid" role="list">
+                    <article class="feature-card" role="listitem" tabindex="0">
+                        <div class="icon" role="img" aria-label="Robot icon">🤖</div>
                         <h3 id="feature1-title">إدارة الوكلاء</h3>
                         <p id="feature1-desc">بناء ونشر وكلاء ذكاء اصطناعي متعددة مع إدارة كاملة لدورة حياتهم</p>
-                    </div>
-                    <div class="feature-card">
-                        <div class="icon">🔧</div>
+                    </article>
+                    <article class="feature-card" role="listitem" tabindex="0">
+                        <div class="icon" role="img" aria-label="Tools icon">🔧</div>
                         <h3 id="feature2-title">أدوات متقدمة</h3>
                         <p id="feature2-desc">مجموعة شاملة من الأدوات لتسهيل التطوير والنشر والصيانة</p>
-                    </div>
-                    <div class="feature-card">
-                        <div class="icon">📦</div>
+                    </article>
+                    <article class="feature-card" role="listitem" tabindex="0">
+                        <div class="icon" role="img" aria-label="Package icon">📦</div>
                         <h3 id="feature3-title">الأرشفة التلقائية</h3>
                         <p id="feature3-desc">نظام تلقائي لأرشفة حالة المشروع وحفظ السجلات</p>
-                    </div>
-                    <div class="feature-card">
-                        <div class="icon">🔒</div>
+                    </article>
+                    <article class="feature-card" role="listitem" tabindex="0">
+                        <div class="icon" role="img" aria-label="Security lock icon">🔒</div>
                         <h3 id="feature4-title">الأمان</h3>
                         <p id="feature4-desc">اتباع أفضل ممارسات الأمان مع استبعاد الملفات الحساسة</p>
-                    </div>
-                    <div class="feature-card">
-                        <div class="icon">📊</div>
+                    </article>
+                    <article class="feature-card" role="listitem" tabindex="0">
+                        <div class="icon" role="img" aria-label="Chart icon">📊</div>
                         <h3 id="feature5-title">التقارير الشاملة</h3>
                         <p id="feature5-desc">توليد تقارير مفصلة عن حالة المشروع والعمليات المنفذة</p>
-                    </div>
-                    <div class="feature-card">
-                        <div class="icon">🌐</div>
+                    </article>
+                    <article class="feature-card" role="listitem" tabindex="0">
+                        <div class="icon" role="img" aria-label="Globe icon">🌐</div>
                         <h3 id="feature6-title">دعم متعدد اللغات</h3>
                         <p id="feature6-desc">واجهة وتوثيق باللغتين العربية والإنجليزية</p>
-                    </div>
-                    <div class="feature-card">
-                        <div class="icon">🤖</div>
+                    </article>
+                    <article class="feature-card" role="listitem" tabindex="0">
+                        <div class="icon" role="img" aria-label="Robot icon">🤖</div>
                         <h3 id="feature7-title">تكامل OpenWebUI</h3>
                         <p id="feature7-desc">واجهة ويب قوية للتفاعل مع نماذج الذكاء الاصطناعي</p>
-                    </div>
-                    <div class="feature-card">
-                        <div class="icon">🚀</div>
+                    </article>
+                    <article class="feature-card" role="listitem" tabindex="0">
+                        <div class="icon" role="img" aria-label="Rocket icon">🚀</div>
                         <h3 id="feature8-title">نشر سهل على VPS</h3>
                         <p id="feature8-desc">أدوات تلقائية لنشر المشروع على الخوادم الافتراضية</p>
-                    </div>
+                    </article>
                 </div>
-            </div>
+            </section>
 
             <!-- Workflow Section -->
             <div class="section">
@@ -768,7 +829,7 @@
                 
                 <h3 id="openwebui-install-title" style="color: #667eea; margin-top: 20px;">تثبيت OpenWebUI</h3>
                 <div class="command-box">
-                    <button class="copy-btn" onclick="copyCommand('cmd-openwebui1')">نسخ</button>
+                    <button class="copy-btn" onclick="copyCommand('cmd-openwebui1')" aria-label="Copy OpenWebUI installation command">نسخ</button>
                     <code id="cmd-openwebui1"># التثبيت التفاعلي
 ./setup-openwebui.sh
 
@@ -778,7 +839,7 @@
 
                 <h3 id="openwebui-manage-title" style="color: #667eea; margin-top: 20px;">إدارة OpenWebUI</h3>
                 <div class="command-box">
-                    <button class="copy-btn" onclick="copyCommand('cmd-openwebui2')">نسخ</button>
+                    <button class="copy-btn" onclick="copyCommand('cmd-openwebui2')" aria-label="Copy OpenWebUI management commands">نسخ</button>
                     <code id="cmd-openwebui2"># عرض الحالة
 ./setup-openwebui.sh status
 
@@ -810,19 +871,19 @@
                 
                 <h3 id="interactive-title" style="color: #667eea; margin-top: 20px;">الوضع التفاعلي</h3>
                 <div class="command-box">
-                    <button class="copy-btn" onclick="copyCommand('cmd1')">نسخ</button>
+                    <button class="copy-btn" onclick="copyCommand('cmd1')" aria-label="Copy interactive mode command">نسخ</button>
                     <code id="cmd1">./finalize_project.sh</code>
                 </div>
 
                 <h3 id="directive-title" style="color: #667eea; margin-top: 20px;">التنفيذ التلقائي</h3>
                 <div class="command-box">
-                    <button class="copy-btn" onclick="copyCommand('cmd2')">نسخ</button>
+                    <button class="copy-btn" onclick="copyCommand('cmd2')" aria-label="Copy automatic execution command">نسخ</button>
                     <code id="cmd2">./directive_finalize.sh</code>
                 </div>
 
                 <h3 id="advanced-title" style="color: #667eea; margin-top: 20px;">خيارات متقدمة</h3>
                 <div class="command-box">
-                    <button class="copy-btn" onclick="copyCommand('cmd3')">نسخ</button>
+                    <button class="copy-btn" onclick="copyCommand('cmd3')" aria-label="Copy advanced options commands">نسخ</button>
                     <code id="cmd3"># إظهار المساعدة
 ./finalize_project.sh --help
 
@@ -856,14 +917,14 @@
             </div>
 
             <!-- Interactive Chat Section -->
-            <div class="section">
+            <section class="section" aria-labelledby="chat-title">
                 <h2 id="chat-title">💬 تواصل مع النماذج مباشرة</h2>
                 <p id="chat-subtitle">تفاعل مع نماذج الذكاء الاصطناعي بشكل مباشر من خلال هذه الواجهة</p>
                 
-                <div class="chat-container">
-                    <div class="model-selector">
+                <div class="chat-container" role="region" aria-label="Chat interface">
+                    <div class="model-selector" role="toolbar" aria-label="Model selection and connection controls">
                         <label for="model-select" id="model-label">اختر النموذج:</label>
-                        <select id="model-select" class="model-dropdown">
+                        <select id="model-select" class="model-dropdown" aria-label="Select AI model">
                             <option value="gpt-3.5-turbo">GPT-3.5 Turbo</option>
                             <option value="gpt-4">GPT-4</option>
                             <option value="claude-3">Claude 3</option>
@@ -873,73 +934,77 @@
                             <option value="mistral">Mistral</option>
                             <option value="deepseek">DeepSeek Coder</option>
                         </select>
-                        <button class="btn-small" onclick="connectToModel()" id="connect-btn">اتصل</button>
-                        <span id="status-indicator" class="status-indicator">⚫ غير متصل</span>
+                        <button class="btn-small" onclick="connectToModel()" id="connect-btn" aria-label="Connect to selected model">اتصل</button>
+                        <span id="status-indicator" class="status-indicator" role="status" aria-live="polite">⚫ غير متصل</span>
                     </div>
 
-                    <div class="chat-messages" id="chat-messages">
+                    <div class="chat-messages" id="chat-messages" role="log" aria-live="polite" aria-atomic="false" aria-label="Chat messages">
                         <div class="system-message">
                             <p id="welcome-msg">مرحباً! اختر نموذج الذكاء الاصطناعي واضغط "اتصل" للبدء في المحادثة.</p>
                         </div>
                     </div>
 
-                    <div class="chat-input-container">
+                    <form class="chat-input-container" onsubmit="event.preventDefault(); sendMessage();" aria-label="Send message form">
                         <textarea 
                             id="chat-input" 
                             class="chat-input" 
                             placeholder="اكتب رسالتك هنا..." 
                             rows="3"
                             onkeydown="handleChatKeydown(event)"
+                            aria-label="Type your message here"
+                            aria-required="true"
                         ></textarea>
-                        <button class="btn-send" onclick="sendMessage()" id="send-btn">
+                        <button type="submit" class="btn-send" id="send-btn" aria-label="Send message">
                             <span>إرسال 📤</span>
                         </button>
-                    </div>
+                    </form>
 
-                    <div class="api-config" id="api-config">
+                    <div class="api-config" id="api-config" role="region" aria-label="API Configuration Settings">
                         <details>
-                            <summary id="api-settings-title">⚙️ إعدادات API</summary>
+                            <summary id="api-settings-title" aria-label="API Settings - Click to expand">⚙️ إعدادات API</summary>
                             <div class="api-settings-content">
                                 <label for="api-endpoint" id="api-endpoint-label">نقطة نهاية API:</label>
                                 <input type="text" id="api-endpoint" class="api-input" 
                                     value="http://localhost:8000/api/process" 
-                                    placeholder="http://localhost:8000/api/process">
+                                    placeholder="http://localhost:8000/api/process"
+                                    aria-describedby="api-endpoint-label">
                                 
                                 <label for="api-key" id="api-key-label">مفتاح API (اختياري):</label>
                                 <input type="password" id="api-key" class="api-input" 
-                                    placeholder="أدخل مفتاح API إذا كان مطلوباً">
+                                    placeholder="أدخل مفتاح API إذا كان مطلوباً"
+                                    aria-describedby="api-key-label">
                                 
-                                <button class="btn-small" onclick="saveApiSettings()" id="save-settings-btn">حفظ الإعدادات</button>
+                                <button class="btn-small" onclick="saveApiSettings()" id="save-settings-btn" aria-label="Save API settings">حفظ الإعدادات</button>
                             </div>
                         </details>
                     </div>
                 </div>
-            </div>
+            </section>
 
             <!-- Quick Actions -->
-            <div class="section">
+            <section class="section" aria-labelledby="actions-title">
                 <h2 id="actions-title">إجراءات سريعة</h2>
-                <div class="action-buttons">
-                    <button class="btn" onclick="window.open('https://github.com/wasalstor-web/AI-Agent-Platform', '_blank')">
+                <nav class="action-buttons" aria-label="Quick actions">
+                    <button class="btn" onclick="window.open('https://github.com/wasalstor-web/AI-Agent-Platform', '_blank')" aria-label="Open GitHub repository in new tab">
                         <span id="btn-repo">📂 المستودع على GitHub</span>
                     </button>
-                    <button class="btn btn-secondary" onclick="alert('لتنفيذ السكريبت، قم بتشغيله من سطر الأوامر: ./finalize_project.sh')">
+                    <button class="btn btn-secondary" onclick="alert('لتنفيذ السكريبت، قم بتشغيله من سطر الأوامر: ./finalize_project.sh')" aria-label="Show finalize script instructions">
                         <span id="btn-run">▶️ تشغيل الإنهاء</span>
                     </button>
-                    <button class="btn btn-success" onclick="downloadDocs()">
+                    <button class="btn btn-success" onclick="downloadDocs()" aria-label="Download documentation file">
                         <span id="btn-docs">📄 تحميل التوثيق</span>
                     </button>
-                </div>
-            </div>
-        </div>
+                </nav>
+            </section>
+        </main>
 
-        <div class="footer">
+        <footer class="footer" role="contentinfo">
             <p id="footer-text">
                 © 2025 منصة وكيل الذكاء الاصطناعي | 
-                <a href="https://github.com/wasalstor-web/AI-Agent-Platform" target="_blank">GitHub</a> | 
-                <a href="mailto:support@example.com">الدعم الفني</a>
+                <a href="https://github.com/wasalstor-web/AI-Agent-Platform" target="_blank" rel="noopener noreferrer" aria-label="Visit GitHub repository">GitHub</a> | 
+                <a href="mailto:support@example.com" aria-label="Contact technical support">الدعم الفني</a>
             </p>
-        </div>
+        </footer>
     </div>
 
     <script>
