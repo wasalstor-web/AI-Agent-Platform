@@ -28,6 +28,8 @@ class CodeGeneratorAgent(BaseAgent):
             'rust', 'typescript', 'php', 'ruby', 'swift'
         ]
         self.default_language = 'python'
+        # Prefer DeepSeek for code generation, fallback to LLaMA 3
+        self.set_preferred_models(['deepseek', 'llama3', 'mistral'])
     
     async def execute(self, task: Dict[str, Any]) -> Dict[str, Any]:
         """
@@ -78,13 +80,33 @@ class CodeGeneratorAgent(BaseAgent):
         """
         Generate the actual code
         
-        In production, this would use:
-        - OpenAI Codex
-        - GitHub Copilot API
-        - DeepSeek Coder
-        - Or other code generation models
+        Uses AI models if available, otherwise falls back to templates.
         """
-        # Template-based generation for demonstration
+        # Try to use AI model if available
+        if self.model_manager:
+            for model_id in self.preferred_models:
+                try:
+                    # Create prompt for code generation
+                    prompt = self._create_code_generation_prompt(
+                        description, language, requirements
+                    )
+                    
+                    # Use model
+                    result = await self.use_model(model_id, prompt, {
+                        'max_length': 2048,
+                        'temperature': 0.7
+                    })
+                    
+                    if result.get('success'):
+                        logger.info(f"✅ Code generated using model '{model_id}'")
+                        return result.get('output', '')
+                        
+                except Exception as e:
+                    logger.warning(f"⚠️ Model '{model_id}' failed: {e}, trying next...")
+                    continue
+        
+        # Fallback to template-based generation
+        logger.info("📝 Using template-based code generation")
         templates = {
             'python': self._generate_python_template,
             'javascript': self._generate_javascript_template,
@@ -93,6 +115,23 @@ class CodeGeneratorAgent(BaseAgent):
         
         generator = templates.get(language, self._generate_generic_template)
         return generator(description, requirements)
+    
+    def _create_code_generation_prompt(
+        self,
+        description: str,
+        language: str,
+        requirements: List[str]
+    ) -> str:
+        """Create prompt for AI model code generation"""
+        prompt = f"""Generate {language} code for the following task:
+
+Task: {description}
+
+Requirements: {', '.join(requirements) if requirements else 'None'}
+
+Please provide clean, well-commented code following best practices."""
+        
+        return prompt
     
     def _generate_python_template(
         self,

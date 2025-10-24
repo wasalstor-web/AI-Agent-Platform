@@ -7,7 +7,7 @@ Base class for all DL+ agents.
 
 import logging
 from abc import ABC, abstractmethod
-from typing import Dict, Any, Optional
+from typing import Dict, Any, Optional, List
 from datetime import datetime
 
 logger = logging.getLogger(__name__)
@@ -34,6 +34,8 @@ class BaseAgent(ABC):
         self.enabled = True
         self.execution_count = 0
         self.last_execution = None
+        self.model_manager = None  # Will be set by integration bridge
+        self.preferred_models = []  # Preferred models for this agent
         
         logger.info(f"🤖 Agent '{name}' initialized")
     
@@ -112,8 +114,55 @@ class BaseAgent(ABC):
             'enabled': self.enabled,
             'execution_count': self.execution_count,
             'last_execution': self.last_execution,
-            'config': self.config
+            'config': self.config,
+            'has_model_manager': self.model_manager is not None,
+            'preferred_models': self.preferred_models
         }
+    
+    def set_model_manager(self, model_manager: Any):
+        """
+        Set the model manager for AI model integration
+        
+        Args:
+            model_manager: ModelManager instance
+        """
+        self.model_manager = model_manager
+        logger.info(f"🔗 Model Manager connected to agent '{self.name}'")
+    
+    def set_preferred_models(self, models: List[str]):
+        """
+        Set preferred models for this agent
+        
+        Args:
+            models: List of model IDs
+        """
+        self.preferred_models = models
+        logger.info(f"📋 Agent '{self.name}' preferred models: {models}")
+    
+    async def use_model(
+        self,
+        model_id: str,
+        input_text: str,
+        parameters: Optional[Dict[str, Any]] = None
+    ) -> Dict[str, Any]:
+        """
+        Use an AI model from within the agent
+        
+        Args:
+            model_id: Model identifier
+            input_text: Input text for the model
+            parameters: Optional inference parameters
+            
+        Returns:
+            Model inference result
+        """
+        if not self.model_manager:
+            return {
+                'success': False,
+                'error': 'No model manager connected to this agent'
+            }
+        
+        return await self.model_manager.inference(model_id, input_text, parameters)
     
     def __repr__(self) -> str:
         return f"<{self.__class__.__name__} name='{self.name}' enabled={self.enabled}>"
