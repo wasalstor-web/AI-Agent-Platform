@@ -1,0 +1,692 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="صفحة الإجراءات - منصة وكيل الذكاء الاصطناعي">
+    <title>صفحة الإجراءات - AI Agent Platform</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 40px;
+            text-align: center;
+            position: relative;
+        }
+
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .header p {
+            font-size: 1.2em;
+            opacity: 0.9;
+        }
+
+        .back-link {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            text-decoration: none;
+            padding: 10px 20px;
+            border-radius: 25px;
+            border: 2px solid white;
+            transition: all 0.3s;
+            font-weight: bold;
+        }
+
+        .back-link:hover {
+            background: white;
+            color: #667eea;
+        }
+
+        .content {
+            padding: 40px;
+        }
+
+        .section {
+            margin-bottom: 40px;
+        }
+
+        .section h2 {
+            color: #667eea;
+            font-size: 2em;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 3px solid #667eea;
+        }
+
+        .actions-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 25px;
+            margin-top: 30px;
+        }
+
+        .action-card {
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s, box-shadow 0.3s;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .action-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 5px;
+            height: 100%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+
+        .action-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(102, 126, 234, 0.3);
+        }
+
+        .action-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .action-icon {
+            font-size: 2.5em;
+            margin-left: 15px;
+        }
+
+        .action-card h3 {
+            color: #333;
+            font-size: 1.4em;
+            margin-bottom: 10px;
+        }
+
+        .action-card p {
+            color: #666;
+            font-size: 0.95em;
+            line-height: 1.6;
+            margin-bottom: 15px;
+        }
+
+        .action-status {
+            display: inline-block;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.85em;
+            font-weight: bold;
+            margin-top: 10px;
+        }
+
+        .status-active {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .status-pending {
+            background: #fff3cd;
+            color: #856404;
+        }
+
+        .status-inactive {
+            background: #f8d7da;
+            color: #721c24;
+        }
+
+        .action-button {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 8px;
+            font-size: 1em;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: bold;
+            margin-top: 10px;
+            width: 100%;
+        }
+
+        .action-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .action-button:active {
+            transform: translateY(0);
+        }
+
+        .stats-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 40px;
+        }
+
+        .stat-card {
+            background: white;
+            padding: 25px;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            border-top: 4px solid #667eea;
+        }
+
+        .stat-value {
+            font-size: 2.5em;
+            font-weight: bold;
+            color: #667eea;
+            margin-bottom: 10px;
+        }
+
+        .stat-label {
+            color: #666;
+            font-size: 1em;
+        }
+
+        .logs-container {
+            background: #2d2d2d;
+            color: #f8f8f2;
+            padding: 20px;
+            border-radius: 15px;
+            font-family: 'Courier New', monospace;
+            max-height: 400px;
+            overflow-y: auto;
+            margin-top: 20px;
+        }
+
+        .log-entry {
+            padding: 8px 0;
+            border-bottom: 1px solid #444;
+        }
+
+        .log-entry:last-child {
+            border-bottom: none;
+        }
+
+        .log-time {
+            color: #a6e22e;
+            margin-left: 10px;
+        }
+
+        .log-type {
+            color: #66d9ef;
+            font-weight: bold;
+            margin-left: 10px;
+        }
+
+        .log-message {
+            color: #f8f8f2;
+        }
+
+        .execution-panel {
+            background: #f8f9fa;
+            padding: 30px;
+            border-radius: 15px;
+            margin-top: 20px;
+        }
+
+        .execution-form {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .form-group label {
+            font-weight: bold;
+            color: #333;
+        }
+
+        .form-input,
+        .form-select,
+        .form-textarea {
+            padding: 12px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 1em;
+            font-family: inherit;
+            transition: border-color 0.3s;
+        }
+
+        .form-input:focus,
+        .form-select:focus,
+        .form-textarea:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .form-textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        .execute-button {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 10px;
+            font-size: 1.1em;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: bold;
+        }
+
+        .execute-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(79, 172, 254, 0.4);
+        }
+
+        .execute-button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .footer {
+            background: #333;
+            color: white;
+            text-align: center;
+            padding: 30px;
+        }
+
+        .footer a {
+            color: #667eea;
+            text-decoration: none;
+        }
+
+        .footer a:hover {
+            color: #764ba2;
+        }
+
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 1.8em;
+            }
+
+            .actions-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .stats-container {
+                grid-template-columns: 1fr;
+            }
+
+            .back-link {
+                position: static;
+                display: block;
+                margin-bottom: 20px;
+            }
+        }
+
+        /* English Mode */
+        body[dir="ltr"] .action-card::before {
+            left: auto;
+            right: 0;
+        }
+
+        body[dir="ltr"] .action-icon {
+            margin-left: 0;
+            margin-right: 15px;
+        }
+
+        body[dir="ltr"] .log-time,
+        body[dir="ltr"] .log-type {
+            margin-left: 0;
+            margin-right: 10px;
+        }
+
+        body[dir="ltr"] .back-link {
+            right: auto;
+            left: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header class="header" role="banner">
+            <a href="index.html" class="back-link">← العودة للرئيسية</a>
+            <h1 id="title">صفحة الإجراءات</h1>
+            <p id="subtitle">إدارة وتنفيذ إجراءات وكيل الذكاء الاصطناعي</p>
+        </header>
+
+        <main class="content" role="main">
+            <!-- Statistics Section -->
+            <div class="section">
+                <h2 id="stats-title">إحصائيات النظام</h2>
+                <div class="stats-container">
+                    <div class="stat-card">
+                        <div class="stat-value" id="active-agents">5</div>
+                        <div class="stat-label" id="label-agents">وكلاء نشطون</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value" id="completed-tasks">127</div>
+                        <div class="stat-label" id="label-tasks">مهام مكتملة</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value" id="success-rate">98.5%</div>
+                        <div class="stat-label" id="label-success">نسبة النجاح</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value" id="uptime">99.9%</div>
+                        <div class="stat-label" id="label-uptime">وقت التشغيل</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Available Actions Section -->
+            <div class="section">
+                <h2 id="actions-title">الإجراءات المتاحة</h2>
+                <div class="actions-grid">
+                    <!-- Action 1: Web Search -->
+                    <div class="action-card">
+                        <div class="action-header">
+                            <div class="action-icon">🔍</div>
+                            <div>
+                                <h3 id="action1-title">البحث على الويب</h3>
+                            </div>
+                        </div>
+                        <p id="action1-desc">البحث عن المعلومات من الإنترنت وجمع البيانات من مصادر متعددة باستخدام وكيل البحث الذكي.</p>
+                        <span class="action-status status-active">✓ نشط</span>
+                        <button class="action-button" onclick="executeAction('web_search')">تشغيل</button>
+                    </div>
+
+                    <!-- Action 2: Code Generation -->
+                    <div class="action-card">
+                        <div class="action-header">
+                            <div class="action-icon">💻</div>
+                            <div>
+                                <h3 id="action2-title">توليد الأكواد</h3>
+                            </div>
+                        </div>
+                        <p id="action2-desc">إنشاء أكواد برمجية بلغات متعددة (Python, JavaScript, Java، إلخ) مع التوثيق والاختبارات.</p>
+                        <span class="action-status status-active">✓ نشط</span>
+                        <button class="action-button" onclick="executeAction('code_generation')">تشغيل</button>
+                    </div>
+
+                    <!-- Action 3: File Operations -->
+                    <div class="action-card">
+                        <div class="action-header">
+                            <div class="action-icon">📁</div>
+                            <div>
+                                <h3 id="action3-title">عمليات الملفات</h3>
+                            </div>
+                        </div>
+                        <p id="action3-desc">قراءة وكتابة الملفات، إنشاء تقارير، وإدارة محتويات الملفات بشكل تلقائي.</p>
+                        <span class="action-status status-active">✓ نشط</span>
+                        <button class="action-button" onclick="executeAction('file_operations')">تشغيل</button>
+                    </div>
+
+                    <!-- Action 4: Shell Commands -->
+                    <div class="action-card">
+                        <div class="action-header">
+                            <div class="action-icon">⚙️</div>
+                            <div>
+                                <h3 id="action4-title">تنفيذ الأوامر</h3>
+                            </div>
+                        </div>
+                        <p id="action4-desc">تنفيذ أوامر النظام والبرمجيات على الخوادم بشكل آمن ومراقب.</p>
+                        <span class="action-status status-pending">⏳ محدود</span>
+                        <button class="action-button" onclick="executeAction('shell_execution')">تشغيل</button>
+                    </div>
+
+                    <!-- Action 5: Arabic Processing -->
+                    <div class="action-card">
+                        <div class="action-header">
+                            <div class="action-icon">🔤</div>
+                            <div>
+                                <h3 id="action5-title">معالجة اللغة العربية</h3>
+                            </div>
+                        </div>
+                        <p id="action5-desc">معالجة متقدمة للنصوص العربية، تحليل النوايا، واستخراج الكيانات.</p>
+                        <span class="action-status status-active">✓ نشط</span>
+                        <button class="action-button" onclick="executeAction('arabic_processing')">تشغيل</button>
+                    </div>
+
+                    <!-- Action 6: Data Analysis -->
+                    <div class="action-card">
+                        <div class="action-header">
+                            <div class="action-icon">📊</div>
+                            <div>
+                                <h3 id="action6-title">تحليل البيانات</h3>
+                            </div>
+                        </div>
+                        <p id="action6-desc">تحليل البيانات وإنشاء تقارير إحصائية ورسوم بيانية توضيحية.</p>
+                        <span class="action-status status-active">✓ نشط</span>
+                        <button class="action-button" onclick="executeAction('data_analysis')">تشغيل</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Execution Panel -->
+            <div class="section">
+                <h2 id="execution-title">لوحة التنفيذ</h2>
+                <div class="execution-panel">
+                    <form class="execution-form" onsubmit="event.preventDefault(); executeCustomAction();">
+                        <div class="form-group">
+                            <label for="action-type" id="label-action-type">نوع الإجراء:</label>
+                            <select id="action-type" class="form-select">
+                                <option value="web_search">البحث على الويب</option>
+                                <option value="code_generation">توليد الأكواد</option>
+                                <option value="file_operations">عمليات الملفات</option>
+                                <option value="shell_execution">تنفيذ الأوامر</option>
+                                <option value="arabic_processing">معالجة اللغة العربية</option>
+                                <option value="data_analysis">تحليل البيانات</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="action-input" id="label-action-input">المدخلات:</label>
+                            <textarea id="action-input" class="form-textarea" placeholder="أدخل المدخلات المطلوبة للإجراء..."></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label for="model-select" id="label-model-select">اختر النموذج:</label>
+                            <select id="model-select" class="form-select">
+                                <option value="gpt-3.5-turbo">GPT-3.5 Turbo</option>
+                                <option value="gpt-4">GPT-4</option>
+                                <option value="claude-3">Claude 3</option>
+                                <option value="llama-3">LLaMA 3</option>
+                                <option value="qwen-arabic">Qwen Arabic</option>
+                                <option value="arabert">AraBERT</option>
+                            </select>
+                        </div>
+                        <button type="submit" class="execute-button" id="execute-btn">
+                            <span id="btn-execute">⚡ تنفيذ الإجراء</span>
+                        </button>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Logs Section -->
+            <div class="section">
+                <h2 id="logs-title">سجلات النشاط</h2>
+                <div class="logs-container" id="logs-container">
+                    <div class="log-entry">
+                        <span class="log-time">[2025-10-24 19:45:23]</span>
+                        <span class="log-type">[INFO]</span>
+                        <span class="log-message">تم بدء تشغيل نظام DL+ بنجاح</span>
+                    </div>
+                    <div class="log-entry">
+                        <span class="log-time">[2025-10-24 19:45:45]</span>
+                        <span class="log-type">[SUCCESS]</span>
+                        <span class="log-message">تم الاتصال بنموذج GPT-3.5 Turbo</span>
+                    </div>
+                    <div class="log-entry">
+                        <span class="log-time">[2025-10-24 19:46:12]</span>
+                        <span class="log-type">[INFO]</span>
+                        <span class="log-message">تنفيذ إجراء البحث على الويب - جاري البحث عن "تقنيات الذكاء الاصطناعي"</span>
+                    </div>
+                    <div class="log-entry">
+                        <span class="log-time">[2025-10-24 19:46:34]</span>
+                        <span class="log-type">[SUCCESS]</span>
+                        <span class="log-message">تم جمع 15 نتيجة بحث من مصادر متعددة</span>
+                    </div>
+                    <div class="log-entry">
+                        <span class="log-time">[2025-10-24 19:47:01]</span>
+                        <span class="log-type">[INFO]</span>
+                        <span class="log-message">تم إنشاء ملف تقرير: ai_trends_report.md</span>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <footer class="footer" role="contentinfo">
+            <p id="footer-text">
+                © 2025 منصة وكيل الذكاء الاصطناعي | 
+                <a href="https://github.com/wasalstor-web/AI-Agent-Platform" target="_blank">GitHub</a> | 
+                <a href="index.html">الصفحة الرئيسية</a>
+            </p>
+        </footer>
+    </div>
+
+    <script>
+        // Add log entry
+        function addLog(type, message) {
+            const logsContainer = document.getElementById('logs-container');
+            const logEntry = document.createElement('div');
+            logEntry.className = 'log-entry';
+            
+            const now = new Date();
+            const timestamp = now.toISOString().substring(0, 19).replace('T', ' ');
+            
+            logEntry.innerHTML = `
+                <span class="log-time">[${timestamp}]</span>
+                <span class="log-type">[${type}]</span>
+                <span class="log-message">${message}</span>
+            `;
+            
+            logsContainer.appendChild(logEntry);
+            logsContainer.scrollTop = logsContainer.scrollHeight;
+        }
+
+        // Execute action from card
+        function executeAction(actionType) {
+            const actionNames = {
+                'web_search': 'البحث على الويب',
+                'code_generation': 'توليد الأكواد',
+                'file_operations': 'عمليات الملفات',
+                'shell_execution': 'تنفيذ الأوامر',
+                'arabic_processing': 'معالجة اللغة العربية',
+                'data_analysis': 'تحليل البيانات'
+            };
+            
+            addLog('INFO', `بدء تنفيذ إجراء: ${actionNames[actionType]}`);
+            
+            // Simulate action execution
+            setTimeout(() => {
+                addLog('SUCCESS', `تم تنفيذ إجراء ${actionNames[actionType]} بنجاح`);
+                
+                // Update stats (demo)
+                updateStats();
+            }, 1500);
+        }
+
+        // Execute custom action
+        async function executeCustomAction() {
+            const actionType = document.getElementById('action-type').value;
+            const actionInput = document.getElementById('action-input').value;
+            const model = document.getElementById('model-select').value;
+            const executeBtn = document.getElementById('execute-btn');
+            
+            if (!actionInput.trim()) {
+                addLog('ERROR', 'يرجى إدخال المدخلات المطلوبة');
+                return;
+            }
+            
+            executeBtn.disabled = true;
+            executeBtn.textContent = '⏳ جاري التنفيذ...';
+            
+            const actionNames = {
+                'web_search': 'البحث على الويب',
+                'code_generation': 'توليد الأكواد',
+                'file_operations': 'عمليات الملفات',
+                'shell_execution': 'تنفيذ الأوامر',
+                'arabic_processing': 'معالجة اللغة العربية',
+                'data_analysis': 'تحليل البيانات'
+            };
+            
+            addLog('INFO', `بدء تنفيذ: ${actionNames[actionType]}`);
+            addLog('INFO', `النموذج المستخدم: ${model}`);
+            addLog('INFO', `المدخلات: ${actionInput.substring(0, 50)}...`);
+            
+            try {
+                // Simulate API call
+                await new Promise(resolve => setTimeout(resolve, 2000));
+                
+                addLog('SUCCESS', `تم تنفيذ ${actionNames[actionType]} بنجاح`);
+                addLog('INFO', 'النتائج جاهزة للمراجعة');
+                
+                // Clear input
+                document.getElementById('action-input').value = '';
+                
+                // Update stats
+                updateStats();
+                
+            } catch (error) {
+                addLog('ERROR', `خطأ في التنفيذ: ${error.message}`);
+            }
+            
+            executeBtn.disabled = false;
+            executeBtn.innerHTML = '<span id="btn-execute">⚡ تنفيذ الإجراء</span>';
+        }
+
+        // Update statistics
+        function updateStats() {
+            const completedTasks = document.getElementById('completed-tasks');
+            const currentValue = parseInt(completedTasks.textContent);
+            completedTasks.textContent = currentValue + 1;
+        }
+
+        // Auto-scroll logs
+        setInterval(() => {
+            const logsContainer = document.getElementById('logs-container');
+            if (logsContainer.scrollHeight > logsContainer.clientHeight) {
+                // Add random demo log every 10 seconds
+                const demoLogs = [
+                    { type: 'INFO', msg: 'مراقبة نشاط النظام...' },
+                    { type: 'INFO', msg: 'فحص الاتصال بالنماذج...' },
+                    { type: 'SUCCESS', msg: 'جميع الأنظمة تعمل بشكل طبيعي' }
+                ];
+                
+                const randomLog = demoLogs[Math.floor(Math.random() * demoLogs.length)];
+                addLog(randomLog.type, randomLog.msg);
+            }
+        }, 10000);
+    </script>
+</body>
+</html>
