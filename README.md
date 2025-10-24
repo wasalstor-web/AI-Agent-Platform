@@ -446,6 +446,7 @@ AI-Agent-Platform © 2025
 - 🔧 **دليل إعداد النطاق**: [DOMAIN_SETUP_GUIDE.md](DOMAIN_SETUP_GUIDE.md)
 - 💬 **دمج OpenWebUI**: [OPENWEBUI_INTEGRATION.md](OPENWEBUI_INTEGRATION.md)
 - 🤖 **نظام DL+**: [DLPLUS_README.md](DLPLUS_README.md)
+- ⚡ **دليل سريع: جعل المستودع عام**: [QUICK_PUBLIC_GUIDE.md](QUICK_PUBLIC_GUIDE.md)
 - 🔓 **دليل جعل المستودع عام**: [MAKE_REPOSITORY_PUBLIC_GUIDE.md](MAKE_REPOSITORY_PUBLIC_GUIDE.md)
 - 🔒 **قائمة التحقق الأمني**: [SECURITY_CHECKLIST_BEFORE_PUBLIC.md](SECURITY_CHECKLIST_BEFORE_PUBLIC.md)
 
