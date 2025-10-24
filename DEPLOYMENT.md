@@ -1,6 +1,42 @@
 # AI Agent Platform - Deployment Guide
 # دليل نشر منصة وكيل الذكاء الاصطناعي
 
+## ⚠️ حل مشكلة 404 / Fixing 404 Error
+
+### المشكلة / The Problem
+لا يوجد موقع GitHub Pages (404) - GitHub Pages غير مفعل  
+No GitHub Pages site found (404) - GitHub Pages not enabled
+
+### الحل السريع / Quick Solution
+
+**الخيار 1: تفعيل GitHub Pages / Option 1: Enable GitHub Pages**
+
+1. اذهب إلى [إعدادات المستودع](https://github.com/wasalstor-web/AI-Agent-Platform/settings/pages)
+2. في "Source" اختر "GitHub Actions"
+3. انتظر 2-5 دقائق
+4. الموقع سيكون متاح على: `https://wasalstor-web.github.io/AI-Agent-Platform/`
+
+**الخيار 2: نشر سريع على رابط مؤقت / Option 2: Quick Deploy to Temporary URL**
+
+```bash
+# استخدم سكريبت النشر السريع / Use quick deploy script
+./quick-deploy.sh
+
+# أو نشر مباشر / Or direct deployment:
+# Vercel
+vercel --prod
+
+# Netlify  
+netlify deploy --prod
+
+# Surge
+surge . ai-agent-platform.surge.sh
+```
+
+📖 **للتفاصيل الكاملة / For complete details:** [GITHUB_PAGES_SETUP.md](GITHUB_PAGES_SETUP.md)
+
+---
+
 ## الإجابة على السؤال / Answer to the Question
 
 ### هل تم إضافة OpenWeb؟ / Has OpenWeb been added?

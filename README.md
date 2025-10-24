@@ -73,10 +73,49 @@ The platform now includes DL+, a complete Arabic-first AI system that integrates
 
 ---
 
+## 🚨 Getting 404 Error? / تحصل على خطأ 404؟
+
+### 📌 **ملخص الحل / Solution Summary** → [SOLUTION_SUMMARY.md](SOLUTION_SUMMARY.md) ⭐
+
+**➡️ [دليل الحل السريع بالعربية / Quick Fix Guide in Arabic](QUICK_START_ARABIC.md) ⬅️**
+
+**Quick Solutions:**
+- 🟢 Enable GitHub Pages: [Settings → Pages → Select "GitHub Actions"](https://github.com/wasalstor-web/AI-Agent-Platform/settings/pages)
+- 🟢 Or deploy instantly: `./quick-deploy.sh` (Vercel/Netlify/Surge)
+- 🟢 Full instructions: [GITHUB_PAGES_SETUP.md](GITHUB_PAGES_SETUP.md)
+
 ## 🚀 Quick Start
 
-**The platform is live and accessible at:**
-**🌐 [https://wasalstor-web.github.io/AI-Agent-Platform/](https://wasalstor-web.github.io/AI-Agent-Platform/)**
+### 🌟 دليل البدء السريع بالعربية / Arabic Quick Start Guide
+**📖 [اضغط هنا لحل مشكلة 404 والنشر السريع / Click here to fix 404 and deploy quickly](QUICK_START_ARABIC.md)**
+
+---
+
+### ⚠️ GitHub Pages Setup Required
+
+To access the site at `https://wasalstor-web.github.io/AI-Agent-Platform/`, you need to enable GitHub Pages first:
+
+1. Go to [Repository Settings > Pages](https://github.com/wasalstor-web/AI-Agent-Platform/settings/pages)
+2. Under "Source", select "GitHub Actions"
+3. Wait a few minutes for deployment
+
+**📖 For detailed instructions, see [GITHUB_PAGES_SETUP.md](GITHUB_PAGES_SETUP.md)**
+
+### 🚀 Quick Deploy (Alternative Options)
+
+If you want to deploy the site immediately without waiting:
+
+```bash
+# Interactive deployment menu
+./quick-deploy.sh
+
+# Options available:
+# 1. Vercel - Fast & Free
+# 2. Netlify - Fast & Free  
+# 3. Surge.sh - Very Simple
+# 4. VPS Deployment
+# 5. Local Server
+```
 
 ### ⚡ Autonomous Deployment (RECOMMENDED!)
 
@@ -176,7 +215,10 @@ The site is automatically deployed when changes are pushed to the main branch.
 You can also open `index.html` in your web browser locally:
 
 ```bash
-# Open directly in browser
+# Quick test (opens browser automatically)
+./test-local.sh
+
+# Or open directly in browser
 open index.html  # macOS
 xdg-open index.html  # Linux
 start index.html  # Windows
