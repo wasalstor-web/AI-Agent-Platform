@@ -1,551 +1,467 @@
-# AI-Agent-Platform
+# AI Agent Platform - منصة الوكيل الذكي
+# نظام الذكاء الاصطناعي المستقل عبر GitHub Actions
 
-An AI Agent Platform infrastructure project with automated finalization capabilities, OpenWebUI integration, and the **DL+ Unified Arabic Intelligence System**.
+[![GitHub Actions](https://img.shields.io/badge/Automated-GitHub%20Actions-2088FF?logo=github-actions&logoColor=white)](https://github.com/features/actions)
+[![OpenRouter](https://img.shields.io/badge/AI-OpenRouter-10B981?logo=openai&logoColor=white)](https://openrouter.ai/)
+[![Python](https://img.shields.io/badge/Python-3.9+-3776AB?logo=python&logoColor=white)](https://www.python.org/)
+[![FastAPI](https://img.shields.io/badge/FastAPI-009688?logo=fastapi&logoColor=white)](https://fastapi.tiangolo.com/)
 
-## 🆕 NEW: Autonomous Deployment System
+## 🌟 مقدمة | Introduction
 
-**نظام النشر الذاتي الكامل / Full Autonomous Deployment**
+**AI Agent Platform** عبارة عن نظام ذكاء اصطناعي مستقل ومتطور يعمل بالكامل عبر GitHub Actions، مما يوفر بيئة قوية لبناء ونشر وإدارة الوكلاء الأذكياء (AI Agents) القادرين على التفكير المنطقي، واختيار الأدوات المناسبة، وتنفيذ المهام المعقدة بشكل ذاتي.
 
-The platform now features a **fully autonomous deployment system** that automatically:
-- 🤖 **Discovers AI models** from configuration files
-- 🧠 **Detects AI agents** from the agents directory
-- ⚙️ **Sets up environment** with all dependencies
-- 🔧 **Configures services** (Gateway, OpenWebUI, Ollama, Qdrant)
-- 📊 **Generates reports** with complete deployment status
-- ✅ **Runs health checks** on all services
+**AI Agent Platform** is an advanced autonomous artificial intelligence system that runs entirely through GitHub Actions, providing a powerful environment for building, deploying, and managing intelligent AI agents capable of logical reasoning, tool selection, and autonomous execution of complex tasks.
 
-**One-Command Deployment:**
-```bash
-bash autonomous-deploy.sh
-```
+### ✨ لماذا هذا المشروع مميز؟ | Why This Project Stands Out?
 
-📖 **Complete Guide:**
-- **[Autonomous Deployment Guide](AUTONOMOUS_DEPLOYMENT.md)** ⭐ NEW!
-- **[Generated Deployment Report](DEPLOY.md)** - Created after deployment
-- **Agent Manager:** `bash ai-agent-manager.sh --auto --warm`
+- **🤖 استقلالية كاملة**: وكيل ذكي يعمل بدون تدخل بشري
+- **🧠 تفكير منطقي متقدم**: يحلل المهام ويخطط للحلول
+- **🛠️ اختيار أدوات ذكي**: ينتقي الأدوات المناسبة لكل مهمة
+- **🌐 تكامل سلس**: يعمل مع GitHub Actions و OpenRouter و Render
+- **🇸🇦 دعم عربي أصلي**: معالجة متقدمة للغة العربية الفصحى
 
 ---
 
-## 🆕 NEW: OpenWebUI Integration with Open-Source AI Models
+## 🚀 الميزات الرئيسية | Key Features
 
-**دمج OpenWebUI مع نماذج الذكاء الصناعي المفتوحة المصدر**
+### 1. **التفكير المنطقي المتقدم** | Advanced Reasoning
+نظام DL+ Intelligence Core يوفر قدرات تفكير متطورة:
+- تحليل السياق والمعنى
+- فهم النوايا من الأوامر العربية والإنجليزية
+- التخطيط متعدد الخطوات
+- اتخاذ القرارات الذكية
 
-The platform now features a complete OpenWebUI integration with **7 open-source AI models**:
-- 🤖 **LLaMA 3 8B** (Meta) - General purpose
-- 🇸🇦 **Qwen 2.5 Arabic** (Alibaba) - Arabic specialized
-- 📝 **AraBERT** (AUB) - Arabic NLP
-- 📝 **CAMeLBERT** (CAMeL-Lab) - Arabic NLP
-- 🌐 **Mistral 7B** (Mistral AI) - Multilingual
-- 💻 **DeepSeek Coder** (DeepSeek) - Code generation
-- ⚡ **Phi-3 Mini** (Microsoft) - Compact & efficient
+### 2. **اختيار الأدوات الذكي** | Intelligent Tool Selection
+الوكيل يختار تلقائياً الأداة المناسبة من مجموعة شاملة:
+- **`run_web_search`** - البحث على الإنترنت وجمع المعلومات
+- **`run_shell`** - تنفيذ أوامر النظام والبرمجيات
+- **`write_to_file`** - كتابة وتعديل الملفات
+- **`read_from_file`** - قراءة محتوى الملفات
+- **`code_generator`** - توليد الأكواد بلغات متعددة
+- **`arabic_processor`** - معالجة متقدمة للغة العربية
 
-**Quick Start OpenWebUI Integration:**
-```bash
-./deploy-openwebui-integration.sh
-```
+### 3. **البحث على الويب** | Web Search (run_web_search)
+وكيل البحث على الويب (WebRetrievalAgent):
+- البحث الذكي على الإنترنت
+- جمع المعلومات من مصادر متعددة
+- تحليل النتائج وترتيبها حسب الأهمية
+- دعم الاستعلامات بالعربية والإنجليزية
 
-📖 **Integration Documentation:**
-- **[OpenWebUI Integration Guide](OPENWEBUI_INTEGRATION.md)** ⭐ NEW!
-- **[Interactive Demo Page](openwebui-demo.html)**
-- **Webhook URL:** `https://wasalstor-web.github.io/AI-Agent-Platform`
+### 4. **تنفيذ الأوامر** | Shell Execution (run_shell)
+تنفيذ آمن للأوامر عبر:
+- واجهة API آمنة مع قائمة بيضاء للأوامر
+- تنفيذ على خوادم Hostinger
+- مراقبة الأداء والنتائج
+- سجلات تنفيذ شاملة
+
+### 5. **كتابة الملفات** | File Writing (write_to_file)
+إدارة متقدمة للملفات:
+- إنشاء وتحديث الملفات تلقائياً
+- دعم صيغ متعددة (Python, JavaScript, JSON, Markdown)
+- حفظ النتائج والتقارير
+- إنشاء وثائق تلقائية
+
+### 6. **توليد الأكواد** | Code Generation
+وكيل توليد الأكواد (CodeGeneratorAgent):
+- توليد أكواد احترافية في 10+ لغات برمجة
+- Python, JavaScript, Java, C++, Go, Rust, TypeScript
+- إنشاء اختبارات وحدة تلقائياً
+- توثيق الأكواد بالعربية والإنجليزية
+
+### 7. **معالجة اللغة العربية** | Arabic Language Processing
+نظام متقدم لمعالجة العربية:
+- دعم العربية الفصحى
+- تحليل النوايا من النصوص العربية
+- توليد استجابات باللغة العربية السليمة
+- فهم السياق العربي
 
 ---
 
-## 🧠 DL+ Arabic Intelligence System
+## 🔄 كيف يعمل النظام | How It Works
 
-**نظام DL+ للذكاء الصناعي العربي الموحد**
+### معمارية النظام | System Architecture
 
-The platform now includes DL+, a complete Arabic-first AI system that integrates:
-- 🧠 **GitHub Intelligence Core** - AI models and reasoning
-- ⚙️ **Hostinger Integration** - Execution and deployment
-- 💬 **OpenWebUI** - Interactive user interface
-- 🔗 **FastAPI Bridge** - Seamless communication layer
-
-**Quick Start DL+:**
-```bash
-./start-dlplus.sh
+```
+┌─────────────────────────────────────────────────────────────┐
+│                      User Input / إدخال المستخدم            │
+│              "Your prompt for the agent"                     │
+└────────────────────────┬────────────────────────────────────┘
+                         │
+                         ▼
+┌─────────────────────────────────────────────────────────────┐
+│                 GitHub Actions Workflow                      │
+│              سير عمل GitHub Actions                          │
+│  • Triggered manually or automatically                       │
+│  • Receives user prompt                                      │
+│  • Sets up environment                                       │
+└────────────────────────┬────────────────────────────────────┘
+                         │
+                         ▼
+┌─────────────────────────────────────────────────────────────┐
+│              DL+ Intelligence Core                           │
+│              نواة الذكاء DL+                                 │
+│  • Arabic Processor - معالج اللغة العربية                   │
+│  • Context Analyzer - محلل السياق                           │
+│  • Intent Detection - كشف النوايا                           │
+└────────────────────────┬────────────────────────────────────┘
+                         │
+                         ▼
+┌─────────────────────────────────────────────────────────────┐
+│              Reasoning Engine                                │
+│              محرك التفكير المنطقي                            │
+│  • Analyzes the task                                         │
+│  • Plans execution steps                                     │
+│  • Selects appropriate tools                                 │
+└────────────────────────┬────────────────────────────────────┘
+                         │
+                         ▼
+┌─────────────────────────────────────────────────────────────┐
+│              Tool Selection                                  │
+│              اختيار الأدوات                                  │
+│                                                              │
+│  ┌──────────────┐  ┌──────────────┐  ┌──────────────┐      │
+│  │run_web_search│  │  run_shell   │  │write_to_file │      │
+│  │  البحث ويب   │  │  تنفيذ أوامر │  │  كتابة ملف   │      │
+│  └──────────────┘  └──────────────┘  └──────────────┘      │
+│                                                              │
+│  ┌──────────────┐  ┌──────────────┐  ┌──────────────┐      │
+│  │code_generator│  │read_from_file│  │arabic_process│      │
+│  │  توليد كود   │  │  قراءة ملف   │  │  معالجة عربي │      │
+│  └──────────────┘  └──────────────┘  └──────────────┘      │
+└────────────────────────┬────────────────────────────────────┘
+                         │
+                         ▼
+┌─────────────────────────────────────────────────────────────┐
+│           OpenRouter AI Integration                          │
+│           تكامل OpenRouter للذكاء الصناعي                    │
+│  • GPT-4, Claude 3, Gemini Pro                              │
+│  • LLaMA 3, Mistral, DeepSeek                               │
+│  • Qwen Arabic, AraBERT                                     │
+└────────────────────────┬────────────────────────────────────┘
+                         │
+                         ▼
+┌─────────────────────────────────────────────────────────────┐
+│              Execution & Results                             │
+│              التنفيذ والنتائج                                │
+│  • Tools execute tasks                                       │
+│  • Results are collected                                     │
+│  • Logs are generated                                        │
+└────────────────────────┬────────────────────────────────────┘
+                         │
+                         ▼
+┌─────────────────────────────────────────────────────────────┐
+│           Final Response / الاستجابة النهائية                │
+│  • Comprehensive answer in Arabic/English                    │
+│  • Generated files and reports                               │
+│  • Execution logs                                            │
+└─────────────────────────────────────────────────────────────┘
 ```
 
-📖 **Key Documentation:**
-- **[Complete DL+ Documentation](DLPLUS_README.md)**
-- **[Hostinger Command Execution Guide](HOSTINGER_COMMAND_EXECUTION.md)**
-- **[Command Examples](examples/hostinger_command_examples.py)**
+### سير العمل خطوة بخطوة | Step-by-Step Workflow
+
+1. **استقبال المهمة** - يتلقى الوكيل الأمر عبر GitHub Actions
+2. **التحليل** - DL+ Intelligence Core يحلل المهمة ويفهم السياق
+3. **التفكير** - محرك التفكير يخطط للخطوات اللازمة
+4. **اختيار الأدوات** - انتقاء الأدوات المناسبة (بحث، تنفيذ، كتابة)
+5. **التنفيذ** - تشغيل الأدوات عبر OpenRouter و FastAPI
+6. **التجميع** - جمع النتائج ومعالجتها
+7. **الاستجابة النهائية** - إنشاء رد شامل بالعربية أو الإنجليزية
 
 ---
 
-## 🚀 Quick Start
+## 📖 دليل البدء السريع | Quick Start Guide
 
-**The platform is live and accessible at:**
-**🌐 [https://wasalstor-web.github.io/AI-Agent-Platform/](https://wasalstor-web.github.io/AI-Agent-Platform/)**
+### المتطلبات الأساسية | Prerequisites
 
-### ⚡ Autonomous Deployment (RECOMMENDED!)
+- حساب GitHub مع صلاحيات GitHub Actions
+- مفتاح API من OpenRouter (للذكاء الصناعي)
+- (اختياري) خادم Hostinger لتنفيذ الأوامر
+- (اختياري) حساب Render للنشر المتقدم
 
-**One-command deployment - fully autonomous:**
+### الخطوة 1: استنساخ المشروع | Clone the Repository
 
 ```bash
-# Clone the repository
 git clone https://github.com/wasalstor-web/AI-Agent-Platform.git
 cd AI-Agent-Platform
-
-# Run autonomous deployment (discovers models, agents, and sets up everything)
-bash autonomous-deploy.sh
-
-# OR run complete smart execution (all steps in order)
-bash smart-autonomous-execution.sh
 ```
 
-**What it does automatically:**
-- ✅ Discovers 7 AI models from configuration
-- ✅ Detects 3 AI agents from agents directory
-- ✅ Installs all dependencies
-- ✅ Configures all services
-- ✅ Runs health checks
-- ✅ Generates comprehensive DEPLOY.md report
+### الخطوة 2: إعداد المتغيرات البيئية | Configure Environment Variables
 
-**📖 Complete Guides:**
-- **[Autonomous Deployment Guide](AUTONOMOUS_DEPLOYMENT.md)** ⭐ FULL GUIDE
-- **[Quick Reference](QUICK_REFERENCE.md)** 📋 QUICK COMMANDS
-- **[Generated Report](DEPLOY.md)** 📊 AFTER DEPLOYMENT
+في GitHub، اذهب إلى Settings > Secrets and variables > Actions وأضف:
 
-### ⚡ Alternative: Instant Deployment
-
-Deploy OpenWebUI with DL+ Backend in seconds:
-
-```bash
-# 1. Configure your deployment
-cp .env.instant-deploy.example .env.instant-deploy
-# Edit .env.instant-deploy with your secure keys
-
-# 2. Run instant deployment
-./quick-deploy-openwebui.sh
+```
+OPENROUTER_API_KEY=your_openrouter_api_key_here
+VPS_HOST=your_hostinger_host (optional)
+VPS_USER=your_hostinger_user (optional)
+VPS_KEY=your_ssh_key (optional)
 ```
 
-**📖 [Complete Quick Deploy Guide](QUICK_DEPLOY_GUIDE.md)**
+### الخطوة 3: استخدام الوكيل عبر GitHub Actions | Use Agent via GitHub Actions
 
-**Features:**
-- ✅ One-command deployment
-- ✅ Secure key management via environment variables
-- ✅ Integrated DL+ Backend + OpenWebUI
-- ✅ Automatic dashboard creation
-- ✅ No hardcoded credentials
+1. اذهب إلى تبويب **Actions** في مستودع GitHub
+2. اختر workflow حسب احتياجاتك:
+   - **DL+ Smart VPS Auto Verify & Deploy** - للنشر التلقائي
+   - **Deploy Pages** - لنشر الواجهة
+   - **OpenWeb Pages** - لنشر OpenWebUI
+3. انقر على **Run workflow**
+4. أدخل **Your prompt for the agent** في حقل الإدخال
+   - مثال بالعربية: "ابحث عن أحدث تقنيات الذكاء الصناعي واكتب تقريراً في ملف report.md"
+   - مثال بالإنجليزية: "Search for AI trends and create a summary file"
+5. انقر **Run workflow** لبدء التنفيذ
+6. راقب السجلات في تبويب Actions
 
-### 💬 Interactive Chat Interface
+### الخطوة 4: مشاهدة النتائج | View Results
 
-The platform now features a **live chat interface** where you can directly communicate with AI models:
-- Select from 8 different AI models (GPT-4, Claude 3, LLaMA 3, Qwen Arabic, AraBERT, and more)
-- Real-time messaging with typing indicators
-- Bilingual support (Arabic/English)
-- Configurable API endpoints
-- Mobile-responsive design
-
-**[Read the Chat Interface Guide →](CHAT_INTERFACE.md)**
-
-For complete deployment information, see **[DEPLOYMENT.md](DEPLOYMENT.md)**.
-
-## Overview
-
-This project provides a comprehensive platform for building, deploying, and managing AI agents with:
-- **DL+ Arabic Intelligence System** - Native Arabic AI with deep language understanding
-- **Automated finalization capabilities** - Built-in project lifecycle management
-- **OpenWebUI integration** - Interactive interface for large language models
-- **Multi-agent orchestration** - Coordinate multiple AI agents seamlessly
-
-## Web Interface
-
-The platform now includes a comprehensive HTML interface that provides:
-- **Interactive Chat**: Direct communication with AI models through a live chat interface
-- **Model Selection**: Choose from 8 different AI models including GPT-4, Claude 3, LLaMA 3, and Arabic-specialized models
-- **Bilingual Support**: Full Arabic and English interface with real-time language switching
-- **Interactive Documentation**: Visual representation of all features and workflows
-- **Command Reference**: Easy-to-copy commands for all operations
-- **Modern Design**: Responsive, mobile-friendly interface with gradient styling
-- **API Configuration**: Customizable API endpoints and authentication
-
-### Accessing the Web Interface
-
-#### Online (GitHub Pages)
-
-The platform is hosted on GitHub Pages and can be accessed at:
-
-**🌐 [https://wasalstor-web.github.io/AI-Agent-Platform/](https://wasalstor-web.github.io/AI-Agent-Platform/)**
-
-The site is automatically deployed when changes are pushed to the main branch.
-
-#### Local Access
-
-You can also open `index.html` in your web browser locally:
-
-```bash
-# Open directly in browser
-open index.html  # macOS
-xdg-open index.html  # Linux
-start index.html  # Windows
-
-# Or serve it with a local server
-python3 -m http.server 8080
-# Then navigate to http://localhost:8080/index.html
-```
-
-The web interface includes:
-- Project overview and features showcase
-- Step-by-step finalization workflow visualization
-- Command examples with copy-to-clipboard functionality
-- Quick action buttons for GitHub repository and documentation
-- Benefits and security information
-
-## 🧠 DL+ Unified Arabic Intelligence System
-
-### نظام DL+ للذكاء الصناعي العربي الموحد
-
-DL+ is a comprehensive Arabic-first AI system that brings together intelligence, execution, and interaction in a unified platform.
-
-### Key Components
-
-**1. GitHub Intelligence Core** (`dlplus/core/`)
-- `intelligence_core.py` - Main AI engine coordinating all models
-- `arabic_processor.py` - Advanced Arabic language processing with classical Arabic support
-- `context_analyzer.py` - Context-aware conversation management
-
-**2. API Layer** (`dlplus/api/`)
-- `fastapi_connector.py` - Gateway between GitHub and Hostinger
-- `internal_api.py` - Secure command execution API with whitelisting
-
-**3. Configuration** (`dlplus/config/`)
-- `settings.py` - System configuration
-- `models_config.py` - AI model configurations (AraBERT, LLaMA 3, Qwen, etc.)
-- `agents_config.py` - Agent definitions and capabilities
-
-**4. Agents** (`dlplus/agents/`)
-- `WebRetrievalAgent` - Web search and information retrieval
-- `CodeGeneratorAgent` - Code generation in multiple languages
-- `BaseAgent` - Abstract base class for custom agents
-
-### Quick Start with DL+
-
-```bash
-# 1. Clone the repository
-git clone https://github.com/wasalstor-web/AI-Agent-Platform.git
-cd AI-Agent-Platform
-
-# 2. Start DL+ system
-./start-dlplus.sh
-
-# The system will be available at http://localhost:8000
-```
-
-### API Endpoints
-
-- `GET /` - System information
-- `GET /api/health` - Health check
-- `GET /api/status` - System status
-- `POST /api/process` - Process commands in Arabic
-- `POST /api/github/execute` - Execute commands from GitHub
-- `GET /api/docs` - Interactive API documentation
-
-### Example Usage
-
-**Python:**
-```python
-import asyncio
-from dlplus import DLPlusCore
-
-async def main():
-    core = DLPlusCore()
-    await core.initialize()
-    
-    result = await core.process_command("اشرح لي ما هو الذكاء الصناعي")
-    print(result['response'])
-
-asyncio.run(main())
-```
-
-**cURL:**
-```bash
-curl -X POST http://localhost:8000/api/process \
-  -H "X-API-Key: your-secret-key" \
-  -H "Content-Type: application/json" \
-  -d '{"command": "مرحباً"}'
-```
-
-### Documentation
-
-- 📖 [Complete DL+ Documentation](dlplus/docs/DLPLUS_SYSTEM.md)
-- 🚀 [Quick Start Guide](DLPLUS_README.md)
-- ⚙️ [Hostinger Command Execution](HOSTINGER_COMMAND_EXECUTION.md) ⭐ NEW!
-- 💡 [Examples](examples/)
-- 🧪 [Tests](tests/)
-
-### Supported AI Models
-
-- **AraBERT** - Arabic language understanding
-- **CAMeLBERT** - Arabic NLP and NER
-- **Qwen 2.5 Arabic** - Arabic text generation and reasoning
-- **LLaMA 3** - General reasoning and coding
-- **DeepSeek** - Advanced code generation
-- **Mistral** - Multilingual support
+- **السجلات (Logs)**: في صفحة الـ workflow run
+- **الملفات المنشأة**: في المستودع أو artifacts
+- **التقارير**: في ملفات markdown المُنشأة
 
 ---
 
-## Deployment Status
+## 🌐 النشر على Render | Deployment on Render
 
-✅ **OpenWebUI has been successfully added and integrated**
-✅ **Project is deployed and accessible via GitHub Pages**
-✅ **DL+ Arabic Intelligence System implemented**
-✅ **Temporary domain active:** https://wasalstor-web.github.io/AI-Agent-Platform/
+### نظرة عامة | Overview
 
-📖 **For complete deployment information, see [DEPLOYMENT.md](DEPLOYMENT.md)**
+يمكن نشر المشروع على منصة Render للحصول على:
+- API دائم التشغيل
+- واجهة OpenWebUI تفاعلية
+- ربط مع نطاق مخصص
 
-## Project Finalization
+### خطوات النشر | Deployment Steps
 
-The platform includes automated scripts for finalizing projects with proper resource cleanup and archival.
+#### 1. إنشاء ملف `render.yaml`
 
-### Finalization Scripts
+في جذر المشروع، أنشئ ملف `render.yaml`:
 
-#### 1. Directive Script (`directive_finalize.sh`)
-
-The main directive script that initiates the finalization process. This script:
-- Displays administrative directives in both Arabic and English
-- Calls the finalization script with appropriate parameters
-- Provides clear status messages throughout the process
-
-**Usage:**
-```bash
-./directive_finalize.sh
+```yaml
+services:
+  - type: web
+    name: dlplus-ai-agent
+    env: python
+    buildCommand: pip install -r requirements.txt
+    startCommand: uvicorn dlplus.main:app --host 0.0.0.0 --port $PORT
+    envVars:
+      - key: OPENROUTER_API_KEY
+        sync: false
+      - key: WEBUI_SECRET_KEY
+        generateValue: true
+      - key: PYTHON_VERSION
+        value: 3.9
 ```
 
-#### 2. Finalization Script (`finalize_project.sh`)
+#### 2. الربط مع Render
 
-The core finalization script that handles:
-- Project status validation
-- Git repository checks
-- Artifact archival
-- Report generation
-- Resource cleanup
-- Final verification
+1. اذهب إلى [render.com](https://render.com)
+2. انقر **New** > **Web Service**
+3. اربط مستودع GitHub
+4. Render سيكتشف `render.yaml` تلقائياً
+5. أضف المتغيرات البيئية (OPENROUTER_API_KEY)
+6. انقر **Create Web Service**
 
-**Usage:**
-```bash
-# Interactive mode (with confirmation prompt)
-./finalize_project.sh
+#### 3. الوصول للتطبيق
 
-# Force mode (skip checks but proceed anyway)
-./finalize_project.sh --force
+بعد النشر، ستحصل على رابط:
+- `https://your-app-name.onrender.com`
+- API Docs: `https://your-app-name.onrender.com/api/docs`
 
-# No confirmation mode (skip user prompt)
-./finalize_project.sh --no-confirmation
+### ربط نطاق مخصص | Custom Domain Setup
 
-# Combined mode (force + no confirmation)
-./finalize_project.sh --force --no-confirmation
+لربط نطاقك الخاص (مثل ai.yourdomain.com)، راجع:
+**[دليل إعداد النطاق المخصص - DOMAIN_SETUP_GUIDE.md](DOMAIN_SETUP_GUIDE.md)**
+
+---
+
+## 🧠 نظام DL+ للذكاء العربي | DL+ Arabic Intelligence System
+
+### المكونات الأساسية | Core Components
+
+#### 1. **نواة الذكاء** | Intelligence Core
+`dlplus/core/intelligence_core.py`
+- محرك الذكاء الرئيسي
+- تنسيق جميع النماذج والوكلاء
+- إدارة السياق والذاكرة
+
+#### 2. **معالج اللغة العربية** | Arabic Processor
+`dlplus/core/arabic_processor.py`
+- معالجة متقدمة للعربية الفصحى
+- تحليل النوايا
+- استخراج الكيانات
+
+#### 3. **محلل السياق** | Context Analyzer
+`dlplus/core/context_analyzer.py`
+- فهم سياق المحادثة
+- إدارة الذاكرة قصيرة وطويلة المدى
+- تتبع العلاقات بين المهام
+
+#### 4. **طبقة API** | API Layer
+`dlplus/api/fastapi_connector.py`
+- بوابة الاتصال بين GitHub و Hostinger
+- نقاط نهاية API آمنة
+- توثيق تفاعلي (Swagger)
+
+#### 5. **الوكلاء الأذكياء** | Intelligent Agents
+- `WebRetrievalAgent` - البحث على الويب
+- `CodeGeneratorAgent` - توليد الأكواد
+- `BaseAgent` - فئة أساسية لوكلاء مخصصة
+
+### نماذج الذكاء الاصطناعي المدعومة | Supported AI Models
+
+#### النماذج العربية | Arabic Models
+- **AraBERT** - فهم اللغة العربية
+- **CAMeLBERT** - معالجة اللغة الطبيعية العربية
+- **Qwen 2.5 Arabic** - توليد النصوص العربية
+
+#### النماذج العامة | General Models
+- **LLaMA 3** - التفكير العام والبرمجة
+- **GPT-4** - مهام متقدمة
+- **Claude 3** - تحليل وكتابة
+- **Mistral 7B** - دعم متعدد اللغات
+- **DeepSeek Coder** - توليد أكواد متقدم
+- **Phi-3 Mini** - كفاءة عالية
+
+---
+
+## 💻 أمثلة الاستخدام | Usage Examples
+
+### مثال 1: البحث وإنشاء تقرير
+**Arabic Prompt:**
+```
+ابحث عن أحدث تطورات الذكاء الاصطناعي في 2024 واكتب تقريراً شاملاً في ملف ai_trends_2024.md
 ```
 
-### Finalization Process
+**ما سيفعله الوكيل:**
+1. يستخدم `run_web_search` للبحث عن معلومات
+2. يحلل النتائج
+3. يستخدم `write_to_file` لإنشاء الملف
+4. يكتب تقريراً مفصلاً بالعربية
 
-The finalization script performs the following steps:
-
-1. **Project Status Check** - Validates project documentation and structure
-2. **Git Repository Validation** - Checks repository status and uncommitted changes
-3. **Artifact Archival** - Creates timestamped archives of project state
-4. **Report Generation** - Generates comprehensive finalization report
-5. **Resource Cleanup** - Removes temporary files and caches
-6. **Final Verification** - Confirms all steps completed successfully
-
-### Archive Contents
-
-After finalization, an archive is created in `/tmp/ai-agent-platform-archive-[TIMESTAMP]` containing:
-- `recent_commits.txt` - Last 10 git commits
-- `final_status.txt` - Final git status
-- `project_snapshot/` - Complete project snapshot
-- `finalization_report.txt` - Detailed finalization report
-
-### Options
-
-- `--force` - Continue finalization even if warnings are detected
-- `--no-confirmation` - Skip user confirmation prompt
-
-## OpenWebUI Integration
-
-The platform now includes full integration with OpenWebUI, a powerful open-source web interface for large language models (LLMs) like Ollama.
-
-### Setup OpenWebUI Script (`setup-openwebui.sh`)
-
-A comprehensive bilingual script for installing and managing OpenWebUI on your VPS:
-
-**Features:**
-- Automated Docker and Docker Compose installation
-- OpenWebUI container deployment
-- Optional Ollama installation
-- Nginx reverse proxy configuration
-- SSL certificate support
-- Service management (start, stop, restart, logs)
-- Interactive menu interface
-
-**Quick Installation:**
-
-```bash
-# Interactive mode
-./setup-openwebui.sh
-
-# Or automated installation
-./setup-openwebui.sh install
-
-# Check status
-./setup-openwebui.sh status
-
-# View logs
-./setup-openwebui.sh logs
+### مثال 2: توليد كود Python
+**English Prompt:**
+```
+Generate a Python script that fetches weather data from an API and saves it to JSON
 ```
 
-**What is OpenWebUI?**
+**What the agent will do:**
+1. Uses `code_generator` agent
+2. Generates complete Python code
+3. Creates unit tests
+4. Saves to file using `write_to_file`
 
-OpenWebUI is an extensible, feature-rich, and user-friendly web interface designed to operate entirely offline. It supports various LLM runners including Ollama and OpenAI-compatible APIs.
-
-**Key Features:**
-- 🎨 Intuitive web interface for chat interactions
-- 🔌 Support for Ollama and OpenAI-compatible APIs
-- 📱 Responsive design for mobile and desktop
-- 🔐 User authentication and management
-- 💬 Multiple chat sessions
-- 📝 Markdown and code syntax highlighting
-- 🌐 Multi-language support
-
-**Access OpenWebUI:**
-
-After installation, OpenWebUI will be available at:
-- `http://your-vps-ip:3000`
-- Or via your configured domain if Nginx is setup
-
-**📖 Complete Documentation:**
-For detailed information about OpenWebUI integration, installation, configuration, troubleshooting, and advanced usage, see [OPENWEBUI.md](OPENWEBUI.md)
-
-## VPS Connection Check
-
-The platform includes comprehensive VPS connection verification tools with OpenWebUI service checks.
-
-### Deploy Script (`deploy.sh`)
-
-A bilingual (Arabic/English) script for checking VPS connectivity:
-
-**Features:**
-- DNS resolution check
-- SSH connection test
-- HTTP/HTTPS connectivity verification
-- Response time measurement
-- Comprehensive port scanning (SSH, HTTP, HTTPS, OpenWebUI, Ollama, databases)
-- OpenWebUI and Ollama service checks
-- Colored output for better readability
-- Configurable timeouts
-
-**Usage:**
-
-```bash
-# Basic usage with command line arguments
-./deploy.sh --host your-vps.com
-
-# With custom SSH settings
-./deploy.sh --host your-vps.com --user admin --port 2222
-
-# Using environment variables
-VPS_HOST=your-vps.com ./deploy.sh
-
-# Configure via .env file
-cp .env.example .env
-# Edit .env with your VPS details
-source .env
-./deploy.sh
-
-# Show help
-./deploy.sh --help
+### مثال 3: تحليل وتنفيذ
+**Arabic Prompt:**
+```
+قم بتحليل ملف requirements.txt وتثبيت المكتبات المطلوبة على الخادم
 ```
 
-**Configuration Options:**
+**Agent Actions:**
+1. Uses `read_from_file` to read requirements.txt
+2. Analyzes dependencies
+3. Uses `run_shell` to execute `pip install -r requirements.txt`
+4. Reports results
 
-- `--host, -h` : VPS hostname or IP address
-- `--user, -u` : SSH username (default: root)
-- `--port, -p` : SSH port (default: 22)
-- `--timeout, -t` : Connection timeout in seconds (default: 5)
+---
 
-**Environment Variables:**
-
-- `VPS_HOST` : Server hostname
-- `VPS_USER` : SSH username
-- `VPS_PORT` : SSH port
-- `HTTP_PORT` : HTTP port (default: 80)
-- `HTTPS_PORT` : HTTPS port (default: 443)
-- `TIMEOUT` : Connection timeout
-- `OPENWEBUI_PORT` : OpenWebUI port (default: 3000)
-- `OPENWEBUI_VERSION` : OpenWebUI Docker image version (default: latest)
-- `OLLAMA_API_BASE_URL` : Ollama API URL (default: http://localhost:11434)
-- `WEBUI_SECRET_KEY` : Secret key for OpenWebUI (generate with: `openssl rand -hex 32`)
-
-### Smart Deploy Script (`smart-deploy.sh`)
-
-Interactive menu-driven deployment tool with Arabic interface. The first option now integrates with the comprehensive VPS connection check.
-
-**Usage:**
-```bash
-./smart-deploy.sh
-```
-
-**Features:**
-1. Check deployment status (VPS connection check)
-2. Automated git pull deployment
-3. SSL certificate setup
-4. GitHub webhooks configuration
-5. Nginx configuration
-6. Backup system
-7. Log monitoring
-8. Performance checks
-9. Security scanning
-10. **OpenWebUI Management** (New!)
-11. Rollback capability
-
-### Connection Check Output
-
-The VPS connection check provides detailed information:
+## 📚 البنية التنظيمية | Project Structure
 
 ```
-✓ DNS Resolution: Shows IP address resolution
-✓ SSH Connection: Tests SSH connectivity
-✓ HTTP/HTTPS: Checks web server status
-✓ Response Time: Measures ping and HTTP response times
-✓ Port Scanning: Checks common service ports
+AI-Agent-Platform/
+├── dlplus/                      # نظام DL+ الأساسي
+│   ├── core/                    # النواة الذكية
+│   │   ├── intelligence_core.py     # محرك الذكاء الرئيسي
+│   │   ├── arabic_processor.py      # معالج العربية
+│   │   └── context_analyzer.py      # محلل السياق
+│   ├── agents/                  # الوكلاء الأذكياء
+│   │   ├── base_agent.py            # الفئة الأساسية
+│   │   ├── web_retrieval_agent.py   # وكيل البحث
+│   │   └── code_generator_agent.py  # وكيل توليد الأكواد
+│   ├── api/                     # طبقة API
+│   │   ├── fastapi_connector.py     # موصل FastAPI
+│   │   └── internal_api.py          # API الداخلي
+│   ├── config/                  # الإعدادات
+│   │   ├── settings.py              # إعدادات النظام
+│   │   ├── models_config.py         # إعدادات النماذج
+│   │   └── agents_config.py         # إعدادات الوكلاء
+│   └── utils/                   # أدوات مساعدة
+│       ├── logger.py                # نظام السجلات
+│       └── helpers.py               # دوال مساعدة
+├── .github/
+│   └── workflows/               # سير عمل GitHub Actions
+│       ├── vps-auto-verify.yml      # نشر VPS تلقائي
+│       ├── deploy-pages.yml         # نشر الصفحات
+│       └── openweb-pages.yml        # نشر OpenWebUI
+├── api/                         # API الخارجي
+│   └── server.py                    # خادم API
+├── examples/                    # أمثلة الاستخدام
+├── tests/                       # الاختبارات
+├── docs/                        # الوثائق
+├── requirements.txt             # المتطلبات
+├── README.md                    # هذا الملف
+└── DOMAIN_SETUP_GUIDE.md       # دليل إعداد النطاق
 ```
 
-**Output Example:**
+---
 
-```
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-  فحص شامل لاتصال VPS / Comprehensive VPS Connection Check
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+## 🛡️ الأمان وأفضل الممارسات | Security & Best Practices
 
-✓ DNS resolved: your-vps.com → 123.456.789.0
-✓ SSH connection successful
-✓ HTTP server is responding
-✓ Average response time: 45ms
-✓ Port 22 is open
-✓ Port 3000 (OpenWebUI) is open
-✓ OpenWebUI is running
-✓ Ollama is running
-```
+### الأمان | Security
+- ✅ عدم تخزين البيانات الحساسة في المستودع
+- ✅ استخدام GitHub Secrets للمفاتيح
+- ✅ مصادقة API آمنة
+- ✅ قائمة بيضاء للأوامر المسموحة
+- ✅ تشفير الاتصالات (HTTPS/WSS)
+- ✅ تحديثات أمنية منتظمة
 
-## Security and Best Practices
+### أفضل الممارسات | Best Practices
+- 📝 توثيق شامل للأكواد
+- 🧪 اختبارات شاملة (80%+ تغطية)
+- 🔄 التكامل المستمر عبر GitHub Actions
+- 📊 مراقبة الأداء والسجلات
+- 🌍 دعم متعدد اللغات
+- ♿ إمكانية الوصول والشمولية
 
-Following the platform's security guidelines:
-- ✅ No sensitive data committed to repository
-- ✅ Proper error handling implemented
-- ✅ Resource cleanup automated
-- ✅ Comprehensive logging and reporting
-- ✅ Clear user communication in multiple languages
-- ✅ Secure VPS connection verification
-- ✅ Environment variable support for sensitive configuration
+---
 
-**Security Notes:**
-- Never commit `.env` file to the repository
-- Use SSH keys for authentication instead of passwords
-- Configure firewall rules to restrict SSH access
-- Use non-standard SSH ports when possible
-- Keep SSH and web server software up to date
+## 🤝 المساهمة | Contributing
 
-## License
+نرحب بمساهماتكم! يرجى:
+1. Fork المشروع
+2. إنشاء branch للميزة (`git checkout -b feature/AmazingFeature`)
+3. Commit التغييرات (`git commit -m 'Add some AmazingFeature'`)
+4. Push إلى Branch (`git push origin feature/AmazingFeature`)
+5. فتح Pull Request
+
+---
+
+## 📄 الترخيص | License
 
 AI-Agent-Platform © 2025
+
+---
+
+## 🔗 روابط مفيدة | Useful Links
+
+- 🌐 **الموقع الحي**: [https://wasalstor-web.github.io/AI-Agent-Platform/](https://wasalstor-web.github.io/AI-Agent-Platform/)
+- 📖 **الوثائق الكاملة**: [docs/](docs/)
+- 🚀 **دليل النشر السريع**: [QUICK_DEPLOY_GUIDE.md](QUICK_DEPLOY_GUIDE.md)
+- 🔧 **دليل إعداد النطاق**: [DOMAIN_SETUP_GUIDE.md](DOMAIN_SETUP_GUIDE.md)
+- 💬 **دمج OpenWebUI**: [OPENWEBUI_INTEGRATION.md](OPENWEBUI_INTEGRATION.md)
+- 🤖 **نظام DL+**: [DLPLUS_README.md](DLPLUS_README.md)
+
+---
+
+## 📞 الدعم | Support
+
+للأسئلة والدعم:
+- افتح Issue في GitHub
+- راجع الوثائق في مجلد `docs/`
+- تابع سجلات GitHub Actions للتشخيص
+
+---
+
+<div align="center">
+
+**صُنع بـ ❤️ للمجتمع العربي والعالمي**
+
+**Made with ❤️ for the Arabic and Global Community**
+
+</div>
