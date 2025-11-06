@@ -355,8 +355,14 @@ start_dlplus_system() {
         sleep 2
     fi
     
-    # Start the server in background
-    python3 main.py &> /tmp/dlplus.log &
+    # Try simple server first, fallback to main.py
+    if [ -f "simple_server.py" ]; then
+        print_info "Using simplified DL+ server..."
+        python3 simple_server.py &> /tmp/dlplus.log &
+    else
+        print_info "Using full DL+ system..."
+        python3 main.py &> /tmp/dlplus.log &
+    fi
     DLPLUS_PID=$!
     sleep 3
     
@@ -372,14 +378,15 @@ start_dlplus_system() {
         else
             print_warning "DL+ System may not be fully ready yet"
         fi
+        echo "$DLPLUS_PID" > /tmp/deploy-now-dlplus.pid
     else
-        print_error "Failed to start DL+ System"
-        print_error "فشل تشغيل نظام DL+"
-        cat /tmp/dlplus.log
-        return 1
+        print_warning "Failed to start DL+ System (optional)"
+        print_warning "فشل تشغيل نظام DL+ (اختياري)"
+        print_info "Check /tmp/dlplus.log for details"
+        print_info "راجع /tmp/dlplus.log للتفاصيل"
+        print_info "Continuing with Flask API and Web Dashboard only..."
+        print_info "الاستمرار مع Flask API ولوحة الويب فقط..."
     fi
-    
-    echo "$DLPLUS_PID" > /tmp/deploy-now-dlplus.pid
 }
 
 #############################################################################
@@ -427,16 +434,20 @@ start_web_server() {
 test_api_endpoints() {
     print_header "🧪 Testing API Endpoints / اختبار نقاط API"
     
+    # Give servers a moment to fully start
+    print_info "Waiting for servers to be ready..."
+    sleep 3
+    
     local endpoints=(
-        "http://localhost:${API_PORT}/api/health:Flask API Health"
-        "http://localhost:${API_PORT}/api/status:Flask API Status"
-        "http://localhost:${API_PORT}/api/models:Flask API Models"
-        "http://localhost:${DLPLUS_PORT}/api/health:DL+ Health"
-        "http://localhost:${DLPLUS_PORT}/api/status:DL+ Status"
+        "http://localhost:${API_PORT}/api/health|Flask API Health"
+        "http://localhost:${API_PORT}/api/status|Flask API Status"
+        "http://localhost:${API_PORT}/api/models|Flask API Models"
+        "http://localhost:${DLPLUS_PORT}/api/health|DL+ Health"
+        "http://localhost:${DLPLUS_PORT}/api/status|DL+ Status"
     )
     
     for endpoint_info in "${endpoints[@]}"; do
-        IFS=':' read -r url name <<< "$endpoint_info"
+        IFS='|' read -r url name <<< "$endpoint_info"
         print_info "Testing ${name}..."
         
         if response=$(curl -s -w "\n%{http_code}" "$url" 2>/dev/null); then
@@ -527,9 +538,22 @@ ${GREEN}✓ تم النشر بنجاح!${NC}
 ${CYAN}Access Information:${NC}
 
 ${YELLOW}🌐 Web Interfaces:${NC}
-1. Flask API:        http://localhost:${API_PORT}
-2. DL+ System:       http://localhost:${DLPLUS_PORT}
-3. Web Dashboard:    http://localhost:${WEB_PORT}/index.html
+EOF
+
+    # Check which services are running and display only those
+    if [ -f /tmp/deploy-now-api.pid ] && ps -p $(cat /tmp/deploy-now-api.pid 2>/dev/null) > /dev/null 2>&1; then
+        echo "1. Flask API:        http://localhost:${API_PORT}"
+    fi
+    
+    if [ -f /tmp/deploy-now-dlplus.pid ] && ps -p $(cat /tmp/deploy-now-dlplus.pid 2>/dev/null) > /dev/null 2>&1; then
+        echo "2. DL+ System:       http://localhost:${DLPLUS_PORT}"
+    fi
+    
+    if [ -f /tmp/deploy-now-web.pid ] && ps -p $(cat /tmp/deploy-now-web.pid 2>/dev/null) > /dev/null 2>&1; then
+        echo "3. Web Dashboard:    http://localhost:${WEB_PORT}/index.html"
+    fi
+    
+    cat << EOF
 
 ${YELLOW}📋 AI Models (8 available):${NC}
    GPT-3.5, GPT-4, Claude 3, LLaMA 3, Qwen Arabic,
