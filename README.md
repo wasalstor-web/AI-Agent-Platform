@@ -6,6 +6,61 @@
 [![Python](https://img.shields.io/badge/Python-3.9+-3776AB?logo=python&logoColor=white)](https://www.python.org/)
 [![FastAPI](https://img.shields.io/badge/FastAPI-009688?logo=fastapi&logoColor=white)](https://fastapi.tiangolo.com/)
 
+## ⚡ البدء السريع | Quick Start
+
+**للمستخدمين الجدد** | **For New Users**: ابدأ من هنا ↓ Start here ↓
+
+```bash
+# 1. حمّل المشروع | Download the project
+git clone https://github.com/wasalstor-web/AI-Agent-Platform.git
+cd AI-Agent-Platform
+
+# 2. نفّذ سكريبت النشر | Run deployment script
+bash DEPLOY-NOW.sh
+```
+
+**هذا كل شيء!** 🎉 البرنامج سيتولى الباقي تلقائياً!
+
+**That's it!** 🎉 The script will handle everything automatically!
+
+### 📚 ملفات مهمة | Important Files
+
+| الملف | الحجم | الوصف | Description |
+|------|------|-------|-------------|
+| 📄 [**START-HERE.md**](START-HERE.md) | 3.7KB | **ابدأ من هنا** - أبسط دليل للبدء السريع | **Start Here** - Simplest quick start guide |
+| 🚀 [**DEPLOY-NOW.sh**](DEPLOY-NOW.sh) | 18KB | السكريبت الرئيسي للنشر التلقائي | Main automatic deployment script |
+| 🌐 [**connect-api-server.sh**](connect-api-server.sh) | 6KB | **جديد!** اتصال بخادم API والواجهات | **New!** API server & interfaces connection |
+| 📖 [**GITHUB-DOWNLOAD.txt**](GITHUB-DOWNLOAD.txt) | 13KB | 5 طرق لتحميل المشروع | 5 ways to download the project |
+| 📦 [**mubsat-deployment.tar.gz**](mubsat-deployment.tar.gz) | 44KB | حزمة مضغوطة بكل شيء | Compressed package with everything |
+| 📘 **README.md** | (هذا الملف) | الدليل الكامل للمشروع | Complete project guide |
+| 🌐 [**DEPLOYMENT.md**](DEPLOYMENT.md) | 12KB | دليل النشر التفصيلي | Detailed deployment guide |
+| 🔌 [**API-CONNECTION-GUIDE.md**](API-CONNECTION-GUIDE.md) | 6KB | **جديد!** دليل الاتصال بـ API | **New!** API connection guide |
+
+### 🎯 الخيارات السريعة | Quick Options
+
+```bash
+# نشر محلي | Local deployment
+bash DEPLOY-NOW.sh --local
+
+# نشر على VPS | VPS deployment
+bash DEPLOY-NOW.sh --vps
+
+# نشر على GitHub Pages
+bash DEPLOY-NOW.sh --github
+
+# الوصول لخادم API والواجهات | API server & interfaces access
+bash DEPLOY-NOW.sh --api
+
+# نشر تلقائي كامل | Full automatic deployment
+bash DEPLOY-NOW.sh --auto
+```
+
+**💡 نصيحة**: إذا كانت هذه أول مرة، اقرأ [START-HERE.md](START-HERE.md) أولاً!
+
+**💡 Tip**: If this is your first time, read [START-HERE.md](START-HERE.md) first!
+
+---
+
 ## 🌟 مقدمة | Introduction
 
 **AI Agent Platform** عبارة عن نظام ذكاء اصطناعي مستقل ومتطور يعمل بالكامل عبر GitHub Actions، مما يوفر بيئة قوية لبناء ونشر وإدارة الوكلاء الأذكياء (AI Agents) القادرين على التفكير المنطقي، واختيار الأدوات المناسبة، وتنفيذ المهام المعقدة بشكل ذاتي.
@@ -446,6 +501,63 @@ AI-Agent-Platform © 2025
 - 🔧 **دليل إعداد النطاق**: [DOMAIN_SETUP_GUIDE.md](DOMAIN_SETUP_GUIDE.md)
 - 💬 **دمج OpenWebUI**: [OPENWEBUI_INTEGRATION.md](OPENWEBUI_INTEGRATION.md)
 - 🤖 **نظام DL+**: [DLPLUS_README.md](DLPLUS_README.md)
+
+---
+
+## 📊 إحصائيات المشروع | Project Statistics
+
+### 📦 ملفات المشروع | Project Files
+
+```
+📄 إجمالي الملفات    | Total Files:        138 files
+📦 سكريبتات النشر     | Deployment Scripts: 23 scripts  
+📖 الوثائق والأدلة    | Documentation:      36 guides
+⚙️  ملفات التكوين      | Configuration:      5 files
+💾 الحجم الإجمالي     | Total Size:         ~1.8 MB
+```
+
+### 🚀 السكريبتات الرئيسية | Main Scripts
+
+| # | السكريبت | الحجم | الوصف |
+|---|---------|------|-------|
+| 1️⃣ | **DEPLOY-NOW.sh** | 18KB | ⭐ السكريبت الرئيسي للنشر التلقائي |
+| 2️⃣ | **complete-deployment.sh** | 20KB | نشر شامل ومتكامل |
+| 3️⃣ | **autonomous-deploy.sh** | 16KB | نشر مستقل تلقائي |
+| 4️⃣ | **setup-openwebui.sh** | 17KB | إعداد OpenWebUI |
+| 5️⃣ | **quick-deploy-openwebui.sh** | 16KB | نشر سريع لـ OpenWebUI |
+
+### 📚 الأدلة المهمة | Important Guides
+
+| # | الدليل | الحجم | الوصف |
+|---|-------|------|-------|
+| 1️⃣ | **START-HERE.md** | 3.7KB | ⭐ ابدأ من هنا - أبسط دليل |
+| 2️⃣ | **README.md** | 20KB | الدليل الكامل (هذا الملف) |
+| 3️⃣ | **DEPLOYMENT.md** | 12KB | دليل النشر التفصيلي |
+| 4️⃣ | **GITHUB-DOWNLOAD.txt** | 13KB | طرق التحميل من GitHub |
+| 5️⃣ | **QUICK-START.md** | 2.7KB | دليل البدء السريع |
+
+### 📦 الحزم المتوفرة | Available Packages
+
+| الحزمة | الحجم | المحتوى |
+|-------|------|---------|
+| **mubsat-deployment.tar.gz** | 44KB | ⭐ حزمة مضغوطة بكل الملفات الأساسية |
+
+### 🎯 التصنيفات | Categories
+
+- **🚀 سكريبتات النشر**: 23 سكريبت لجميع أنواع النشر
+- **📖 التعليمات والأدلة**: 36 دليل شامل بالعربي والإنجليزي
+- **⚙️ ملفات التكوين**: 5 ملفات لضبط البيئة
+- **🐍 Python Scripts**: معالجة الذكاء الاصطناعي والتكاملات
+- **🌐 Web Files**: واجهات HTML تفاعلية
+
+### 💡 التوصيات | Recommendations
+
+| الحالة | الملف الموصى به | السبب |
+|-------|-----------------|--------|
+| **للبدء السريع** | START-HERE.md + DEPLOY-NOW.sh | الأبسط والأسرع |
+| **للنشر الكامل** | DEPLOY-NOW.sh --auto | نشر تلقائي متكامل |
+| **للتحميل السريع** | mubsat-deployment.tar.gz | حزمة صغيرة ومضغوطة |
+| **للفهم الشامل** | README.md + DEPLOYMENT.md | توثيق كامل |
 
 ---
 

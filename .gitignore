@@ -9,8 +9,10 @@
 # Archive directories
 /tmp/
 *.tar.gz
+!mubsat-deployment.tar.gz
 *.zip
 *.archive
+mubsat-deployment-temp/
 
 # Python
 __pycache__/
