@@ -218,6 +218,50 @@ VPS_KEY=your_ssh_key (optional)
 
 ---
 
+## ⚡ النشر السريع | Quick Deployment with DEPLOY-NOW.sh
+
+### 🚀 للوصول لخادم API والواجهات والنماذج فقط | API Access Only Mode
+
+**commit 670b146**: New feature added! Quick deployment script for instant API access.
+
+```bash
+# Clone and navigate to the repository
+git clone https://github.com/wasalstor-web/AI-Agent-Platform.git
+cd AI-Agent-Platform
+
+# Checkout the deployment branch
+git checkout copilot/add-deployment-scripts
+
+# Run DEPLOY-NOW.sh with --api flag
+bash DEPLOY-NOW.sh --api
+```
+
+### ✨ What You Get / ما تحصل عليه
+
+This provides / يوفر هذا:
+
+- 🌐 **3 Web Interfaces** / **3 واجهات ويب**
+  - Flask API Server (Port 5000)
+  - DL+ Intelligence System (Port 8000)
+  - Web Dashboard (Port 8080)
+
+- 📋 **8 AI Models** / **8 نماذج ذكاء اصطناعي**
+  - GPT-3.5 Turbo, GPT-4 (OpenAI)
+  - Claude 3 (Anthropic)
+  - LLaMA 3 (Meta)
+  - Qwen Arabic, AraBERT (Arabic Models)
+  - Mistral, DeepSeek Coder
+
+- 🧪 **Test API Endpoints** / **اختبار نقاط API**
+- 🚀 **Start Local API Server** / **بدء خادم API محلي**
+- 🔗 **Hostinger Domain 2 Integration** / **تكامل مع الدومين الثاني** (mbst.space)
+
+### 📚 Full Documentation / التوثيق الكامل
+
+For complete documentation, see [DEPLOY-NOW-README.md](./DEPLOY-NOW-README.md)
+
+---
+
 ## 🌐 النشر على Render | Deployment on Render
 
 ### نظرة عامة | Overview
