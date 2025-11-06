@@ -148,21 +148,21 @@ check_system_requirements() {
     print_step "Checking essential tools..."
     
     if check_command "bash"; then
-        BASH_VERSION_NUM=$(bash --version | head -n1 | grep -oP '\d+\.\d+' | head -1)
+        BASH_VERSION_NUM=$(bash --version | head -n1 | sed -n 's/.*version \([0-9]*\.[0-9]*\).*/\1/p')
         print_info "Bash version: $BASH_VERSION_NUM"
     else
         all_ok=false
     fi
     
     if check_command "git"; then
-        GIT_VERSION=$(git --version | grep -oP '\d+\.\d+\.\d+')
+        GIT_VERSION=$(git --version | sed -n 's/git version \([0-9]*\.[0-9]*\.[0-9]*\).*/\1/p')
         print_info "Git version: $GIT_VERSION"
     else
         print_warning "Git is recommended for version control"
     fi
     
     if check_command "python3"; then
-        PYTHON_VERSION=$(python3 --version | grep -oP '\d+\.\d+\.\d+')
+        PYTHON_VERSION=$(python3 --version | sed -n 's/Python \([0-9]*\.[0-9]*\.[0-9]*\).*/\1/p')
         print_info "Python version: $PYTHON_VERSION"
     else
         print_error "Python 3 is required!"
@@ -170,7 +170,7 @@ check_system_requirements() {
     fi
     
     if check_command "pip3" || check_command "pip"; then
-        PIP_VERSION=$(pip3 --version 2>/dev/null || pip --version | grep -oP '\d+\.\d+\.\d+' | head -1)
+        PIP_VERSION=$(pip3 --version 2>/dev/null || pip --version | sed -n 's/pip \([0-9]*\.[0-9]*\.[0-9]*\).*/\1/p' | head -1)
         print_info "Pip version: $PIP_VERSION"
     else
         print_error "Pip is required!"
@@ -359,7 +359,7 @@ deploy_vps() {
     
     # Test SSH connection
     print_step "Testing SSH connection..."
-    if ssh -o ConnectTimeout=5 -p "$VPS_PORT" "$VPS_USER@$VPS_HOST" "echo 'Connection successful'" 2>/dev/null; then
+    if ssh -o ConnectTimeout=5 -o StrictHostKeyChecking=yes -p "$VPS_PORT" "$VPS_USER@$VPS_HOST" "echo 'Connection successful'" 2>/dev/null; then
         print_success "SSH connection successful"
     else
         print_error "Cannot connect to VPS via SSH"
@@ -367,6 +367,7 @@ deploy_vps() {
         echo "  1. VPS is running and accessible"
         echo "  2. SSH keys are configured"
         echo "  3. Firewall allows SSH connections"
+        echo "  4. Host key is verified (check ~/.ssh/known_hosts)"
         return 1
     fi
     
@@ -383,6 +384,10 @@ deploy_vps() {
             --exclude='__pycache__' \
             --exclude='*.pyc' \
             --exclude='.env' \
+            --exclude='.env.*' \
+            --exclude='*.bak' \
+            --exclude='*.backup' \
+            --exclude='.env.local' \
             ./ "$VPS_USER@$VPS_HOST:/var/www/ai-agent-platform/"
         
         print_success "Files copied successfully"

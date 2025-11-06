@@ -20,27 +20,46 @@ mkdir -p "$TEMP_DIR"
 
 echo "📦 Collecting essential files..."
 
-# Copy essential deployment scripts
+# Define file lists
+DEPLOYMENT_SCRIPTS=(
+    "DEPLOY-NOW.sh"
+    "deploy.sh"
+    "smart-deploy.sh"
+    "quick-start.sh"
+    "autonomous-deploy.sh"
+)
+
+DOCUMENTATION=(
+    "START-HERE.md"
+    "README.md"
+    "DEPLOYMENT.md"
+    "GITHUB-DOWNLOAD.txt"
+    "QUICK-START.md"
+)
+
+CONFIG_FILES=(
+    ".env.example"
+    "requirements.txt"
+    ".gitignore"
+)
+
+# Copy deployment scripts
 echo "  ✓ Deployment scripts"
-cp DEPLOY-NOW.sh "$TEMP_DIR/" 2>/dev/null || true
-cp deploy.sh "$TEMP_DIR/" 2>/dev/null || true
-cp smart-deploy.sh "$TEMP_DIR/" 2>/dev/null || true
-cp quick-start.sh "$TEMP_DIR/" 2>/dev/null || true
-cp autonomous-deploy.sh "$TEMP_DIR/" 2>/dev/null || true
+for file in "${DEPLOYMENT_SCRIPTS[@]}"; do
+    cp "$file" "$TEMP_DIR/" 2>/dev/null || true
+done
 
 # Copy documentation
 echo "  ✓ Documentation"
-cp START-HERE.md "$TEMP_DIR/" 2>/dev/null || true
-cp README.md "$TEMP_DIR/" 2>/dev/null || true
-cp DEPLOYMENT.md "$TEMP_DIR/" 2>/dev/null || true
-cp GITHUB-DOWNLOAD.txt "$TEMP_DIR/" 2>/dev/null || true
-cp QUICK-START.md "$TEMP_DIR/" 2>/dev/null || true
+for file in "${DOCUMENTATION[@]}"; do
+    cp "$file" "$TEMP_DIR/" 2>/dev/null || true
+done
 
 # Copy configuration files
 echo "  ✓ Configuration files"
-cp .env.example "$TEMP_DIR/" 2>/dev/null || true
-cp requirements.txt "$TEMP_DIR/" 2>/dev/null || true
-cp .gitignore "$TEMP_DIR/" 2>/dev/null || true
+for file in "${CONFIG_FILES[@]}"; do
+    cp "$file" "$TEMP_DIR/" 2>/dev/null || true
+done
 
 # Copy API directory if it exists
 if [ -d "api" ]; then
