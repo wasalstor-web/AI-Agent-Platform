@@ -49,6 +49,13 @@ cd AI-Agent-Platform
 bash DEPLOY-NOW.sh
 ```
 
+### للوصول لخادم API والواجهات | For API Server & Interfaces Access
+```bash
+bash DEPLOY-NOW.sh --api
+# أو | or
+bash connect-api-server.sh
+```
+
 ### للإعداد اليدوي | For Manual Setup
 ```bash
 # 1. تثبيت المتطلبات | Install Requirements

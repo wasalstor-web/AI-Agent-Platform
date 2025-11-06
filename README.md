@@ -29,10 +29,12 @@ bash DEPLOY-NOW.sh
 |------|------|-------|-------------|
 | 📄 [**START-HERE.md**](START-HERE.md) | 3.7KB | **ابدأ من هنا** - أبسط دليل للبدء السريع | **Start Here** - Simplest quick start guide |
 | 🚀 [**DEPLOY-NOW.sh**](DEPLOY-NOW.sh) | 18KB | السكريبت الرئيسي للنشر التلقائي | Main automatic deployment script |
+| 🌐 [**connect-api-server.sh**](connect-api-server.sh) | 6KB | **جديد!** اتصال بخادم API والواجهات | **New!** API server & interfaces connection |
 | 📖 [**GITHUB-DOWNLOAD.txt**](GITHUB-DOWNLOAD.txt) | 13KB | 5 طرق لتحميل المشروع | 5 ways to download the project |
 | 📦 [**mubsat-deployment.tar.gz**](mubsat-deployment.tar.gz) | 44KB | حزمة مضغوطة بكل شيء | Compressed package with everything |
 | 📘 **README.md** | (هذا الملف) | الدليل الكامل للمشروع | Complete project guide |
 | 🌐 [**DEPLOYMENT.md**](DEPLOYMENT.md) | 12KB | دليل النشر التفصيلي | Detailed deployment guide |
+| 🔌 [**API-CONNECTION-GUIDE.md**](API-CONNECTION-GUIDE.md) | 6KB | **جديد!** دليل الاتصال بـ API | **New!** API connection guide |
 
 ### 🎯 الخيارات السريعة | Quick Options
 
@@ -45,6 +47,9 @@ bash DEPLOY-NOW.sh --vps
 
 # نشر على GitHub Pages
 bash DEPLOY-NOW.sh --github
+
+# الوصول لخادم API والواجهات | API server & interfaces access
+bash DEPLOY-NOW.sh --api
 
 # نشر تلقائي كامل | Full automatic deployment
 bash DEPLOY-NOW.sh --auto

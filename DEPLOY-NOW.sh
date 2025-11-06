@@ -101,6 +101,7 @@ ${CYAN}Options:${NC}
   --local     Deploy locally only
   --vps       Deploy to VPS server
   --github    Deploy to GitHub Pages
+  --api       API server & interfaces only
   --help      Show this help message
 
 ${CYAN}Examples:${NC}
@@ -108,6 +109,7 @@ ${CYAN}Examples:${NC}
   bash DEPLOY-NOW.sh --auto       # Automatic deployment
   bash DEPLOY-NOW.sh --local      # Local deployment only
   bash DEPLOY-NOW.sh --vps        # VPS deployment
+  bash DEPLOY-NOW.sh --api        # API & interfaces access
 
 ${CYAN}Environment Variables:${NC}
   VPS_HOST    VPS server hostname or IP
@@ -453,16 +455,19 @@ show_deployment_menu() {
     echo "  3) ${PURPLE}نشر على GitHub Pages${NC}   | GitHub Pages"
     echo "     نشر موقع ثابت               Deploy static website"
     echo ""
-    echo "  4) ${YELLOW}نشر كامل${NC}                | Full Deployment"
+    echo "  4) ${CYAN}خادم API والواجهات${NC}      | API Server & Interfaces"
+    echo "     الوصول للنماذج والواجهات    Access models and interfaces"
+    echo ""
+    echo "  5) ${YELLOW}نشر كامل${NC}                | Full Deployment"
     echo "     نشر على جميع المنصات        Deploy to all platforms"
     echo ""
-    echo "  5) ${WHITE}اختبار النظام${NC}           | System Test"
+    echo "  6) ${WHITE}اختبار النظام${NC}           | System Test"
     echo "     اختبار البيئة فقط           Test environment only"
     echo ""
-    echo "  6) ${RED}خروج${NC}                    | Exit"
+    echo "  7) ${RED}خروج${NC}                    | Exit"
     echo ""
     
-    read -p "$(echo -e ${CYAN}Enter your choice [1-6]:${NC} )" choice
+    read -p "$(echo -e ${CYAN}Enter your choice [1-7]:${NC} )" choice
     
     case $choice in
         1)
@@ -475,6 +480,17 @@ show_deployment_menu() {
             deploy_github_pages
             ;;
         4)
+            # API Server & Interfaces
+            if [ -f "connect-api-server.sh" ]; then
+                chmod +x connect-api-server.sh
+                ./connect-api-server.sh
+            else
+                print_error "connect-api-server.sh not found!"
+                print_info "Running API server directly..."
+                deploy_local
+            fi
+            ;;
+        5)
             print_info "Starting full deployment..."
             deploy_local &
             LOCAL_PID=$!
@@ -483,12 +499,12 @@ show_deployment_menu() {
             deploy_github_pages
             print_success "Full deployment complete!"
             ;;
-        5)
+        6)
             check_system_requirements
             setup_environment
             print_success "System test complete!"
             ;;
-        6)
+        7)
             print_info "Exiting..."
             exit 0
             ;;
@@ -526,6 +542,10 @@ main() {
                 TARGET="github"
                 shift
                 ;;
+            --api)
+                TARGET="api"
+                shift
+                ;;
             *)
                 print_error "Unknown option: $1"
                 echo "Use --help for usage information"
@@ -554,6 +574,15 @@ main() {
                 ;;
             github)
                 deploy_github_pages
+                ;;
+            api)
+                if [ -f "connect-api-server.sh" ]; then
+                    chmod +x connect-api-server.sh
+                    ./connect-api-server.sh
+                else
+                    print_error "connect-api-server.sh not found!"
+                    exit 1
+                fi
                 ;;
         esac
     else
