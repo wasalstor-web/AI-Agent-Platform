@@ -298,15 +298,27 @@ start_api_server() {
     print_info "Starting Flask API Server on port ${API_PORT}..."
     print_info "بدء تشغيل خادم Flask API على المنفذ ${API_PORT}..."
     
+    # Validate directory exists
+    if [ ! -d "$SCRIPT_DIR/api" ]; then
+        print_error "API directory not found: $SCRIPT_DIR/api"
+        return 1
+    fi
+    
     cd "$SCRIPT_DIR/api"
     
     # Check if port is already in use
     if lsof -Pi :${API_PORT} -sTCP:LISTEN -t >/dev/null 2>&1; then
         print_warning "Port ${API_PORT} is already in use"
         print_warning "المنفذ ${API_PORT} مستخدم بالفعل"
-        print_info "Stopping existing process..."
-        lsof -ti:${API_PORT} | xargs kill -9 2>/dev/null || true
+        print_info "Stopping existing process gracefully..."
+        # Try graceful shutdown first (SIGTERM), then force if needed
+        lsof -ti:${API_PORT} | xargs kill 2>/dev/null || true
         sleep 2
+        # Force kill if still running
+        if lsof -Pi :${API_PORT} -sTCP:LISTEN -t >/dev/null 2>&1; then
+            lsof -ti:${API_PORT} | xargs kill -9 2>/dev/null || true
+            sleep 1
+        fi
     fi
     
     # Start the server in background
@@ -344,15 +356,27 @@ start_dlplus_system() {
     print_info "Starting DL+ Intelligence System on port ${DLPLUS_PORT}..."
     print_info "بدء تشغيل نظام DL+ على المنفذ ${DLPLUS_PORT}..."
     
+    # Validate directory exists
+    if [ ! -d "$SCRIPT_DIR/dlplus" ]; then
+        print_error "DL+ directory not found: $SCRIPT_DIR/dlplus"
+        return 1
+    fi
+    
     cd "$SCRIPT_DIR/dlplus"
     
     # Check if port is already in use
     if lsof -Pi :${DLPLUS_PORT} -sTCP:LISTEN -t >/dev/null 2>&1; then
         print_warning "Port ${DLPLUS_PORT} is already in use"
         print_warning "المنفذ ${DLPLUS_PORT} مستخدم بالفعل"
-        print_info "Stopping existing process..."
-        lsof -ti:${DLPLUS_PORT} | xargs kill -9 2>/dev/null || true
+        print_info "Stopping existing process gracefully..."
+        # Try graceful shutdown first (SIGTERM), then force if needed
+        lsof -ti:${DLPLUS_PORT} | xargs kill 2>/dev/null || true
         sleep 2
+        # Force kill if still running
+        if lsof -Pi :${DLPLUS_PORT} -sTCP:LISTEN -t >/dev/null 2>&1; then
+            lsof -ti:${DLPLUS_PORT} | xargs kill -9 2>/dev/null || true
+            sleep 1
+        fi
     fi
     
     # Try simple server first, fallback to main.py
@@ -397,15 +421,27 @@ start_web_server() {
     print_info "Starting Web Dashboard on port ${WEB_PORT}..."
     print_info "بدء تشغيل لوحة الويب على المنفذ ${WEB_PORT}..."
     
+    # Validate directory exists
+    if [ ! -d "$SCRIPT_DIR" ]; then
+        print_error "Script directory not found: $SCRIPT_DIR"
+        return 1
+    fi
+    
     cd "$SCRIPT_DIR"
     
     # Check if port is already in use
     if lsof -Pi :${WEB_PORT} -sTCP:LISTEN -t >/dev/null 2>&1; then
         print_warning "Port ${WEB_PORT} is already in use"
         print_warning "المنفذ ${WEB_PORT} مستخدم بالفعل"
-        print_info "Stopping existing process..."
-        lsof -ti:${WEB_PORT} | xargs kill -9 2>/dev/null || true
+        print_info "Stopping existing process gracefully..."
+        # Try graceful shutdown first (SIGTERM), then force if needed
+        lsof -ti:${WEB_PORT} | xargs kill 2>/dev/null || true
         sleep 2
+        # Force kill if still running
+        if lsof -Pi :${WEB_PORT} -sTCP:LISTEN -t >/dev/null 2>&1; then
+            lsof -ti:${WEB_PORT} | xargs kill -9 2>/dev/null || true
+            sleep 1
+        fi
     fi
     
     # Start the server in background

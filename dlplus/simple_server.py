@@ -16,9 +16,12 @@ app = FastAPI(
 )
 
 # Add CORS middleware
+# For production, restrict origins to specific domains
+import os
+allowed_origins = os.getenv("ALLOWED_ORIGINS", "http://localhost:3000,http://localhost:8080,http://localhost:5000").split(",")
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
+    allow_origins=allowed_origins,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -69,15 +72,19 @@ async def get_status():
         "timestamp": datetime.now().isoformat()
     }
 
+from pydantic import BaseModel, Field
+
+class ProcessRequest(BaseModel):
+    """Request model for process endpoint"""
+    command: str = Field(..., min_length=1, max_length=10000, description="Command to process")
+    context: dict = Field(default_factory=dict, description="Additional context")
+
 @app.post("/api/process")
-async def process_request(request: dict):
+async def process_request(request: ProcessRequest):
     """Process AI requests"""
-    command = request.get("command", "")
-    context = request.get("context", {})
-    
     return {
         "success": True,
-        "response": f"DL+ System processed: {command}",
+        "response": f"DL+ System processed: {request.command}",
         "system": "DL+ Intelligence System",
         "timestamp": datetime.now().isoformat()
     }
