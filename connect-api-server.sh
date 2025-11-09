@@ -10,7 +10,7 @@
 # Usage: bash connect-api-server.sh [server_url]
 #############################################################################
 
-set -e
+# Note: Not using set -e to allow explicit error handling for commands that may fail gracefully
 
 # Color codes
 RED='\033[0;31m'
@@ -22,6 +22,17 @@ NC='\033[0m'
 
 # Default API server URL
 API_SERVER="${1:-http://localhost:5000}"
+
+# Validate API server URL for basic security
+validate_url() {
+    local url="$1"
+    # Allow localhost, 127.0.0.1, or any IP for flexibility in deployment scenarios
+    # In production, consider restricting to specific trusted domains
+    if [[ ! "$url" =~ ^https?:// ]]; then
+        print_error "Invalid API server URL. Must start with http:// or https://"
+        exit 1
+    fi
+}
 
 print_header() {
     echo ""
@@ -42,6 +53,9 @@ print_error() {
 print_info() {
     echo -e "${BLUE}ℹ${NC} $1"
 }
+
+# Validate the API server URL
+validate_url "$API_SERVER"
 
 print_header "🌐 الاتصال بخادم API | Connecting to API Server"
 
@@ -147,8 +161,8 @@ try:
         print(f'   Provider: {model[\"provider\"]}')
         print(f'   Type: {model[\"type\"]}')
         print()
-except:
-    print('Error parsing models')
+except Exception as e:
+    print(f'Error parsing models: {e}')
 " 2>/dev/null)
         
         echo "$MODELS"

@@ -46,19 +46,25 @@ CONFIG_FILES=(
 # Copy deployment scripts
 echo "  ✓ Deployment scripts"
 for file in "${DEPLOYMENT_SCRIPTS[@]}"; do
-    cp "$file" "$TEMP_DIR/" 2>/dev/null || true
+    if ! cp "$file" "$TEMP_DIR/" 2>/dev/null; then
+        echo "    Warning: $file not found, skipping..."
+    fi
 done
 
 # Copy documentation
 echo "  ✓ Documentation"
 for file in "${DOCUMENTATION[@]}"; do
-    cp "$file" "$TEMP_DIR/" 2>/dev/null || true
+    if ! cp "$file" "$TEMP_DIR/" 2>/dev/null; then
+        echo "    Warning: $file not found, skipping..."
+    fi
 done
 
 # Copy configuration files
 echo "  ✓ Configuration files"
 for file in "${CONFIG_FILES[@]}"; do
-    cp "$file" "$TEMP_DIR/" 2>/dev/null || true
+    if ! cp "$file" "$TEMP_DIR/" 2>/dev/null; then
+        echo "    Warning: $file not found, skipping..."
+    fi
 done
 
 # Copy API directory if it exists

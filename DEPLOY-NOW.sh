@@ -19,7 +19,7 @@
 #          --help    : Show help message
 #############################################################################
 
-set -e  # Exit on error
+set -euo pipefail  # Stricter error handling: exit on error, undefined variable, or failed pipeline
 
 # Version
 VERSION="1.0.0"
@@ -264,13 +264,16 @@ EOF
     # Install Python dependencies
     print_step "Installing Python dependencies..."
     if [ -f "requirements.txt" ]; then
-        pip3 install -q -r requirements.txt 2>&1 | grep -v "already satisfied" || {
-            print_warning "Some packages may already be installed"
-        }
+        if ! pip3 install -q -r requirements.txt 2>&1 | grep -v "already satisfied"; then
+            print_warning "Some packages may already be installed or installation had warnings"
+        fi
         print_success "Python dependencies installed"
     else
         print_warning "requirements.txt not found, installing basic packages"
-        pip3 install -q flask flask-cors requests
+        if ! pip3 install -q flask flask-cors requests; then
+            print_error "Failed to install basic packages"
+            exit 1
+        fi
         print_success "Basic packages installed"
     fi
     
@@ -361,10 +364,12 @@ deploy_vps() {
     
     # Test SSH connection
     print_step "Testing SSH connection..."
-    if ssh -o ConnectTimeout=5 -o StrictHostKeyChecking=yes -p "$VPS_PORT" "$VPS_USER@$VPS_HOST" "echo 'Connection successful'" 2>/dev/null; then
+    SSH_ERROR=$(ssh -o ConnectTimeout=5 -o StrictHostKeyChecking=yes -p "$VPS_PORT" "$VPS_USER@$VPS_HOST" "echo 'Connection successful'" 2>&1)
+    if [ $? -eq 0 ]; then
         print_success "SSH connection successful"
     else
         print_error "Cannot connect to VPS via SSH"
+        echo "$SSH_ERROR"
         print_info "Please check:"
         echo "  1. VPS is running and accessible"
         echo "  2. SSH keys are configured"
@@ -380,7 +385,7 @@ deploy_vps() {
         ./deploy.sh
     else
         print_step "Copying files to VPS..."
-        rsync -avz -e "ssh -p $VPS_PORT" \
+        rsync -avz -e "ssh -p \"$VPS_PORT\"" \
             --exclude='.git' \
             --exclude='node_modules' \
             --exclude='__pycache__' \
@@ -492,12 +497,14 @@ show_deployment_menu() {
             ;;
         5)
             print_info "Starting full deployment..."
-            deploy_local &
-            LOCAL_PID=$!
-            sleep 2
+            print_warning "Note: Local server will not be started in background for full deployment"
+            print_info "Deploy locally separately if you need a running server"
+            # deploy_local runs a blocking server, so we skip it in full deployment
+            # Users should run it separately if they need a local server
             deploy_vps
             deploy_github_pages
             print_success "Full deployment complete!"
+            print_info "To start local server: bash DEPLOY-NOW.sh --local"
             ;;
         6)
             check_system_requirements
