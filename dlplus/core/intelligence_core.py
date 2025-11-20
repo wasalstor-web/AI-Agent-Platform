@@ -37,6 +37,8 @@ class DLPlusCore:
         self.agents = {}
         self.context_history = []
         self.initialized = False
+        self.model_manager = None
+        self.integration_bridge = None
         
         logger.info("🧠 DL+ Core Intelligence Engine initializing...")
         
@@ -53,11 +55,27 @@ class DLPlusCore:
             from .context_analyzer import ContextAnalyzer
             self.context_analyzer = ContextAnalyzer()
             
+            # Initialize model manager
+            from .model_manager import ModelManager
+            from ..config import ModelsConfig
+            models_config = ModelsConfig()
+            self.model_manager = ModelManager(models_config)
+            
             # Load available models
             await self._load_models()
             
+            # Initialize integration bridge
+            from .integration_bridge import IntegrationBridge
+            self.integration_bridge = IntegrationBridge(
+                self.model_manager,
+                self.agents
+            )
+            
             # Initialize agents
             await self._initialize_agents()
+            
+            # Connect model manager to agents
+            self._connect_agents_to_models()
             
             self.initialized = True
             logger.info("✅ DL+ Core initialized successfully")
@@ -68,28 +86,47 @@ class DLPlusCore:
     
     async def _load_models(self):
         """Load AI models"""
-        # Placeholder for model loading
-        # In production, this would load actual AI models
-        self.models = {
-            'arabert': {'name': 'AraBERT', 'status': 'ready'},
-            'camelbert': {'name': 'CAMeLBERT', 'status': 'ready'},
-            'qwen_arabic': {'name': 'Qwen 2.5 Arabic', 'status': 'ready'},
-            'llama3': {'name': 'LLaMA 3', 'status': 'ready'},
-            'deepseek': {'name': 'DeepSeek', 'status': 'ready'},
-            'mistral': {'name': 'Mistral', 'status': 'ready'}
-        }
-        logger.info(f"📚 Loaded {len(self.models)} AI models")
+        logger.info("📚 Loading AI models...")
+        
+        # Preload essential models
+        essential_models = ['llama3', 'arabert', 'deepseek']
+        results = await self.model_manager.preload_models(essential_models)
+        
+        loaded_count = sum(1 for success in results.values() if success)
+        logger.info(f"📚 Loaded {loaded_count}/{len(essential_models)} essential AI models")
+        
+        # Update models dictionary
+        self.models = self.model_manager.get_all_models_info()
     
     async def _initialize_agents(self):
         """Initialize AI agents"""
-        # Placeholder for agent initialization
+        logger.info("🤖 Initializing AI agents...")
+        
+        # Import agent classes
+        from ..agents import WebRetrievalAgent, CodeGeneratorAgent
+        
+        # Create agent instances
+        web_agent = WebRetrievalAgent()
+        code_agent = CodeGeneratorAgent()
+        
+        # Store agents
         self.agents = {
-            'web_retrieval': {'name': 'Web Retrieval Agent', 'status': 'ready'},
-            'code_generator': {'name': 'Code Generator Agent', 'status': 'ready'},
-            'translator': {'name': 'Translation Agent', 'status': 'ready'},
-            'analyzer': {'name': 'Analysis Agent', 'status': 'ready'}
+            'web_retrieval': web_agent,
+            'code_generator': code_agent
         }
+        
+        # Register agents with integration bridge
+        if self.integration_bridge:
+            for agent_name, agent in self.agents.items():
+                self.integration_bridge.register_agent(agent_name, agent)
+        
         logger.info(f"🤖 Initialized {len(self.agents)} agents")
+    
+    def _connect_agents_to_models(self):
+        """Connect model manager to all agents"""
+        for agent_name, agent in self.agents.items():
+            agent.set_model_manager(self.model_manager)
+            logger.info(f"🔗 Connected model manager to agent '{agent_name}'")
     
     async def process_command(self, command: str, context: Optional[Dict] = None) -> Dict[str, Any]:
         """
@@ -178,13 +215,49 @@ class DLPlusCore:
         context: Dict
     ) -> Dict[str, Any]:
         """Execute the command using the selected executor"""
-        # Placeholder for actual execution
-        # In production, this would call the actual model/agent
-        return {
-            'executor': executor,
-            'result': f"نتيجة تنفيذ الأمر: {command}",
-            'status': 'completed'
-        }
+        try:
+            # Check if executor is an agent
+            if executor in self.agents:
+                agent = self.agents[executor]
+                result = await agent.run({
+                    'input': command,
+                    'context': context
+                })
+                return {
+                    'executor': executor,
+                    'executor_type': 'agent',
+                    'result': result,
+                    'status': 'completed'
+                }
+            
+            # Otherwise, use model through integration bridge
+            elif self.integration_bridge:
+                result = await self.integration_bridge.execute_with_model(
+                    executor,
+                    {'input': command},
+                    None
+                )
+                return {
+                    'executor': executor,
+                    'executor_type': 'model',
+                    'result': result,
+                    'status': 'completed'
+                }
+            
+            # Fallback
+            return {
+                'executor': executor,
+                'result': f"نتيجة تنفيذ الأمر: {command}",
+                'status': 'completed'
+            }
+            
+        except Exception as e:
+            logger.error(f"❌ Error executing command: {e}")
+            return {
+                'executor': executor,
+                'error': str(e),
+                'status': 'failed'
+            }
     
     async def _generate_response(
         self,
@@ -199,16 +272,45 @@ class DLPlusCore:
     
     async def get_status(self) -> Dict[str, Any]:
         """Get system status"""
-        return {
+        status = {
             'initialized': self.initialized,
-            'models': len(self.models),
-            'agents': len(self.agents),
             'context_history_size': len(self.context_history),
             'timestamp': datetime.now().isoformat()
         }
+        
+        # Add model manager status
+        if self.model_manager:
+            status['models'] = {
+                'loaded': len(self.model_manager.get_loaded_models()),
+                'loaded_models': self.model_manager.get_loaded_models()
+            }
+        else:
+            status['models'] = {'loaded': 0}
+        
+        # Add agent status
+        if self.agents:
+            status['agents'] = {
+                'count': len(self.agents),
+                'agents': [
+                    agent.get_status() for agent in self.agents.values()
+                ]
+            }
+        else:
+            status['agents'] = {'count': 0}
+        
+        # Add integration bridge status
+        if self.integration_bridge:
+            status['integration'] = self.integration_bridge.get_statistics()
+        
+        return status
     
     async def shutdown(self):
         """Shutdown the core system"""
         logger.info("🔌 Shutting down DL+ Core...")
+        
+        # Shutdown model manager
+        if self.model_manager:
+            await self.model_manager.shutdown()
+        
         self.initialized = False
         logger.info("✅ DL+ Core shutdown complete")
