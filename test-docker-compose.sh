@@ -107,9 +107,10 @@ test_build() {
     print_header "اختبار 4: بناء الصور | Test 4: Build Images"
     
     print_info "بناء صورة DL+ | Building DL+ image..."
-    if docker compose build dlplus 2>&1 | tail -5; then
+    if docker compose build dlplus; then
         print_success "تم بناء الصورة | Image built successfully"
         ((TESTS_PASSED++))
+        return 0
     else
         print_error "فشل بناء الصورة | Image build failed"
         ((TESTS_FAILED++))

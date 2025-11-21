@@ -44,8 +44,9 @@ RUN mkdir -p logs
 EXPOSE 8000 5000
 
 # Health check
+# Use python to check health instead of curl (not available in slim image)
 HEALTHCHECK --interval=30s --timeout=10s --start-period=40s --retries=3 \
-    CMD curl -f http://localhost:8000/api/health || exit 1
+    CMD python -c "import urllib.request; urllib.request.urlopen('http://localhost:8000/api/health')" || exit 1
 
 # Default command runs the DL+ simple server
 CMD ["python", "-m", "dlplus.simple_server"]

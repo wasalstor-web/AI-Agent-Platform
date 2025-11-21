@@ -104,10 +104,29 @@ setup_environment() {
     
     # Generate secrets if needed
     if grep -q "change-me-to-a-secure" .env 2>/dev/null; then
-        print_warning "تحذير: يرجى تغيير المفاتيح السرية في ملف .env"
-        print_warning "Warning: Please change secret keys in .env file"
-        print_info "يمكنك توليد مفتاح باستخدام: openssl rand -hex 32"
-        print_info "You can generate a key using: openssl rand -hex 32"
+        print_warning "⚠️  تحذير أمني: المفاتيح السرية الافتراضية مستخدمة!"
+        print_warning "⚠️  Security Warning: Default secret keys detected!"
+        echo ""
+        print_warning "للإنتاج، يجب تغيير المفاتيح السرية في ملف .env"
+        print_warning "For production, you MUST change secret keys in .env file"
+        echo ""
+        print_info "يمكنك توليد مفتاح آمن باستخدام:"
+        print_info "You can generate a secure key using:"
+        echo "  openssl rand -hex 32"
+        echo ""
+        
+        if [ "${PRODUCTION}" = "true" ]; then
+            print_error "لا يمكن المتابعة في وضع الإنتاج مع مفاتيح افتراضية"
+            print_error "Cannot continue in production mode with default keys"
+            exit 1
+        fi
+        
+        read -p "هل تريد المتابعة للتطوير فقط؟ (y/n) Continue for development only? (y/n): " -n 1 -r
+        echo
+        if [[ ! $REPLY =~ ^[Yy]$ ]]; then
+            print_info "خروج... | Exiting..."
+            exit 1
+        fi
     fi
 }
 
