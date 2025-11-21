@@ -1,0 +1,91 @@
+# Docker Compose configuration for AI Agent Platform
+# تكوين Docker Compose لمنصة وكيل الذكاء الاصطناعي
+
+services:
+  # DL+ Intelligence System - نظام DL+ للذكاء الاصطناعي
+  dlplus:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: ai-agent-dlplus
+    restart: unless-stopped
+    ports:
+      - "8000:8000"
+    environment:
+      # FastAPI Settings
+      - FASTAPI_HOST=0.0.0.0
+      - FASTAPI_PORT=8000
+      - FASTAPI_SECRET_KEY=${FASTAPI_SECRET_KEY:-change-me-to-a-secure-key}
+      - LOG_LEVEL=info
+      
+      # OpenRouter API (if needed)
+      - OPENROUTER_API_KEY=${OPENROUTER_API_KEY:-}
+      
+      # CORS Settings
+      - ALLOWED_ORIGINS=http://localhost:3000,http://localhost:8080,http://localhost:5000,http://localhost:8000
+    volumes:
+      - ./dlplus:/app/dlplus
+      - ./logs:/app/logs
+      - dlplus_data:/app/data
+    networks:
+      - ai-agent-network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/api/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    labels:
+      - "com.ai-agent-platform.service=dlplus"
+      - "com.ai-agent-platform.description=DL+ Intelligence System"
+
+  # OpenWebUI (Optional) - واجهة OpenWeb (اختياري)
+  openwebui:
+    image: ghcr.io/open-webui/open-webui:latest
+    container_name: ai-agent-openwebui
+    restart: unless-stopped
+    ports:
+      - "3000:8080"
+    environment:
+      - OLLAMA_API_BASE_URL=${OLLAMA_API_BASE_URL:-http://host.docker.internal:11434}
+      - WEBUI_SECRET_KEY=${WEBUI_SECRET_KEY:-change-me-to-a-secure-key}
+      - WEBUI_AUTH=true
+      - ENABLE_SIGNUP=${ENABLE_SIGNUP:-true}
+    volumes:
+      - openwebui_data:/app/backend/data
+    networks:
+      - ai-agent-network
+    depends_on:
+      - dlplus
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    labels:
+      - "com.ai-agent-platform.service=openwebui"
+      - "com.ai-agent-platform.description=OpenWebUI Interface"
+    profiles:
+      - openwebui
+      - full
+
+volumes:
+  dlplus_data:
+    driver: local
+    labels:
+      - "com.ai-agent-platform.volume=dlplus-data"
+      - "com.ai-agent-platform.description=DL+ System Data"
+  
+  openwebui_data:
+    driver: local
+    labels:
+      - "com.ai-agent-platform.volume=openwebui-data"
+      - "com.ai-agent-platform.description=OpenWebUI Data"
+
+networks:
+  ai-agent-network:
+    driver: bridge
+    labels:
+      - "com.ai-agent-platform.network=main"
+      - "com.ai-agent-platform.description=AI Agent Platform Network"

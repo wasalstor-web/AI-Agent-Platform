@@ -196,6 +196,26 @@ VPS_USER=your_hostinger_user (optional)
 VPS_KEY=your_ssh_key (optional)
 ```
 
+### الخطوة 2.1: تشغيل محلياً باستخدام Docker Compose | Run Locally with Docker Compose
+
+**🐳 الطريقة الأسهل والأسرع | Easiest & Fastest Method:**
+
+```bash
+# استخدم سكريبت البدء السريع | Use quick start script
+chmod +x docker-start.sh
+./docker-start.sh start basic
+
+# أو استخدم Docker Compose مباشرة | Or use Docker Compose directly
+docker compose up -d
+```
+
+**الوصول للخدمات | Access Services:**
+- DL+ API: http://localhost:8000
+- API Docs: http://localhost:8000/docs
+- Health Check: http://localhost:8000/api/health
+
+**لمزيد من التفاصيل، راجع | For more details, see:** [DOCKER-COMPOSE-GUIDE.md](DOCKER-COMPOSE-GUIDE.md)
+
 ### الخطوة 3: استخدام الوكيل عبر GitHub Actions | Use Agent via GitHub Actions
 
 1. اذهب إلى تبويب **Actions** في مستودع GitHub
@@ -215,6 +235,60 @@ VPS_KEY=your_ssh_key (optional)
 - **السجلات (Logs)**: في صفحة الـ workflow run
 - **الملفات المنشأة**: في المستودع أو artifacts
 - **التقارير**: في ملفات markdown المُنشأة
+
+---
+
+## 🐳 Docker Compose - التشغيل المحلي | Local Deployment
+
+### نظرة عامة | Overview
+
+يمكنك تشغيل المنصة بالكامل على جهازك المحلي أو على VPS باستخدام Docker Compose.
+
+You can run the entire platform on your local machine or VPS using Docker Compose.
+
+### البدء السريع | Quick Start
+
+```bash
+# 1. استنسخ المشروع | Clone the project
+git clone https://github.com/wasalstor-web/AI-Agent-Platform.git
+cd AI-Agent-Platform
+
+# 2. شغل باستخدام السكريبت | Start using script
+chmod +x docker-start.sh
+./docker-start.sh start basic
+
+# 3. أو استخدم Docker Compose مباشرة | Or use Docker Compose directly
+docker compose up -d dlplus
+```
+
+### الخدمات المتاحة | Available Services
+
+- **DL+ System**: `http://localhost:8000` - نظام الذكاء الاصطناعي الأساسي
+- **OpenWebUI**: `http://localhost:3000` - واجهة الدردشة التفاعلية (اختياري)
+
+### الأوامر الأساسية | Basic Commands
+
+```bash
+# عرض الحالة | Show status
+docker compose ps
+
+# عرض السجلات | View logs  
+docker compose logs -f
+
+# إيقاف الخدمات | Stop services
+docker compose down
+
+# إعادة البناء | Rebuild
+docker compose build --no-cache
+```
+
+### التوثيق الكامل | Full Documentation
+
+للحصول على دليل شامل حول استخدام Docker Compose، راجع:
+
+For comprehensive guide on using Docker Compose, see:
+
+**📚 [DOCKER-COMPOSE-GUIDE.md](DOCKER-COMPOSE-GUIDE.md)**
 
 ---
 

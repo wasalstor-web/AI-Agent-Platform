@@ -1,0 +1,93 @@
+# Docker ignore file for AI Agent Platform
+# ملف تجاهل Docker لمنصة وكيل الذكاء الاصطناعي
+
+# Git
+.git
+.gitignore
+.github
+
+# Python
+__pycache__
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# Virtual environments
+venv/
+env/
+ENV/
+.venv
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# Logs
+*.log
+logs/
+dlplus.log
+
+# Test coverage
+htmlcov/
+.tox/
+.coverage
+.coverage.*
+.cache
+nosetests.xml
+coverage.xml
+*.cover
+.hypothesis/
+.pytest_cache/
+
+# Documentation
+docs/_build/
+*.md
+!README.md
+
+# Temporary files
+*.tmp
+*.bak
+*.swp
+tmp/
+temp/
+
+# Environment files (keep example)
+.env
+!.env.example
+
+# Node modules (if any)
+node_modules/
+
+# Scripts that are not needed in container
+*.sh
+!setup-openwebui.sh
+
+# Example and test files
+examples/
+tests/
+agent-reports/
+
+# HTML files (except necessary ones)
+*.html
+!index.html
