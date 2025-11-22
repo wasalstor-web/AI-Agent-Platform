@@ -92,6 +92,14 @@ If you want another domain:
 | **دومين مؤقت؟** | ✅ نعم / Yes | wasalstor-web.github.io/AI-Agent-Platform |
 | **مرفوع على سيرفر؟** | ✅ نعم / Yes | GitHub Pages (سيرفر GitHub) |
 | **منشور للنهاية؟** | ✅ نعم / Yes | كل شيء مكتمل ومتاح |
+| **اتصال VPS** | ✅ موجود / EXISTS | SSH integration with Hostinger |
+| **اتصال Dokploy** | ❌ غير موجود / NOT FOUND | See VPS_DOKPLOY_CONNECTION_STATUS.md |
+
+### 🔗 تقرير اتصالات النشر / Deployment Connections Report
+للاطلاع على تقرير مفصل عن حالة اتصالات VPS و Dokploy:  
+For detailed report on VPS and Dokploy connection status:
+
+**📄 [VPS_DOKPLOY_CONNECTION_STATUS.md](VPS_DOKPLOY_CONNECTION_STATUS.md)**
 
 ---
 
