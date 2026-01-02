@@ -82,6 +82,7 @@ finalization_report*.txt
 *.pem
 *.crt
 ssh_config
+vps-connection-info.txt
 
 # OpenWebUI and Docker
 /opt/openwebui/
