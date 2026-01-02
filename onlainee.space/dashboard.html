@@ -121,6 +121,15 @@
                 <button class="btn" onclick="updateSystem()">⬆️ تحديث النظام</button>
                 <button class="btn" onclick="backupData()">💾 نسخ احتياطي</button>
             </div>
+            
+            <!-- Deployment Control -->
+            <div class="control-card">
+                <h3>🚀 نشر المشروع</h3>
+                <button class="btn" onclick="publishAll()" style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); font-size: 16px; padding: 15px 30px;">
+                    📦 نشر الكل / Publish All
+                </button>
+                <div id="publishStatus" class="status-display" style="margin-top: 15px; min-height: 100px;"></div>
+            </div>
         </div>
         
         <div class="control-card">
@@ -218,6 +227,104 @@
                     💾 Disk: ${result.resources.disk_usage}\n
                     🕰️ Updated: ${result.resources.timestamp}
                 `;
+            }
+        }
+        
+        async function publishAll() {
+            // #region agent log
+            fetch('http://127.0.0.1:7243/ingest/c21d1c2c-c721-49fe-8ebe-f011d322bca4', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({
+                    location: 'dashboard.html:publishAll:entry',
+                    message: 'Publish all button clicked',
+                    data: {action: 'button_click'},
+                    timestamp: Date.now(),
+                    sessionId: 'debug-session',
+                    runId: 'run1',
+                    hypothesisId: 'A'
+                })
+            }).catch(() => {});
+            // #endregion
+            
+            const statusDiv = document.getElementById('publishStatus');
+            statusDiv.innerHTML = '⏳ جاري النشر... يرجى الانتظار / Publishing... Please wait...';
+            
+            try {
+                // #region agent log
+                fetch('http://127.0.0.1:7243/ingest/c21d1c2c-c721-49fe-8ebe-f011d322bca4', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({
+                        location: 'dashboard.html:publishAll:before_send',
+                        message: 'Before sending publish_all command',
+                        data: {step: 'before_send'},
+                        timestamp: Date.now(),
+                        sessionId: 'debug-session',
+                        runId: 'run1',
+                        hypothesisId: 'B'
+                    })
+                }).catch(() => {});
+                // #endregion
+                
+                const result = await sendCommand('publish_all');
+                
+                // #region agent log
+                fetch('http://127.0.0.1:7243/ingest/c21d1c2c-c721-49fe-8ebe-f011d322bca4', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({
+                        location: 'dashboard.html:publishAll:after_receive',
+                        message: 'Received publish_all response',
+                        data: {status: result.status, total_steps: result.total_steps},
+                        timestamp: Date.now(),
+                        sessionId: 'debug-session',
+                        runId: 'run1',
+                        hypothesisId: 'C'
+                    })
+                }).catch(() => {});
+                // #endregion
+                
+                if (result && result.deployment_steps) {
+                    let statusHtml = `<strong>${result.message}</strong>\n\n`;
+                    statusHtml += `الخطوات المنفذة / Steps Executed:\n`;
+                    statusHtml += `━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n\n`;
+                    
+                    result.deployment_steps.forEach(step => {
+                        const icon = step.status === 'success' ? '✅' : step.status === 'skipped' ? '⏭️' : '⚠️';
+                        statusHtml += `${icon} ${step.step}. ${step.name} (${step.status})\n`;
+                        if (step.output && step.output.length > 0 && step.output !== 'Script not found' && step.output !== 'No changes to commit') {
+                            statusHtml += `   ${step.output.substring(0, 100)}...\n`;
+                        }
+                        statusHtml += '\n';
+                    });
+                    
+                    statusHtml += `\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n`;
+                    statusHtml += `إجمالي الخطوات / Total Steps: ${result.total_steps}\n`;
+                    statusHtml += `الوقت / Time: ${result.timestamp}`;
+                    
+                    statusDiv.innerHTML = statusHtml.replace(/\n/g, '<br>');
+                } else {
+                    statusDiv.innerHTML = `❌ ${result.message || 'حدث خطأ أثناء النشر'}`;
+                }
+            } catch (error) {
+                // #region agent log
+                fetch('http://127.0.0.1:7243/ingest/c21d1c2c-c721-49fe-8ebe-f011d322bca4', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({
+                        location: 'dashboard.html:publishAll:error',
+                        message: 'Error in publish_all',
+                        data: {error: error.message},
+                        timestamp: Date.now(),
+                        sessionId: 'debug-session',
+                        runId: 'run1',
+                        hypothesisId: 'D'
+                    })
+                }).catch(() => {});
+                // #endregion
+                
+                statusDiv.innerHTML = `❌ خطأ: ${error.message}`;
             }
         }
         

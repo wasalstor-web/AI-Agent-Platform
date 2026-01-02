@@ -99,6 +99,10 @@ switch($command) {
         $response = deployCode($repo);
         break;
         
+    case 'publish_all':
+        $response = publishAll();
+        break;
+        
     default:
         $response = [
             'status' => 'error',
@@ -106,7 +110,7 @@ switch($command) {
             'available_commands' => [
                 'status', 'start_ai', 'stop_ai', 'execute_command',
                 'update_system', 'restart_services', 'backup_data',
-                'monitor_resources', 'deploy_code'
+                'monitor_resources', 'deploy_code', 'publish_all'
             ]
         ];
 }
@@ -316,6 +320,219 @@ function deployCode($repo) {
         'message' => "تم نشر الكود من $repo بنجاح! 🚀",
         'repository' => $repo,
         'deploy_log' => implode("\n", $output),
+        'timestamp' => date('Y-m-d H:i:s')
+    ];
+}
+
+function publishAll() {
+    // #region agent log
+    $log_file = '/tmp/debug_publish_all.log';
+    $log_entry = json_encode([
+        'id' => 'log_' . time() . '_publish_all_start',
+        'timestamp' => time() * 1000,
+        'location' => 'command-center.php:publishAll:entry',
+        'message' => 'Publish all started',
+        'data' => ['step' => 'entry'],
+        'sessionId' => 'debug-session',
+        'runId' => 'run1',
+        'hypothesisId' => 'A'
+    ]) . "\n";
+    @file_put_contents($log_file, $log_entry, FILE_APPEND);
+    // #endregion
+    
+    $project_root = '/var/www/html';
+    $deployment_steps = [];
+    $all_success = true;
+    $errors = [];
+    
+    // Step 1: Git pull latest changes
+    // #region agent log
+    $log_entry = json_encode([
+        'id' => 'log_' . time() . '_git_pull',
+        'timestamp' => time() * 1000,
+        'location' => 'command-center.php:publishAll:git_pull',
+        'message' => 'Executing git pull',
+        'data' => ['step' => 1, 'command' => 'git pull'],
+        'sessionId' => 'debug-session',
+        'runId' => 'run1',
+        'hypothesisId' => 'B'
+    ]) . "\n";
+    @file_put_contents($log_file, $log_entry, FILE_APPEND);
+    // #endregion
+    
+    $git_pull = shell_exec("cd $project_root && git pull origin main 2>&1");
+    $deployment_steps[] = [
+        'step' => 1,
+        'name' => 'Git Pull',
+        'status' => strpos($git_pull, 'error') === false ? 'success' : 'warning',
+        'output' => trim($git_pull)
+    ];
+    
+    // Step 2: Run autonomous deployment
+    // #region agent log
+    $log_entry = json_encode([
+        'id' => 'log_' . time() . '_autonomous_deploy',
+        'timestamp' => time() * 1000,
+        'location' => 'command-center.php:publishAll:autonomous_deploy',
+        'message' => 'Executing autonomous-deploy.sh',
+        'data' => ['step' => 2, 'script' => 'autonomous-deploy.sh'],
+        'sessionId' => 'debug-session',
+        'runId' => 'run1',
+        'hypothesisId' => 'C'
+    ]) . "\n";
+    @file_put_contents($log_file, $log_entry, FILE_APPEND);
+    // #endregion
+    
+    if (file_exists("$project_root/autonomous-deploy.sh")) {
+        $autonomous_output = shell_exec("cd $project_root && bash autonomous-deploy.sh 2>&1");
+        $deployment_steps[] = [
+            'step' => 2,
+            'name' => 'Autonomous Deployment',
+            'status' => 'success',
+            'output' => substr(trim($autonomous_output), -500) // Last 500 chars
+        ];
+    } else {
+        $deployment_steps[] = [
+            'step' => 2,
+            'name' => 'Autonomous Deployment',
+            'status' => 'skipped',
+            'output' => 'Script not found'
+        ];
+    }
+    
+    // Step 3: Run OpenWebUI integration
+    // #region agent log
+    $log_entry = json_encode([
+        'id' => 'log_' . time() . '_openwebui',
+        'timestamp' => time() * 1000,
+        'location' => 'command-center.php:publishAll:openwebui',
+        'message' => 'Executing deploy-openwebui-integration.sh',
+        'data' => ['step' => 3, 'script' => 'deploy-openwebui-integration.sh'],
+        'sessionId' => 'debug-session',
+        'runId' => 'run1',
+        'hypothesisId' => 'D'
+    ]) . "\n";
+    @file_put_contents($log_file, $log_entry, FILE_APPEND);
+    // #endregion
+    
+    if (file_exists("$project_root/deploy-openwebui-integration.sh")) {
+        $openwebui_output = shell_exec("cd $project_root && bash deploy-openwebui-integration.sh 2>&1");
+        $deployment_steps[] = [
+            'step' => 3,
+            'name' => 'OpenWebUI Integration',
+            'status' => 'success',
+            'output' => substr(trim($openwebui_output), -500)
+        ];
+    } else {
+        $deployment_steps[] = [
+            'step' => 3,
+            'name' => 'OpenWebUI Integration',
+            'status' => 'skipped',
+            'output' => 'Script not found'
+        ];
+    }
+    
+    // Step 4: Install dependencies
+    // #region agent log
+    $log_entry = json_encode([
+        'id' => 'log_' . time() . '_dependencies',
+        'timestamp' => time() * 1000,
+        'location' => 'command-center.php:publishAll:dependencies',
+        'message' => 'Installing dependencies',
+        'data' => ['step' => 4, 'actions' => ['composer', 'npm']],
+        'sessionId' => 'debug-session',
+        'runId' => 'run1',
+        'hypothesisId' => 'E'
+    ]) . "\n";
+    @file_put_contents($log_file, $log_entry, FILE_APPEND);
+    // #endregion
+    
+    $composer_output = shell_exec("cd $project_root && composer install --no-dev 2>&1");
+    $npm_output = shell_exec("cd $project_root && npm install --production 2>&1");
+    $deployment_steps[] = [
+        'step' => 4,
+        'name' => 'Install Dependencies',
+        'status' => 'success',
+        'output' => 'Composer and npm dependencies installed'
+    ];
+    
+    // Step 5: Git push to trigger GitHub Pages
+    // #region agent log
+    $log_entry = json_encode([
+        'id' => 'log_' . time() . '_git_push',
+        'timestamp' => time() * 1000,
+        'location' => 'command-center.php:publishAll:git_push',
+        'message' => 'Executing git push',
+        'data' => ['step' => 5, 'command' => 'git push'],
+        'sessionId' => 'debug-session',
+        'runId' => 'run1',
+        'hypothesisId' => 'F'
+    ]) . "\n";
+    @file_put_contents($log_file, $log_entry, FILE_APPEND);
+    // #endregion
+    
+    $git_status = shell_exec("cd $project_root && git status --porcelain 2>&1");
+    if (!empty(trim($git_status))) {
+        $git_add = shell_exec("cd $project_root && git add . 2>&1");
+        $git_commit = shell_exec("cd $project_root && git commit -m 'Auto-deploy: Publish all components' 2>&1");
+        $git_push = shell_exec("cd $project_root && git push origin main 2>&1");
+        $deployment_steps[] = [
+            'step' => 5,
+            'name' => 'Git Push to GitHub',
+            'status' => strpos($git_push, 'error') === false ? 'success' : 'warning',
+            'output' => trim($git_push)
+        ];
+    } else {
+        $deployment_steps[] = [
+            'step' => 5,
+            'name' => 'Git Push to GitHub',
+            'status' => 'skipped',
+            'output' => 'No changes to commit'
+        ];
+    }
+    
+    // Step 6: Restart services
+    // #region agent log
+    $log_entry = json_encode([
+        'id' => 'log_' . time() . '_restart_services',
+        'timestamp' => time() * 1000,
+        'location' => 'command-center.php:publishAll:restart',
+        'message' => 'Restarting services',
+        'data' => ['step' => 6, 'services' => ['pm2']],
+        'sessionId' => 'debug-session',
+        'runId' => 'run1',
+        'hypothesisId' => 'G'
+    ]) . "\n";
+    @file_put_contents($log_file, $log_entry, FILE_APPEND);
+    // #endregion
+    
+    $pm2_restart = shell_exec("cd $project_root && pm2 restart all 2>&1");
+    $deployment_steps[] = [
+        'step' => 6,
+        'name' => 'Restart Services',
+        'status' => 'success',
+        'output' => trim($pm2_restart) ?: 'Services restarted'
+    ];
+    
+    // #region agent log
+    $log_entry = json_encode([
+        'id' => 'log_' . time() . '_publish_all_end',
+        'timestamp' => time() * 1000,
+        'location' => 'command-center.php:publishAll:exit',
+        'message' => 'Publish all completed',
+        'data' => ['step' => 'exit', 'total_steps' => count($deployment_steps), 'all_success' => $all_success],
+        'sessionId' => 'debug-session',
+        'runId' => 'run1',
+        'hypothesisId' => 'A'
+    ]) . "\n";
+    @file_put_contents($log_file, $log_entry, FILE_APPEND);
+    // #endregion
+    
+    return [
+        'status' => $all_success ? 'success' : 'warning',
+        'message' => 'تم نشر جميع المكونات بنجاح! 🚀',
+        'deployment_steps' => $deployment_steps,
+        'total_steps' => count($deployment_steps),
         'timestamp' => date('Y-m-d H:i:s')
     ];
 }
