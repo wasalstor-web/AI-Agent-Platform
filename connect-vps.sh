@@ -1,11 +1,24 @@
 #!/bin/bash
-# سكريبت الاتصال السريع بـ VPS Hostinger
-# =========================================
+# سكريبت الاتصال السريع بـ VPS Hostinger (محسّن)
+# ================================================
 
 # معلومات الاتصال
 VPS_HOST="147.93.120.99"
 VPS_USER="root"
 VPS_PASSWORD="9'hG8lV1RCU)sesnQ3hA"
+
+# دالة الاتصال الذكية (تستخدم SSH keys إن وجدت)
+connect_vps() {
+    if [ -f ~/.ssh/id_rsa ] && ssh -o ConnectTimeout=3 -o BatchMode=yes "$VPS_USER@$VPS_HOST" exit 2>/dev/null; then
+        ssh "$VPS_USER@$VPS_HOST" "$@"
+    else
+        if ! command -v sshpass &> /dev/null; then
+            echo -e "${YELLOW}جارٍ تثبيت sshpass...${NC}"
+            sudo apt-get update && sudo apt-get install -y sshpass
+        fi
+        sshpass -p "$VPS_PASSWORD" ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null "$VPS_USER@$VPS_HOST" "$@"
+    fi
+}
 
 # ألوان للواجهة
 GREEN='\033[0;32m'
@@ -38,11 +51,11 @@ read -p "اختر رقم الإجراء (1-6): " choice
 case $choice in
     1)
         echo -e "${GREEN}جارٍ الاتصال بالخادم...${NC}"
-        sshpass -p "$VPS_PASSWORD" ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null "$VPS_USER@$VPS_HOST"
+        connect_vps
         ;;
     2)
         echo -e "${GREEN}فحص حالة الخادم...${NC}"
-        sshpass -p "$VPS_PASSWORD" ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null "$VPS_USER@$VPS_HOST" "
+        connect_vps "
             echo '=== System Uptime ===' && uptime && 
             echo '' && echo '=== Disk Usage ===' && df -h && 
             echo '' && echo '=== Memory Usage ===' && free -h && 
@@ -51,7 +64,7 @@ case $choice in
         ;;
     3)
         echo -e "${GREEN}فحص الموارد...${NC}"
-        sshpass -p "$VPS_PASSWORD" ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null "$VPS_USER@$VPS_HOST" "
+        connect_vps "
             echo '=== Memory ===' && free -h && 
             echo '' && echo '=== Disk ===' && df -h && 
             echo '' && echo '=== CPU ===' && top -bn1 | head -5
@@ -59,13 +72,11 @@ case $choice in
         ;;
     4)
         echo -e "${GREEN}فحص الخدمات النشطة...${NC}"
-        sshpass -p "$VPS_PASSWORD" ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null "$VPS_USER@$VPS_HOST" "
-            systemctl list-units --type=service --state=running | head -20
-        "
+        connect_vps "systemctl list-units --type=service --state=running | head -20"
         ;;
     5)
         echo -e "${GREEN}عرض السجلات الأخيرة...${NC}"
-        sshpass -p "$VPS_PASSWORD" ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null "$VPS_USER@$VPS_HOST" "
+        connect_vps "
             echo '=== Recent Logins ===' && last | head -5 && 
             echo '' && echo '=== System Messages ===' && journalctl -n 20 --no-pager
         "
@@ -73,7 +84,7 @@ case $choice in
     6)
         read -p "أدخل الأمر المراد تنفيذه: " custom_cmd
         echo -e "${GREEN}تنفيذ الأمر: $custom_cmd${NC}"
-        sshpass -p "$VPS_PASSWORD" ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null "$VPS_USER@$VPS_HOST" "$custom_cmd"
+        connect_vps "$custom_cmd"
         ;;
     *)
         echo -e "${YELLOW}خيار غير صحيح${NC}"
