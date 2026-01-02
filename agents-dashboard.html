@@ -1,0 +1,755 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🤖 لوحة تحكم الوكلاء الاحترافية - DL+ Agents Dashboard</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            font-family: 'Cairo', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: white;
+        }
+        
+        .container { max-width: 1400px; margin: 0 auto; padding: 20px; }
+        
+        .header {
+            background: rgba(255,255,255,0.1);
+            backdrop-filter: blur(20px);
+            padding: 30px;
+            border-radius: 20px;
+            margin-bottom: 30px;
+            text-align: center;
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+        
+        .control-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin: 30px 0;
+        }
+        
+        .control-card {
+            background: rgba(255,255,255,0.1);
+            backdrop-filter: blur(15px);
+            padding: 25px;
+            border-radius: 15px;
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+        
+        .stat-card {
+            background: rgba(255,255,255,0.1);
+            backdrop-filter: blur(15px);
+            padding: 25px;
+            border-radius: 15px;
+            margin-bottom: 20px;
+            text-align: center;
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+        
+        .stat-card h3 {
+            font-size: 2.5rem;
+            font-weight: bold;
+            margin: 0;
+        }
+        
+        .stat-card p {
+            margin: 10px 0 0 0;
+            opacity: 0.9;
+        }
+        
+        .btn {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 10px;
+            cursor: pointer;
+            margin: 5px;
+            font-size: 14px;
+            transition: all 0.3s ease;
+        }
+        
+        .btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+        }
+        
+        .status-display {
+            background: rgba(0,0,0,0.2);
+            padding: 15px;
+            border-radius: 10px;
+            font-family: monospace;
+            font-size: 12px;
+            max-height: 200px;
+            overflow-y: auto;
+        }
+        
+        .ai-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+        
+        .ai-card {
+            background: rgba(255,255,255,0.05);
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+        
+        .live-status {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            background: rgba(0,0,0,0.8);
+            padding: 10px 20px;
+            border-radius: 25px;
+            font-size: 14px;
+        }
+        
+        .pulse {
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+        
+        input, select, textarea {
+            background: rgba(255,255,255,0.1);
+            border: 1px solid rgba(255,255,255,0.3);
+            color: white;
+            padding: 10px;
+            border-radius: 8px;
+            margin: 5px 0;
+            width: 100%;
+        }
+        
+        input::placeholder {
+            color: rgba(255,255,255,0.6);
+        }
+        
+        .agent-card {
+            background: rgba(255,255,255,0.1);
+            backdrop-filter: blur(15px);
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 20px;
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+        
+        .status-badge {
+            display: inline-block;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: bold;
+            background: rgba(56, 239, 125, 0.3);
+            color: white;
+        }
+        
+        .result-display {
+            background: rgba(0,0,0,0.2);
+            border-radius: 10px;
+            padding: 20px;
+            margin-top: 20px;
+            max-height: 500px;
+            overflow-y: auto;
+            font-family: monospace;
+            font-size: 12px;
+        }
+        
+        .chart-container {
+            position: relative;
+            height: 300px;
+            margin: 20px 0;
+        }
+        
+        .log-entry {
+            padding: 10px;
+            margin: 5px 0;
+            border-radius: 5px;
+            background: rgba(255,255,255,0.05);
+            border-left: 3px solid;
+        }
+        
+        .log-entry.success { border-left-color: #38ef7d; }
+        .log-entry.error { border-left-color: #f5576c; }
+        .log-entry.info { border-left-color: #4facfe; }
+        .log-entry.warning { border-left-color: #ffd700; }
+        
+        .agent-icon {
+            font-size: 3rem;
+            margin-bottom: 10px;
+        }
+        
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255,255,255,0.3);
+            border-radius: 50%;
+            border-top-color: #fff;
+            animation: spin 1s ease-in-out infinite;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        
+        .nav-tabs {
+            border-bottom: 1px solid rgba(255,255,255,0.2);
+        }
+        
+        .nav-tabs .nav-link {
+            color: rgba(255,255,255,0.7);
+            border: none;
+            border-bottom: 2px solid transparent;
+            padding: 15px 20px;
+        }
+        
+        .nav-tabs .nav-link:hover {
+            color: white;
+            border-bottom-color: rgba(255,255,255,0.3);
+        }
+        
+        .nav-tabs .nav-link.active {
+            color: white;
+            background: transparent;
+            border-bottom-color: #4facfe;
+        }
+        
+        .tab-content {
+            padding: 20px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="live-status pulse">
+        🞵 الوكيل متصل مباشرة
+    </div>
+    
+    <div class="container">
+        <div class="header">
+            <h1>🤖 لوحة تحكم الوكلاء الاحترافية</h1>
+            <p>DL+ Agents Dashboard | آخر تحديث: <span id="timestamp"></span></p>
+            <button class="btn" onclick="refreshAll()">🔄 تحديث الحالة</button>
+        </div>
+        
+        <!-- Statistics Cards -->
+        <div class="control-grid">
+            <div class="stat-card">
+                <h3 id="totalTasks">0</h3>
+                <p>📊 إجمالي المهام</p>
+            </div>
+            <div class="stat-card">
+                <h3 id="successRate">0%</h3>
+                <p>✅ معدل النجاح</p>
+            </div>
+            <div class="stat-card">
+                <h3 id="avgDuration">0s</h3>
+                <p>⏱️ متوسط المدة</p>
+            </div>
+            <div class="stat-card">
+                <h3 id="activeAgents">5</h3>
+                <p>🤖 الوكلاء النشطة</p>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="control-grid">
+            <!-- Left Column: Agents -->
+            <div class="control-card">
+                <h3>🤖 الوكلاء المتاحة</h3>
+                <div id="agentsList">
+                    <!-- Agents will be loaded here -->
+                </div>
+            </div>
+
+            <!-- Quick Actions -->
+            <div class="control-card">
+                <h3>⚡ إجراءات سريعة</h3>
+                <button class="btn" onclick="refreshAll()">🔄 تحديث الكل</button>
+                <button class="btn" onclick="getAnalytics()">📊 التحليلات</button>
+                <button class="btn" onclick="generateReport()">📄 تقرير شامل</button>
+                <button class="btn" onclick="healthCheck()">💚 فحص الصحة</button>
+            </div>
+        </div>
+
+        <!-- Tabs Section -->
+        <div class="control-card">
+            <ul class="nav nav-tabs" role="tablist" style="display: flex; gap: 10px; border-bottom: 1px solid rgba(255,255,255,0.2); padding-bottom: 10px; margin-bottom: 20px;">
+                <li><a class="nav-link active" onclick="showTab('execute', event)" style="cursor: pointer; padding: 10px 20px; border-radius: 8px; background: rgba(255,255,255,0.1);">🚀 تنفيذ مهمة</a></li>
+                <li><a class="nav-link" onclick="showTab('analytics', event)" style="cursor: pointer; padding: 10px 20px; border-radius: 8px; background: rgba(255,255,255,0.1);">📊 التحليلات</a></li>
+                <li><a class="nav-link" onclick="showTab('logs', event)" style="cursor: pointer; padding: 10px 20px; border-radius: 8px; background: rgba(255,255,255,0.1);">📜 السجلات</a></li>
+                <li><a class="nav-link" onclick="showTab('settings', event)" style="cursor: pointer; padding: 10px 20px; border-radius: 8px; background: rgba(255,255,255,0.1);">⚙️ الإعدادات</a></li>
+            </ul>
+
+            <!-- Execute Tab -->
+            <div id="execute" class="tab-content">
+                <h3>🚀 تنفيذ مهمة جديدة</h3>
+                <div style="margin: 15px 0;">
+                    <label>نوع العملية</label>
+                    <select id="actionType">
+                        <option value="auto">كشف تلقائي</option>
+                        <option value="search">بحث</option>
+                        <option value="code">توليد كود</option>
+                        <option value="translate">ترجمة</option>
+                        <option value="analyze">تحليل</option>
+                    </select>
+                </div>
+                <div style="margin: 15px 0;">
+                    <label>وصف المهمة</label>
+                    <textarea id="taskDescription" rows="3" placeholder="اكتب وصف المهمة هنا..."></textarea>
+                </div>
+                <div style="margin: 15px 0;">
+                    <label>اللغة (للكود/الترجمة)</label>
+                    <input type="text" id="language" placeholder="python, en, ar...">
+                </div>
+                <div style="margin: 15px 0;">
+                    <label>
+                        <input type="checkbox" id="includeTests" style="width: auto; margin-left: 10px;">
+                        تضمين اختبارات
+                    </label>
+                    <label style="margin-right: 20px;">
+                        <input type="checkbox" id="optimize" style="width: auto; margin-left: 10px;">
+                        تحسين تلقائي
+                    </label>
+                </div>
+                <button class="btn" onclick="executeTask()">🚀 تنفيذ المهمة</button>
+                <button class="btn" onclick="clearResults()">🗑️ مسح النتائج</button>
+                <div id="taskResult" class="result-display" style="display: none; margin-top: 20px;"></div>
+            </div>
+
+            <!-- Analytics Tab -->
+            <div id="analytics" class="tab-content" style="display: none;">
+                <h3>📊 التحليلات والإحصائيات</h3>
+                <div class="chart-container">
+                    <canvas id="performanceChart"></canvas>
+                </div>
+                <div class="chart-container">
+                    <canvas id="agentUsageChart"></canvas>
+                </div>
+                <div id="analyticsData" style="margin-top: 20px;"></div>
+            </div>
+
+            <!-- Logs Tab -->
+            <div id="logs" class="tab-content" style="display: none;">
+                <h3>📜 سجل التنفيذات</h3>
+                <div style="margin: 15px 0;">
+                    <input type="text" id="logFilter" placeholder="تصفية السجلات..." onkeyup="filterLogs()">
+                </div>
+                <div id="logsDisplay" class="status-display" style="max-height: 500px;">
+                    <!-- Logs will be displayed here -->
+                </div>
+            </div>
+
+            <!-- Settings Tab -->
+            <div id="settings" class="tab-content" style="display: none;">
+                <h3>⚙️ الإعدادات</h3>
+                <div style="margin: 15px 0;">
+                    <label>API Endpoint</label>
+                    <input type="text" id="apiEndpoint" value="http://localhost:8000/api">
+                </div>
+                <div style="margin: 15px 0;">
+                    <label>
+                        <input type="checkbox" id="enableAnalytics" checked style="width: auto; margin-left: 10px;">
+                        تفعيل التحليلات
+                    </label><br>
+                    <label>
+                        <input type="checkbox" id="enableLearning" checked style="width: auto; margin-left: 10px;">
+                        تفعيل التعلم
+                    </label><br>
+                    <label>
+                        <input type="checkbox" id="enableOptimization" checked style="width: auto; margin-left: 10px;">
+                        تفعيل التحسين
+                    </label>
+                </div>
+                <button class="btn" onclick="saveSettings()">💾 حفظ الإعدادات</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Configuration
+        const API_BASE = localStorage.getItem('apiEndpoint') || 'http://localhost:8000/api';
+        let performanceChart = null;
+        let agentUsageChart = null;
+        let logs = [];
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            updateTimestamp();
+            setInterval(updateTimestamp, 1000);
+            loadAgents();
+            loadAnalytics();
+            setInterval(refreshStats, 5000);
+            initializeCharts();
+        });
+
+        function updateTimestamp() {
+            document.getElementById('timestamp').textContent = new Date().toLocaleString('ar-SA');
+        }
+        
+        function showTab(tabName, event) {
+            // Hide all tabs
+            document.querySelectorAll('.tab-content').forEach(tab => {
+                tab.style.display = 'none';
+            });
+            
+            // Remove active class from all nav links
+            document.querySelectorAll('.nav-link').forEach(link => {
+                link.classList.remove('active');
+                link.style.background = 'rgba(255,255,255,0.1)';
+            });
+            
+            // Show selected tab
+            document.getElementById(tabName).style.display = 'block';
+            
+            // Add active class to clicked link
+            let targetLink = null;
+            if (event && event.target) {
+                targetLink = event.target;
+            } else {
+                // Find the nav-link that corresponds to this tab
+                document.querySelectorAll('.nav-link').forEach(link => {
+                    if (link.getAttribute('onclick') && link.getAttribute('onclick').includes(tabName)) {
+                        targetLink = link;
+                    }
+                });
+            }
+            
+            if (targetLink) {
+                targetLink.classList.add('active');
+                targetLink.style.background = 'rgba(79, 172, 254, 0.3)';
+            }
+        }
+
+        async function loadAgents() {
+            const agents = [
+                { id: 'sdk', name: 'SDK Agent', icon: '🤖', description: 'الوكيل الشامل الاحترافي' },
+                { id: 'search', name: 'Web Retrieval', icon: '🔍', description: 'وكيل البحث على الويب' },
+                { id: 'code', name: 'Code Generator', icon: '💻', description: 'وكيل توليد الأكواد' },
+                { id: 'translate', name: 'Translation', icon: '🌐', description: 'وكيل الترجمة' },
+                { id: 'analyze', name: 'Analysis', icon: '📊', description: 'وكيل التحليل' }
+            ];
+
+            const agentsList = document.getElementById('agentsList');
+            agentsList.innerHTML = agents.map(agent => `
+                <div class="ai-card">
+                    <h4>${agent.icon} ${agent.name}</h4>
+                    <p style="font-size: 12px; margin: 10px 0;">${agent.description}</p>
+                    <span class="status-badge">نشط</span>
+                    <div style="margin-top: 15px;">
+                        <button class="btn" onclick="testAgent('${agent.id}')" style="font-size: 12px; padding: 8px 15px;">🧪 اختبار</button>
+                        <button class="btn" onclick="getAgentInfo('${agent.id}')" style="font-size: 12px; padding: 8px 15px;">ℹ️ معلومات</button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        async function executeTask() {
+            const action = document.getElementById('actionType').value;
+            const description = document.getElementById('taskDescription').value;
+            const language = document.getElementById('language').value;
+            const includeTests = document.getElementById('includeTests').checked;
+            const optimize = document.getElementById('optimize').checked;
+
+            if (!description) {
+                alert('يرجى إدخال وصف المهمة');
+                return;
+            }
+
+            const resultDiv = document.getElementById('taskResult');
+            resultDiv.style.display = 'block';
+            resultDiv.innerHTML = '<div class="loading"></div> جاري التنفيذ...';
+
+            try {
+                const task = {
+                    action: action,
+                    description: description,
+                    language: language || undefined,
+                    include_tests: includeTests || undefined,
+                    optimize: optimize || undefined
+                };
+
+                const response = await fetch(`${API_BASE}/sdk/execute`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(task)
+                });
+
+                const result = await response.json();
+                
+                // Format result
+                resultDiv.innerHTML = `
+                    <h6>✅ النتيجة:</h6>
+                    <pre style="color: #fff; background: rgba(0,0,0,0.3); padding: 15px; border-radius: 5px; overflow-x: auto;">${JSON.stringify(result, null, 2)}</pre>
+                    <div style="margin-top: 15px;">
+                        <strong>التحليلات:</strong>
+                        <ul style="margin-top: 10px;">
+                            <li>مدة التنفيذ: ${result.analytics?.execution_time?.toFixed(2) || 'N/A'}s</li>
+                            <li>الوكيل المستخدم: ${result.analytics?.agent_used || 'N/A'}</li>
+                            <li>جودة النتيجة: ${(result.analytics?.quality_score * 100 || 0).toFixed(1)}%</li>
+                        </ul>
+                    </div>
+                `;
+
+                // Add to logs
+                addLog('success', `تم تنفيذ المهمة: ${description.substring(0, 50)}...`);
+                
+                // Update stats
+                refreshStats();
+
+            } catch (error) {
+                resultDiv.innerHTML = `
+                    <div style="color: #f5576c;">
+                        ⚠️ خطأ: ${error.message}
+                    </div>
+                `;
+                addLog('error', `خطأ في التنفيذ: ${error.message}`);
+            }
+        }
+
+        async function refreshStats() {
+            try {
+                const response = await fetch(`${API_BASE}/sdk/analytics`);
+                const analytics = await response.json();
+
+                if (analytics.performance) {
+                    document.getElementById('totalTasks').textContent = analytics.performance.total_tasks || 0;
+                    const successRate = analytics.performance.successful_tasks / Math.max(analytics.performance.total_tasks, 1) * 100;
+                    document.getElementById('successRate').textContent = successRate.toFixed(1) + '%';
+                    document.getElementById('avgDuration').textContent = (analytics.performance.average_duration || 0).toFixed(2) + 's';
+                }
+            } catch (error) {
+                console.error('Error refreshing stats:', error);
+            }
+        }
+
+        async function loadAnalytics() {
+            try {
+                const response = await fetch(`${API_BASE}/sdk/analytics`);
+                const analytics = await response.json();
+                
+                updateCharts(analytics);
+                
+                const analyticsDiv = document.getElementById('analyticsData');
+                analyticsDiv.innerHTML = `
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px;">
+                        <div>
+                            <h6>إحصائيات الأداء</h6>
+                            <ul style="list-style: none; padding: 0;">
+                                <li>إجمالي المهام: ${analytics.performance?.total_tasks || 0}</li>
+                                <li>المهام الناجحة: ${analytics.performance?.successful_tasks || 0}</li>
+                                <li>المهام الفاشلة: ${analytics.performance?.failed_tasks || 0}</li>
+                                <li>متوسط المدة: ${(analytics.performance?.average_duration || 0).toFixed(2)}s</li>
+                            </ul>
+                        </div>
+                        <div>
+                            <h6>إحصائيات التخزين المؤقت</h6>
+                            <ul style="list-style: none; padding: 0;">
+                                <li>النجاحات: ${analytics.cache_stats?.hits || 0}</li>
+                                <li>الفشل: ${analytics.cache_stats?.misses || 0}</li>
+                                <li>معدل النجاح: ${((analytics.cache_stats?.hit_rate || 0) * 100).toFixed(1)}%</li>
+                            </ul>
+                        </div>
+                    </div>
+                `;
+            } catch (error) {
+                console.error('Error loading analytics:', error);
+            }
+        }
+
+        function initializeCharts() {
+            // Performance Chart
+            const perfCtx = document.getElementById('performanceChart');
+            if (perfCtx) {
+                performanceChart = new Chart(perfCtx.getContext('2d'), {
+                    type: 'line',
+                    data: {
+                        labels: [],
+                        datasets: [{
+                            label: 'مدة التنفيذ (ثانية)',
+                            data: [],
+                            borderColor: '#4facfe',
+                            backgroundColor: 'rgba(79, 172, 254, 0.1)',
+                            tension: 0.4
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: { labels: { color: '#fff' } }
+                        },
+                        scales: {
+                            y: { ticks: { color: '#fff' }, grid: { color: 'rgba(255,255,255,0.1)' } },
+                            x: { ticks: { color: '#fff' }, grid: { color: 'rgba(255,255,255,0.1)' } }
+                        }
+                    }
+                });
+            }
+
+            // Agent Usage Chart
+            const agentCtx = document.getElementById('agentUsageChart');
+            if (agentCtx) {
+                agentUsageChart = new Chart(agentCtx.getContext('2d'), {
+                    type: 'doughnut',
+                    data: {
+                        labels: [],
+                        datasets: [{
+                            data: [],
+                            backgroundColor: [
+                                '#4facfe',
+                                '#00f2fe',
+                                '#f093fb',
+                                '#38ef7d',
+                                '#ffd700'
+                            ]
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: { labels: { color: '#fff' }, position: 'bottom' }
+                        }
+                    }
+                });
+            }
+        }
+
+        function updateCharts(analytics) {
+            if (analytics.agent_usage && agentUsageChart) {
+                agentUsageChart.data.labels = Object.keys(analytics.agent_usage);
+                agentUsageChart.data.datasets[0].data = Object.values(analytics.agent_usage);
+                agentUsageChart.update();
+            }
+        }
+        
+        // Initialize tab display
+        document.addEventListener('DOMContentLoaded', function() {
+            showTab('execute');
+        });
+
+        function addLog(type, message) {
+            const timestamp = new Date().toLocaleTimeString('ar-SA');
+            logs.unshift({ type, message, timestamp });
+            
+            if (logs.length > 100) logs.pop();
+            
+            updateLogsDisplay();
+        }
+
+        function updateLogsDisplay() {
+            const logsDisplay = document.getElementById('logsDisplay');
+            if (logs.length === 0) {
+                logsDisplay.innerHTML = '<div style="padding: 10px; color: rgba(255,255,255,0.6);">لا توجد سجلات</div>';
+            } else {
+                logsDisplay.innerHTML = logs.map(log => `
+                    <div class="log-entry ${log.type}">
+                        <strong>[${log.timestamp}]</strong> ${log.message}
+                    </div>
+                `).join('');
+            }
+        }
+
+        function filterLogs() {
+            const filter = document.getElementById('logFilter').value.toLowerCase();
+            const logsDisplay = document.getElementById('logsDisplay');
+            const filteredLogs = logs.filter(log => 
+                log.message.toLowerCase().includes(filter) || 
+                log.type.toLowerCase().includes(filter)
+            );
+            
+            logsDisplay.innerHTML = filteredLogs.map(log => `
+                <div class="log-entry ${log.type}">
+                    <strong>[${log.timestamp}]</strong> ${log.message}
+                </div>
+            `).join('') || '<div style="padding: 10px; color: rgba(255,255,255,0.6);">لا توجد نتائج</div>';
+        }
+
+        async function refreshAll() {
+            addLog('info', 'جاري تحديث جميع البيانات...');
+            await loadAgents();
+            await loadAnalytics();
+            await refreshStats();
+            addLog('success', 'تم التحديث بنجاح');
+        }
+
+        async function getAnalytics() {
+            await loadAnalytics();
+            showTab('analytics');
+        }
+
+        async function generateReport() {
+            try {
+                const response = await fetch(`${API_BASE}/sdk/report`);
+                const report = await response.text();
+                
+                // Download report
+                const blob = new Blob([report], { type: 'application/json' });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = `report_${Date.now()}.json`;
+                a.click();
+                
+                addLog('success', 'تم توليد التقرير بنجاح');
+            } catch (error) {
+                addLog('error', `خطأ في توليد التقرير: ${error.message}`);
+            }
+        }
+
+        async function healthCheck() {
+            try {
+                const response = await fetch(`${API_BASE}/sdk/health`);
+                const health = await response.json();
+                
+                alert(`حالة النظام:\n\nSDK Agent: ${health.sdk_agent?.status}\nمعدل النجاح: ${(health.performance?.success_rate * 100 || 0).toFixed(1)}%\nالوكلاء النشطة: ${Object.keys(health.sub_agents || {}).length}`);
+                addLog('success', 'فحص الصحة: النظام يعمل بشكل طبيعي');
+            } catch (error) {
+                addLog('error', `خطأ في فحص الصحة: ${error.message}`);
+            }
+        }
+
+        function clearResults() {
+            document.getElementById('taskResult').style.display = 'none';
+            document.getElementById('taskDescription').value = '';
+        }
+
+        function saveSettings() {
+            const endpoint = document.getElementById('apiEndpoint').value;
+            localStorage.setItem('apiEndpoint', endpoint);
+            addLog('success', 'تم حفظ الإعدادات');
+        }
+
+        function testAgent(agentId) {
+            addLog('info', `جاري اختبار الوكيل: ${agentId}`);
+            // Add test logic here
+        }
+
+        function getAgentInfo(agentId) {
+            addLog('info', `جاري جلب معلومات الوكيل: ${agentId}`);
+            // Add info logic here
+        }
+
+        // Initialize logs
+        addLog('info', 'تم تحميل لوحة التحكم');
+    </script>
+</body>
+</html>
+

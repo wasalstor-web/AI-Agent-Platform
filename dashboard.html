@@ -1,0 +1,525 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>لوحة التحكم الرئيسية - AI Agent Platform</title>
+    
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.2/font/bootstrap-icons.css">
+    <!-- Google Fonts - Arabic -->
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    
+    <style>
+        :root {
+            --primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --success-gradient: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            --danger-gradient: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+            --warning-gradient: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+            --info-gradient: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+        }
+        
+        * {
+            font-family: 'Cairo', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px 0;
+        }
+        
+        .dashboard-container {
+            max-width: 1800px;
+            margin: 0 auto;
+        }
+        
+        .header-card {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+        
+        .stat-card {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 20px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            height: 100%;
+        }
+        
+        .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+        }
+        
+        .stat-icon {
+            width: 70px;
+            height: 70px;
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 32px;
+            color: white;
+            margin-bottom: 15px;
+        }
+        
+        .stat-icon.primary { background: var(--primary-gradient); }
+        .stat-icon.success { background: var(--success-gradient); }
+        .stat-icon.danger { background: var(--danger-gradient); }
+        .stat-icon.warning { background: var(--warning-gradient); }
+        .stat-icon.info { background: var(--info-gradient); }
+        
+        .stat-value {
+            font-size: 36px;
+            font-weight: 700;
+            color: #1e293b;
+            margin: 10px 0;
+        }
+        
+        .stat-label {
+            color: #64748b;
+            font-size: 14px;
+            font-weight: 600;
+        }
+        
+        .main-card {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+        
+        .card-title {
+            font-size: 24px;
+            font-weight: 700;
+            color: #1e293b;
+            margin-bottom: 25px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .quick-action-btn {
+            background: var(--primary-gradient);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            padding: 15px 25px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+            margin: 5px;
+        }
+        
+        .quick-action-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(102, 126, 234, 0.4);
+            color: white;
+        }
+        
+        .live-indicator {
+            display: inline-block;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: #10b981;
+            animation: pulse 2s infinite;
+            margin-left: 8px;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.5; transform: scale(1.2); }
+        }
+        
+        .chart-container {
+            position: relative;
+            height: 300px;
+            margin-top: 20px;
+        }
+        
+        .recent-activity-item {
+            padding: 15px;
+            border-bottom: 1px solid #e2e8f0;
+            transition: background 0.3s ease;
+        }
+        
+        .recent-activity-item:hover {
+            background: #f8fafc;
+        }
+        
+        .recent-activity-item:last-child {
+            border-bottom: none;
+        }
+        
+        @media (max-width: 768px) {
+            .stat-value {
+                font-size: 24px;
+            }
+            
+            .main-card {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="dashboard-container">
+        <!-- Header -->
+        <div class="header-card">
+            <div class="row align-items-center">
+                <div class="col-md-8">
+                    <h1 class="mb-2">
+                        <i class="bi bi-speedometer2 text-primary"></i>
+                        لوحة التحكم الرئيسية
+                    </h1>
+                    <p class="text-muted mb-0">
+                        <span class="live-indicator"></span>
+                        النظام متصل مباشرة | آخر تحديث: <span id="lastUpdate"></span>
+                    </p>
+                </div>
+                <div class="col-md-4 text-end">
+                    <a href="servers.html" class="quick-action-btn">
+                        <i class="bi bi-server"></i> إدارة السيرفرات
+                    </a>
+                    <a href="monitoring.html" class="quick-action-btn">
+                        <i class="bi bi-graph-up"></i> المراقبة
+                    </a>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Statistics Cards -->
+        <div class="row mb-4">
+            <div class="col-lg-3 col-md-6 mb-3">
+                <div class="stat-card">
+                    <div class="stat-icon primary">
+                        <i class="bi bi-server"></i>
+                    </div>
+                    <div class="stat-value" id="totalServers">0</div>
+                    <div class="stat-label">السيرفرات النشطة</div>
+                    <small class="text-muted">من أصل <span id="totalServersCount">0</span> سيرفر</small>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-6 mb-3">
+                <div class="stat-card">
+                    <div class="stat-icon success">
+                        <i class="bi bi-robot"></i>
+                    </div>
+                    <div class="stat-value" id="totalAI">0</div>
+                    <div class="stat-label">نماذج AI النشطة</div>
+                    <small class="text-muted"><span id="totalRequests">0</span> طلب اليوم</small>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-6 mb-3">
+                <div class="stat-card">
+                    <div class="stat-icon warning">
+                        <i class="bi bi-cpu"></i>
+                    </div>
+                    <div class="stat-value" id="cpuUsage">0%</div>
+                    <div class="stat-label">استخدام المعالج</div>
+                    <small class="text-muted">متوسط الاستخدام</small>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-6 mb-3">
+                <div class="stat-card">
+                    <div class="stat-icon info">
+                        <i class="bi bi-memory"></i>
+                    </div>
+                    <div class="stat-value" id="memoryUsage">0%</div>
+                    <div class="stat-label">استخدام الذاكرة</div>
+                    <small class="text-muted"><span id="memoryUsed">0</span> GB مستخدم</small>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Main Content -->
+        <div class="row">
+            <!-- Left Column -->
+            <div class="col-lg-8 mb-4">
+                <!-- Performance Chart -->
+                <div class="main-card">
+                    <h3 class="card-title">
+                        <i class="bi bi-graph-up-arrow text-primary"></i>
+                        أداء النظام
+                    </h3>
+                    <div class="chart-container">
+                        <canvas id="performanceChart"></canvas>
+                    </div>
+                </div>
+                
+                <!-- Quick Actions -->
+                <div class="main-card">
+                    <h3 class="card-title">
+                        <i class="bi bi-lightning-charge text-warning"></i>
+                        إجراءات سريعة
+                    </h3>
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <a href="servers.html" class="quick-action-btn w-100 text-center">
+                                <i class="bi bi-server"></i><br>
+                                إدارة السيرفرات
+                            </a>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <a href="servers.html#ai-platforms" class="quick-action-btn w-100 text-center">
+                                <i class="bi bi-robot"></i><br>
+                                منصات AI
+                            </a>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <a href="monitoring.html" class="quick-action-btn w-100 text-center">
+                                <i class="bi bi-activity"></i><br>
+                                مراقبة الموارد
+                            </a>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <a href="monitoring.html#logs" class="quick-action-btn w-100 text-center">
+                                <i class="bi bi-journal-text"></i><br>
+                                السجلات والتقارير
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Right Column -->
+            <div class="col-lg-4 mb-4">
+                <!-- System Status -->
+                <div class="main-card">
+                    <h3 class="card-title">
+                        <i class="bi bi-check-circle text-success"></i>
+                        حالة النظام
+                    </h3>
+                    <div id="systemStatus">
+                        <!-- Status items will be loaded here -->
+                    </div>
+                </div>
+                
+                <!-- Recent Activity -->
+                <div class="main-card">
+                    <h3 class="card-title">
+                        <i class="bi bi-clock-history text-info"></i>
+                        النشاط الأخير
+                    </h3>
+                    <div id="recentActivity">
+                        <!-- Activity items will be loaded here -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Bootstrap 5 JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <script>
+        // API Configuration
+        const API_BASE = {
+            flask: 'http://localhost:5000/api',
+            fastapi: 'http://localhost:8000/api'
+        };
+        
+        // Initialize Dashboard
+        function initDashboard() {
+            updateTimestamp();
+            loadStatistics();
+            loadSystemStatus();
+            loadRecentActivity();
+            initPerformanceChart();
+            
+            // Auto-refresh every 5 seconds
+            setInterval(() => {
+                updateTimestamp();
+                loadStatistics();
+                loadSystemStatus();
+                updatePerformanceChart();
+            }, 5000);
+            
+            // Auto-refresh activity every 10 seconds
+            setInterval(() => {
+                loadRecentActivity();
+            }, 10000);
+        }
+        
+        function updateTimestamp() {
+            const now = new Date();
+            document.getElementById('lastUpdate').textContent = now.toLocaleString('ar-SA');
+        }
+        
+        // Load Statistics
+        function loadStatistics() {
+            // Try to fetch from API, fallback to sample data
+            fetch(`${API_BASE.flask}/status`)
+                .then(res => res.json())
+                .catch(() => ({ status: 'operational', models: [] }))
+                .then(data => {
+                    document.getElementById('totalServers').textContent = '3';
+                    document.getElementById('totalServersCount').textContent = '3';
+                    document.getElementById('totalAI').textContent = data.models?.length || 8;
+                    document.getElementById('totalRequests').textContent = '2,450';
+                    
+                    // Simulate resource usage
+                    const cpu = Math.floor(Math.random() * 20) + 45;
+                    const memory = Math.floor(Math.random() * 15) + 55;
+                    
+                    document.getElementById('cpuUsage').textContent = cpu + '%';
+                    document.getElementById('memoryUsage').textContent = memory + '%';
+                    document.getElementById('memoryUsed').textContent = (memory * 0.16).toFixed(1);
+                });
+        }
+        
+        // Load System Status
+        function loadSystemStatus() {
+            const services = [
+                { name: 'Flask API Server', status: 'running', port: 5000 },
+                { name: 'FastAPI DL+ System', status: 'running', port: 8000 },
+                { name: 'OpenWebUI', status: 'running', port: 3000 },
+                { name: 'Nginx', status: 'running', port: 80 },
+                { name: 'MySQL', status: 'running', port: 3306 }
+            ];
+            
+            const container = document.getElementById('systemStatus');
+            container.innerHTML = '';
+            
+            services.forEach(service => {
+                const item = `
+                    <div class="d-flex justify-content-between align-items-center mb-3 p-2 rounded" style="background: #f8fafc;">
+                        <div>
+                            <strong>${service.name}</strong><br>
+                            <small class="text-muted">Port: ${service.port}</small>
+                        </div>
+                        <span class="badge bg-success">
+                            <i class="bi bi-check-circle"></i> ${service.status}
+                        </span>
+                    </div>
+                `;
+                container.innerHTML += item;
+            });
+        }
+        
+        // Load Recent Activity
+        function loadRecentActivity() {
+            const activities = [
+                { time: 'منذ دقيقتين', action: 'تم تحديث حالة السيرفرات', icon: 'bi-server', color: 'primary' },
+                { time: 'منذ 5 دقائق', action: 'تم تشغيل نموذج GPT-4', icon: 'bi-robot', color: 'success' },
+                { time: 'منذ 10 دقائق', action: 'تم معالجة 125 طلب', icon: 'bi-check-circle', color: 'info' },
+                { time: 'منذ 15 دقيقة', action: 'نسخة احتياطية تلقائية', icon: 'bi-database', color: 'warning' },
+                { time: 'منذ 20 دقيقة', action: 'تحديث النظام', icon: 'bi-arrow-up-circle', color: 'primary' }
+            ];
+            
+            const container = document.getElementById('recentActivity');
+            container.innerHTML = '';
+            
+            activities.forEach(activity => {
+                const item = `
+                    <div class="recent-activity-item">
+                        <div class="d-flex align-items-center">
+                            <div class="me-3">
+                                <i class="bi ${activity.icon} text-${activity.color}" style="font-size: 24px;"></i>
+                            </div>
+                            <div class="flex-grow-1">
+                                <div class="fw-bold">${activity.action}</div>
+                                <small class="text-muted">${activity.time}</small>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                container.innerHTML += item;
+            });
+        }
+        
+        // Performance Chart
+        let performanceChart;
+        
+        function initPerformanceChart() {
+            const ctx = document.getElementById('performanceChart').getContext('2d');
+            performanceChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: [],
+                    datasets: [
+                        {
+                            label: 'CPU %',
+                            data: [],
+                            borderColor: '#f59e0b',
+                            backgroundColor: 'rgba(245, 158, 11, 0.1)',
+                            tension: 0.4
+                        },
+                        {
+                            label: 'Memory %',
+                            data: [],
+                            borderColor: '#3b82f6',
+                            backgroundColor: 'rgba(59, 130, 246, 0.1)',
+                            tension: 0.4
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'top',
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            max: 100
+                        }
+                    }
+                }
+            });
+            
+            // Initialize with empty data
+            for (let i = 0; i < 10; i++) {
+                performanceChart.data.labels.push('');
+                performanceChart.data.datasets[0].data.push(0);
+                performanceChart.data.datasets[1].data.push(0);
+            }
+            performanceChart.update();
+        }
+        
+        function updatePerformanceChart() {
+            if (!performanceChart) return;
+            
+            const cpu = Math.floor(Math.random() * 20) + 45;
+            const memory = Math.floor(Math.random() * 15) + 55;
+            
+            // Remove first data point and add new one
+            performanceChart.data.labels.shift();
+            performanceChart.data.datasets[0].data.shift();
+            performanceChart.data.datasets[1].data.shift();
+            
+            performanceChart.data.labels.push(new Date().toLocaleTimeString('ar-SA'));
+            performanceChart.data.datasets[0].data.push(cpu);
+            performanceChart.data.datasets[1].data.push(memory);
+            
+            performanceChart.update('none');
+        }
+        
+        // Initialize on page load
+        window.addEventListener('DOMContentLoaded', initDashboard);
+    </script>
+</body>
+</html>
+

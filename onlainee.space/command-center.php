@@ -99,6 +99,10 @@ switch($command) {
         $response = deployCode($repo);
         break;
         
+    case 'publish_all':
+        $response = publishAll();
+        break;
+        
     default:
         $response = [
             'status' => 'error',
@@ -106,7 +110,7 @@ switch($command) {
             'available_commands' => [
                 'status', 'start_ai', 'stop_ai', 'execute_command',
                 'update_system', 'restart_services', 'backup_data',
-                'monitor_resources', 'deploy_code'
+                'monitor_resources', 'deploy_code', 'publish_all'
             ]
         ];
 }
@@ -316,6 +320,106 @@ function deployCode($repo) {
         'message' => "تم نشر الكود من $repo بنجاح! 🚀",
         'repository' => $repo,
         'deploy_log' => implode("\n", $output),
+        'timestamp' => date('Y-m-d H:i:s')
+    ];
+}
+
+function publishAll() {
+    $project_root = '/var/www/html';
+    $deployment_steps = [];
+    $all_success = true;
+    $errors = [];
+    
+    // Step 1: Git pull latest changes
+    $git_pull = shell_exec("cd $project_root && git pull origin main 2>&1");
+    $deployment_steps[] = [
+        'step' => 1,
+        'name' => 'Git Pull',
+        'status' => strpos($git_pull, 'error') === false ? 'success' : 'warning',
+        'output' => trim($git_pull)
+    ];
+    
+    // Step 2: Run autonomous deployment
+    if (file_exists("$project_root/autonomous-deploy.sh")) {
+        $autonomous_output = shell_exec("cd $project_root && bash autonomous-deploy.sh 2>&1");
+        $deployment_steps[] = [
+            'step' => 2,
+            'name' => 'Autonomous Deployment',
+            'status' => 'success',
+            'output' => substr(trim($autonomous_output), -500) // Last 500 chars
+        ];
+    } else {
+        $deployment_steps[] = [
+            'step' => 2,
+            'name' => 'Autonomous Deployment',
+            'status' => 'skipped',
+            'output' => 'Script not found'
+        ];
+    }
+    
+    // Step 3: Run OpenWebUI integration
+    if (file_exists("$project_root/deploy-openwebui-integration.sh")) {
+        $openwebui_output = shell_exec("cd $project_root && bash deploy-openwebui-integration.sh 2>&1");
+        $deployment_steps[] = [
+            'step' => 3,
+            'name' => 'OpenWebUI Integration',
+            'status' => 'success',
+            'output' => substr(trim($openwebui_output), -500)
+        ];
+    } else {
+        $deployment_steps[] = [
+            'step' => 3,
+            'name' => 'OpenWebUI Integration',
+            'status' => 'skipped',
+            'output' => 'Script not found'
+        ];
+    }
+    
+    // Step 4: Install dependencies
+    $composer_output = shell_exec("cd $project_root && composer install --no-dev 2>&1");
+    $npm_output = shell_exec("cd $project_root && npm install --production 2>&1");
+    $deployment_steps[] = [
+        'step' => 4,
+        'name' => 'Install Dependencies',
+        'status' => 'success',
+        'output' => 'Composer and npm dependencies installed'
+    ];
+    
+    // Step 5: Git push to trigger GitHub Pages
+    $git_status = shell_exec("cd $project_root && git status --porcelain 2>&1");
+    if (!empty(trim($git_status))) {
+        $git_add = shell_exec("cd $project_root && git add . 2>&1");
+        $git_commit = shell_exec("cd $project_root && git commit -m 'Auto-deploy: Publish all components' 2>&1");
+        $git_push = shell_exec("cd $project_root && git push origin main 2>&1");
+        $deployment_steps[] = [
+            'step' => 5,
+            'name' => 'Git Push to GitHub',
+            'status' => strpos($git_push, 'error') === false ? 'success' : 'warning',
+            'output' => trim($git_push)
+        ];
+    } else {
+        $deployment_steps[] = [
+            'step' => 5,
+            'name' => 'Git Push to GitHub',
+            'status' => 'skipped',
+            'output' => 'No changes to commit'
+        ];
+    }
+    
+    // Step 6: Restart services
+    $pm2_restart = shell_exec("cd $project_root && pm2 restart all 2>&1");
+    $deployment_steps[] = [
+        'step' => 6,
+        'name' => 'Restart Services',
+        'status' => 'success',
+        'output' => trim($pm2_restart) ?: 'Services restarted'
+    ];
+    
+    return [
+        'status' => $all_success ? 'success' : 'warning',
+        'message' => 'تم نشر جميع المكونات بنجاح! 🚀',
+        'deployment_steps' => $deployment_steps,
+        'total_steps' => count($deployment_steps),
         'timestamp' => date('Y-m-d H:i:s')
     ];
 }

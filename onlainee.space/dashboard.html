@@ -121,6 +121,15 @@
                 <button class="btn" onclick="updateSystem()">⬆️ تحديث النظام</button>
                 <button class="btn" onclick="backupData()">💾 نسخ احتياطي</button>
             </div>
+            
+            <!-- Deployment Control -->
+            <div class="control-card">
+                <h3>🚀 نشر المشروع</h3>
+                <button class="btn" onclick="publishAll()" style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); font-size: 16px; padding: 15px 30px;">
+                    📦 نشر الكل / Publish All
+                </button>
+                <div id="publishStatus" class="status-display" style="margin-top: 15px; min-height: 100px;"></div>
+            </div>
         </div>
         
         <div class="control-card">
@@ -218,6 +227,40 @@
                     💾 Disk: ${result.resources.disk_usage}\n
                     🕰️ Updated: ${result.resources.timestamp}
                 `;
+            }
+        }
+        
+        async function publishAll() {
+            const statusDiv = document.getElementById('publishStatus');
+            statusDiv.innerHTML = '⏳ جاري النشر... يرجى الانتظار / Publishing... Please wait...';
+            
+            try {
+                const result = await sendCommand('publish_all');
+                
+                if (result && result.deployment_steps) {
+                    let statusHtml = `<strong>${result.message}</strong>\n\n`;
+                    statusHtml += `الخطوات المنفذة / Steps Executed:\n`;
+                    statusHtml += `━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n\n`;
+                    
+                    result.deployment_steps.forEach(step => {
+                        const icon = step.status === 'success' ? '✅' : step.status === 'skipped' ? '⏭️' : '⚠️';
+                        statusHtml += `${icon} ${step.step}. ${step.name} (${step.status})\n`;
+                        if (step.output && step.output.length > 0 && step.output !== 'Script not found' && step.output !== 'No changes to commit') {
+                            statusHtml += `   ${step.output.substring(0, 100)}...\n`;
+                        }
+                        statusHtml += '\n';
+                    });
+                    
+                    statusHtml += `\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n`;
+                    statusHtml += `إجمالي الخطوات / Total Steps: ${result.total_steps}\n`;
+                    statusHtml += `الوقت / Time: ${result.timestamp}`;
+                    
+                    statusDiv.innerHTML = statusHtml.replace(/\n/g, '<br>');
+                } else {
+                    statusDiv.innerHTML = `❌ ${result.message || 'حدث خطأ أثناء النشر'}`;
+                }
+            } catch (error) {
+                statusDiv.innerHTML = `❌ خطأ: ${error.message}`;
             }
         }
         

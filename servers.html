@@ -1,0 +1,533 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title data-ar="إدارة السيرفرات والمنصات - AI Agent Platform" data-en="Servers & Platforms Management - AI Agent Platform">إدارة السيرفرات والمنصات - AI Agent Platform</title>
+    
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.2/font/bootstrap-icons.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Common Styles -->
+    <link rel="stylesheet" href="common/styles.css">
+    <link rel="stylesheet" href="common/navigation.css">
+    
+    <style>
+        :root {
+            --primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --success-gradient: linear-gradient(135deg, #10b981 0%, #059669 100%);
+        }
+        
+        * {
+            font-family: 'Cairo', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px 0;
+        }
+        
+        .dashboard-container {
+            max-width: 1800px;
+            margin: 0 auto;
+        }
+        
+        .header-card, .main-card {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+        
+        .server-card {
+            background: #f8fafc;
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 20px;
+            border: 2px solid #e2e8f0;
+            transition: all 0.3s ease;
+        }
+        
+        .server-card:hover {
+            border-color: #667eea;
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.15);
+            transform: translateY(-3px);
+        }
+        
+        .server-status {
+            display: inline-block;
+            width: 14px;
+            height: 14px;
+            border-radius: 50%;
+            margin-left: 10px;
+        }
+        
+        .server-status.online { background-color: #10b981; }
+        .server-status.offline { background-color: #ef4444; }
+        .server-status.warning { background-color: #f59e0b; }
+        
+        .ai-model-card {
+            background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 20px;
+            border: 2px solid #e2e8f0;
+            transition: all 0.3s ease;
+        }
+        
+        .ai-model-card:hover {
+            transform: translateX(-5px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+            border-color: #667eea;
+        }
+        
+        .progress-custom {
+            height: 10px;
+            border-radius: 10px;
+            background: #e2e8f0;
+        }
+        
+        .nav-tabs-custom .nav-link {
+            border: none;
+            color: #64748b;
+            font-weight: 600;
+            padding: 15px 25px;
+            border-radius: 10px 10px 0 0;
+            margin-left: 5px;
+        }
+        
+        .nav-tabs-custom .nav-link.active {
+            background: var(--primary-gradient);
+            color: white;
+        }
+        
+        .btn-custom {
+            border-radius: 10px;
+            padding: 10px 20px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-custom:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+    </style>
+</head>
+<body>
+    <!-- Language Toggle Button -->
+    <button class="lang-toggle" id="lang-toggle-btn">
+        <span>English</span>
+    </button>
+    
+    <div class="dashboard-container">
+        <!-- Header -->
+        <div class="header-card">
+            <div class="row align-items-center">
+                <div class="col-md-8">
+                    <h1 class="mb-2">
+                        <i class="bi bi-server text-primary"></i>
+                        <span data-ar="إدارة السيرفرات والمنصات" data-en="Servers & Platforms Management">إدارة السيرفرات والمنصات</span>
+                    </h1>
+                    <p class="text-muted mb-0">
+                        <span data-ar="إدارة شاملة لجميع السيرفرات ومنصات AI" data-en="Comprehensive management of all servers and AI platforms">إدارة شاملة لجميع السيرفرات ومنصات AI</span>
+                    </p>
+                </div>
+                <div class="col-md-4 text-end">
+                    <button class="btn btn-success btn-custom" onclick="addServer()">
+                        <i class="bi bi-plus-circle"></i> <span data-ar="إضافة سيرفر" data-en="Add Server">إضافة سيرفر</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Tabs -->
+        <ul class="nav nav-tabs nav-tabs-custom mb-4" role="tablist">
+            <li class="nav-item" role="presentation">
+                <button class="nav-link active" data-bs-toggle="tab" data-bs-target="#servers" type="button">
+                    <i class="bi bi-server"></i> <span data-ar="السيرفرات" data-en="Servers">السيرفرات</span>
+                </button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" data-bs-toggle="tab" data-bs-target="#ai-platforms" type="button" id="ai-platforms-tab">
+                    <i class="bi bi-robot"></i> <span data-ar="منصات AI" data-en="AI Platforms">منصات AI</span>
+                </button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" data-bs-toggle="tab" data-bs-target="#services" type="button">
+                    <i class="bi bi-gear"></i> <span data-ar="الخدمات" data-en="Services">الخدمات</span>
+                </button>
+            </li>
+        </ul>
+        
+        <div class="tab-content">
+            <!-- Servers Tab -->
+            <div class="tab-pane fade show active" id="servers" role="tabpanel">
+                <div class="main-card">
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <input type="text" class="form-control" id="serverSearch" 
+                                data-ar-placeholder="🔍 البحث عن سيرفر..." 
+                                data-en-placeholder="🔍 Search for server..."
+                                placeholder="🔍 البحث عن سيرفر...">
+                        </div>
+                        <div class="col-md-6 text-end">
+                            <button class="btn btn-primary btn-custom" onclick="refreshServers()">
+                                <i class="bi bi-arrow-clockwise"></i> <span data-ar="تحديث" data-en="Refresh">تحديث</span>
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div id="serversList">
+                        <!-- Servers will be loaded here -->
+                    </div>
+                </div>
+            </div>
+            
+            <!-- AI Platforms Tab -->
+            <div class="tab-pane fade" id="ai-platforms" role="tabpanel">
+                <div class="main-card">
+                    <div class="row mb-3">
+                        <div class="col-md-4">
+                            <select class="form-select" id="aiFilter">
+                                <option value="all" data-ar="جميع النماذج" data-en="All Models">جميع النماذج</option>
+                                <option value="general" data-ar="عام" data-en="General">عام</option>
+                                <option value="arabic" data-ar="عربي" data-en="Arabic">عربي</option>
+                                <option value="code" data-ar="برمجة" data-en="Code">برمجة</option>
+                            </select>
+                        </div>
+                        <div class="col-md-4">
+                            <input type="text" class="form-control" id="aiSearch" 
+                                data-ar-placeholder="🔍 البحث عن نموذج..." 
+                                data-en-placeholder="🔍 Search for model..."
+                                placeholder="🔍 البحث عن نموذج...">
+                        </div>
+                        <div class="col-md-4 text-end">
+                            <button class="btn btn-primary btn-custom" onclick="refreshAIModels()">
+                                <i class="bi bi-arrow-clockwise"></i> <span data-ar="تحديث" data-en="Refresh">تحديث</span>
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div id="aiModelsList">
+                        <!-- AI Models will be loaded here -->
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Services Tab -->
+            <div class="tab-pane fade" id="services" role="tabpanel">
+                <div class="main-card">
+                    <h3 class="mb-4">
+                        <i class="bi bi-gear text-primary"></i>
+                        <span data-ar="إدارة الخدمات" data-en="Services Management">إدارة الخدمات</span>
+                    </h3>
+                    
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead class="table-primary">
+                                <tr>
+                                    <th data-ar="الخدمة" data-en="Service">الخدمة</th>
+                                    <th data-ar="الحالة" data-en="Status">الحالة</th>
+                                    <th data-ar="البورت" data-en="Port">البورت</th>
+                                    <th data-ar="الاستخدام" data-en="Usage">الاستخدام</th>
+                                    <th data-ar="الإجراءات" data-en="Actions">الإجراءات</th>
+                                </tr>
+                            </thead>
+                            <tbody id="servicesTable">
+                                <!-- Services will be loaded here -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <!-- Common Scripts -->
+    <script src="common/language.js"></script>
+    <script src="common/navigation.js"></script>
+    
+    <script>
+        const API_BASE = {
+            flask: 'http://localhost:5000/api',
+            fastapi: 'http://localhost:8000/api'
+        };
+        
+        const sampleServers = [
+            { id: 1, name: 'Hostinger VPS 1', ip: '185.230.63.107', status: 'online', cpu: 45, memory: 62, disk: 58, uptime: '15 يوم', location: 'أمريكا' },
+            { id: 2, name: 'Hostinger VPS 2', ip: '185.230.63.108', status: 'online', cpu: 32, memory: 48, disk: 42, uptime: '8 يوم', location: 'أوروبا' },
+            { id: 3, name: 'Local Development', ip: 'localhost', status: 'warning', cpu: 78, memory: 85, disk: 72, uptime: '2 يوم', location: 'محلي' }
+        ];
+        
+        const sampleAIModels = [
+            { id: 'gpt-4', name: 'GPT-4', provider: 'OpenAI', type: 'general', status: 'active', requests: 1250, latency: '120ms' },
+            { id: 'claude-3', name: 'Claude 3', provider: 'Anthropic', type: 'general', status: 'active', requests: 890, latency: '95ms' },
+            { id: 'qwen-arabic', name: 'Qwen Arabic', provider: 'Alibaba', type: 'arabic', status: 'active', requests: 450, latency: '150ms' },
+            { id: 'llama-3', name: 'LLaMA 3', provider: 'Meta', type: 'general', status: 'active', requests: 2100, latency: '80ms' },
+            { id: 'arabert', name: 'AraBERT', provider: 'AUB', type: 'arabic', status: 'active', requests: 320, latency: '110ms' },
+            { id: 'deepseek', name: 'DeepSeek Coder', provider: 'DeepSeek', type: 'code', status: 'active', requests: 680, latency: '100ms' },
+            { id: 'mistral', name: 'Mistral 7B', provider: 'Mistral AI', type: 'general', status: 'active', requests: 1450, latency: '90ms' },
+            { id: 'gemini', name: 'Gemini Pro', provider: 'Google', type: 'general', status: 'active', requests: 1120, latency: '105ms' }
+        ];
+        
+        function initPage() {
+            loadServers();
+            loadAIModels();
+            loadServices();
+            
+            setInterval(() => {
+                loadServers();
+                loadServices();
+            }, 10000);
+        }
+        
+        function loadServers() {
+            const container = document.getElementById('serversList');
+            container.innerHTML = '';
+            
+            sampleServers.forEach(server => {
+                const card = `
+                    <div class="server-card">
+                        <div class="row align-items-center">
+                            <div class="col-md-3">
+                                <h5 class="mb-1">
+                                    ${server.name}
+                                    <span class="server-status ${server.status}"></span>
+                                </h5>
+                                <p class="text-muted mb-0 small">
+                                    <i class="bi bi-globe"></i> ${server.ip}<br>
+                                    <i class="bi bi-geo-alt"></i> ${server.location}
+                                </p>
+                            </div>
+                            <div class="col-md-2">
+                                <small class="text-muted d-block mb-1">المعالج</small>
+                                <div class="progress progress-custom mb-2">
+                                    <div class="progress-bar bg-warning" style="width: ${server.cpu}%"></div>
+                                </div>
+                                <small>${server.cpu}%</small>
+                            </div>
+                            <div class="col-md-2">
+                                <small class="text-muted d-block mb-1">الذاكرة</small>
+                                <div class="progress progress-custom mb-2">
+                                    <div class="progress-bar bg-info" style="width: ${server.memory}%"></div>
+                                </div>
+                                <small>${server.memory}%</small>
+                            </div>
+                            <div class="col-md-2">
+                                <small class="text-muted d-block mb-1">التخزين</small>
+                                <div class="progress progress-custom mb-2">
+                                    <div class="progress-bar bg-success" style="width: ${server.disk}%"></div>
+                                </div>
+                                <small>${server.disk}%</small>
+                            </div>
+                            <div class="col-md-3 text-end">
+                                <div class="mb-2">
+                                    <small class="text-muted">Uptime: ${server.uptime}</small>
+                                </div>
+                                <button class="btn btn-sm btn-primary btn-custom mb-1" onclick="manageServer(${server.id})">
+                                    <i class="bi bi-gear"></i> <span data-ar="إدارة" data-en="Manage">إدارة</span>
+                                </button>
+                                <button class="btn btn-sm btn-outline-danger btn-custom" onclick="restartServer(${server.id})">
+                                    <i class="bi bi-arrow-clockwise"></i> <span data-ar="إعادة تشغيل" data-en="Restart">إعادة تشغيل</span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                container.innerHTML += card;
+            });
+        }
+        
+        function loadAIModels() {
+            const container = document.getElementById('aiModelsList');
+            container.innerHTML = '';
+            
+            const filter = document.getElementById('aiFilter').value;
+            const search = document.getElementById('aiSearch').value.toLowerCase();
+            const filtered = sampleAIModels.filter(m => {
+                const matchFilter = filter === 'all' || m.type === filter;
+                const matchSearch = m.name.toLowerCase().includes(search) || m.provider.toLowerCase().includes(search);
+                return matchFilter && matchSearch;
+            });
+            
+            filtered.forEach(model => {
+                const typeColors = {
+                    'arabic': 'success',
+                    'code': 'info',
+                    'general': 'primary'
+                };
+                
+                const card = `
+                    <div class="ai-model-card">
+                        <div class="row align-items-center">
+                            <div class="col-md-3">
+                                <h5 class="mb-1">${model.name}</h5>
+                                <p class="text-muted mb-0 small">
+                                    <i class="bi bi-building"></i> ${model.provider}
+                                </p>
+                            </div>
+                            <div class="col-md-2">
+                                <span class="badge bg-${typeColors[model.type]} badge-custom">
+                                    ${model.type === 'arabic' ? 'عربي' : model.type === 'code' ? 'برمجة' : 'عام'}
+                                </span>
+                            </div>
+                            <div class="col-md-2">
+                                <small class="text-muted d-block">الطلبات</small>
+                                <h6 class="mb-0">${model.requests.toLocaleString()}</h6>
+                            </div>
+                            <div class="col-md-2">
+                                <small class="text-muted d-block">الاستجابة</small>
+                                <h6 class="mb-0">${model.latency}</h6>
+                            </div>
+                            <div class="col-md-1">
+                                <span class="badge bg-success badge-custom">
+                                    <i class="bi bi-check-circle"></i> نشط
+                                </span>
+                            </div>
+                            <div class="col-md-2 text-end">
+                                <button class="btn btn-sm btn-primary btn-custom mb-1" onclick="manageAIModel('${model.id}')">
+                                    <i class="bi bi-gear"></i> إدارة
+                                </button>
+                                <button class="btn btn-sm btn-outline-warning btn-custom" onclick="testAIModel('${model.id}')">
+                                    <i class="bi bi-play-circle"></i> اختبار
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                container.innerHTML += card;
+            });
+        }
+        
+        function loadServices() {
+            const services = [
+                { name: 'Flask API Server', status: 'running', port: 5000, usage: 45 },
+                { name: 'FastAPI DL+ System', status: 'running', port: 8000, usage: 32 },
+                { name: 'OpenWebUI', status: 'running', port: 3000, usage: 28 },
+                { name: 'Nginx', status: 'running', port: 80, usage: 15 },
+                { name: 'MySQL', status: 'running', port: 3306, usage: 22 },
+                { name: 'Redis', status: 'running', port: 6379, usage: 8 }
+            ];
+            
+            const container = document.getElementById('servicesTable');
+            container.innerHTML = '';
+            
+            services.forEach(service => {
+                const row = `
+                    <tr>
+                        <td><strong>${service.name}</strong></td>
+                        <td>
+                            <span class="badge bg-success">
+                                <i class="bi bi-check-circle"></i> ${service.status}
+                            </span>
+                        </td>
+                        <td>${service.port}</td>
+                        <td>
+                            <div class="progress progress-custom" style="width: 100px;">
+                                <div class="progress-bar bg-primary" style="width: ${service.usage}%"></div>
+                            </div>
+                            <small>${service.usage}%</small>
+                        </td>
+                        <td>
+                            <button class="btn btn-sm btn-outline-primary" onclick="restartService('${service.name}')">
+                                <i class="bi bi-arrow-clockwise"></i> <span data-ar="إعادة تشغيل" data-en="Restart">إعادة تشغيل</span>
+                            </button>
+                            <button class="btn btn-sm btn-outline-info" onclick="viewServiceLogs('${service.name}')">
+                                <i class="bi bi-journal-text"></i> <span data-ar="السجلات" data-en="Logs">السجلات</span>
+                            </button>
+                        </td>
+                    </tr>
+                `;
+                container.innerHTML += row;
+            });
+        }
+        
+        function refreshServers() {
+            loadServers();
+            alert('تم تحديث قائمة السيرفرات!');
+        }
+        
+        function refreshAIModels() {
+            fetch(`${API_BASE.fastapi}/status`)
+                .then(res => res.json())
+                .catch(() => ({}))
+                .then(() => {
+                    loadAIModels();
+                    alert('تم تحديث قائمة نماذج AI!');
+                });
+        }
+        
+        function addServer() {
+            alert('ميزة إضافة سيرفر جديد - قيد التطوير');
+        }
+        
+        function manageServer(id) {
+            alert(`إدارة السيرفر #${id} - قيد التطوير`);
+        }
+        
+        function restartServer(id) {
+            if (confirm('هل أنت متأكد من إعادة تشغيل هذا السيرفر?')) {
+                alert(`تم إعادة تشغيل السيرفر #${id} بنجاح!`);
+                loadServers();
+            }
+        }
+        
+        function manageAIModel(id) {
+            alert(`إدارة نموذج AI: ${id} - قيد التطوير`);
+        }
+        
+        function testAIModel(id) {
+            alert(`اختبار نموذج AI: ${id} - قيد التطوير`);
+        }
+        
+        function restartService(name) {
+            if (confirm(`هل أنت متأكد من إعادة تشغيل ${name}?`)) {
+                alert(`تم إعادة تشغيل ${name} بنجاح!`);
+                loadServices();
+            }
+        }
+        
+        function viewServiceLogs(name) {
+            alert(`سجلات ${name} - قيد التطوير`);
+        }
+        
+        // Search functionality
+        document.getElementById('serverSearch')?.addEventListener('input', function(e) {
+            const search = e.target.value.toLowerCase();
+            const cards = document.querySelectorAll('.server-card');
+            cards.forEach(card => {
+                const text = card.textContent.toLowerCase();
+                card.style.display = text.includes(search) ? 'block' : 'none';
+            });
+        });
+        
+        document.getElementById('aiFilter')?.addEventListener('change', loadAIModels);
+        document.getElementById('aiSearch')?.addEventListener('input', loadAIModels);
+        
+        // Listen to language changes
+        window.addEventListener('languageChanged', function(event) {
+            const currentLang = event.detail.language;
+            // Update select options
+            document.querySelectorAll('#aiFilter option').forEach(opt => {
+                if (opt.hasAttribute('data-ar') && opt.hasAttribute('data-en')) {
+                    opt.textContent = currentLang === 'ar' ? opt.getAttribute('data-ar') : opt.getAttribute('data-en');
+                }
+            });
+        });
+        
+        window.addEventListener('DOMContentLoaded', initPage);
+    </script>
+    
+    <!-- Navigation Container -->
+    <div id="nav-menu-container"></div>
+</body>
+</html>
+

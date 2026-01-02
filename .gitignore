@@ -65,6 +65,9 @@ package-lock.json
 logs/
 *.log
 
+# Cursor debug logs
+.cursor/
+
 # OS
 Thumbs.db
 Desktop.ini
@@ -82,6 +85,11 @@ finalization_report*.txt
 *.pem
 *.crt
 ssh_config
+vps-connection-info.txt
+backups/
+*.backup
+*.sql
+*.tar.gz
 
 # OpenWebUI and Docker
 /opt/openwebui/

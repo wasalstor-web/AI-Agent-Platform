@@ -1,0 +1,27 @@
+# SSH Config لـ VPS Hostinger
+# ============================
+# استخدم: ssh vps-hostinger
+# أو: ssh hostinger
+
+Host vps-hostinger
+    HostName 147.93.120.99
+    User root
+    Port 22
+    IdentityFile ~/.ssh/id_rsa
+    StrictHostKeyChecking no
+    UserKnownHostsFile /dev/null
+    ServerAliveInterval 60
+    ServerAliveCountMax 3
+    Compression yes
+    ForwardAgent yes
+
+Host hostinger
+    HostName 147.93.120.99
+    User root
+    Port 22
+    IdentityFile ~/.ssh/id_rsa
+    StrictHostKeyChecking no
+    UserKnownHostsFile /dev/null
+
+# ملاحظة: أضف هذا المحتوى إلى ~/.ssh/config
+# أو استخدم: cat ssh-config-vps >> ~/.ssh/config
