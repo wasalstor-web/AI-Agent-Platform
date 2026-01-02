@@ -63,11 +63,13 @@ class AgentsConfig:
                 name_arabic="وكيل الترجمة",
                 type="translation",
                 priority=4,
-                capabilities=["translation", "language_detection", "transliteration"],
-                tools=["translator", "language_detector"],
+                capabilities=["translation", "language_detection", "transliteration", "batch_translation", "quality_check"],
+                tools=["translator", "language_detector", "quality_analyzer"],
                 parameters={
-                    "source_languages": ["ar", "en", "fr", "es"],
-                    "target_languages": ["ar", "en", "fr", "es"]
+                    "source_languages": ["ar", "en", "fr", "es", "de", "it", "pt", "ru", "zh", "ja", "ko", "tr", "hi", "ur"],
+                    "target_languages": ["ar", "en", "fr", "es", "de", "it", "pt", "ru", "zh", "ja", "ko", "tr", "hi", "ur"],
+                    "enable_ai_translation": False,
+                    "enable_context_aware": True
                 }
             ),
             'analyzer': AgentConfig(
@@ -75,10 +77,10 @@ class AgentsConfig:
                 name_arabic="وكيل التحليل",
                 type="analysis",
                 priority=3,
-                capabilities=["data_analysis", "sentiment_analysis", "text_analysis"],
-                tools=["analyzer", "visualizer", "reporter"],
+                capabilities=["data_analysis", "sentiment_analysis", "text_analysis", "topic_extraction", "entity_extraction", "keyword_analysis", "summarization", "trend_analysis"],
+                tools=["analyzer", "visualizer", "reporter", "sentiment_analyzer", "entity_extractor"],
                 parameters={
-                    "analysis_types": ["sentiment", "topic", "entity", "trend"]
+                    "analysis_types": ["sentiment", "topic", "entity", "trend", "keyword", "summary", "comprehensive"]
                 }
             ),
             'system_control': AgentConfig(

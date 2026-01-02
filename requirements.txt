@@ -36,6 +36,26 @@ python-json-logger>=2.0.7
 # arabert>=1.0.0
 # camel-tools>=1.5.0
 
+# Enhanced Agents Dependencies
+# Web Retrieval Agent
+beautifulsoup4>=4.12.0
+lxml>=4.9.0
+duckduckgo-search>=4.0.0
+
+# Translation Agent
+deep-translator>=1.11.0
+googletrans>=4.0.0rc1
+
+# Analysis Agent
+nltk>=3.8.0
+textblob>=0.17.1
+
+# Arabic Language Processing
+pyarabic>=0.6.2
+
+# HTML/Content Parsing
+html5lib>=1.1
+
 # Development Dependencies
 pytest>=7.4.0
 pytest-asyncio>=0.21.0

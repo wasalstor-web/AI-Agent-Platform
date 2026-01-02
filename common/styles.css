@@ -1,0 +1,181 @@
+/**
+ * Common Styles for Multi-Page Dashboard
+ * الأنماط المشتركة للوحة التحكم متعددة الصفحات
+ */
+
+/* Language Toggle Button */
+.lang-toggle {
+    position: fixed;
+    top: 20px;
+    left: 20px;
+    z-index: 1001;
+    background: rgba(0, 0, 0, 0.8);
+    color: white;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    padding: 12px 20px;
+    border-radius: 25px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: all 0.3s ease;
+    backdrop-filter: blur(10px);
+}
+
+.lang-toggle:hover {
+    background: rgba(255, 255, 255, 0.2);
+    transform: scale(1.05);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+}
+
+.lang-toggle:active {
+    transform: scale(0.98);
+}
+
+/* RTL Support for Language Toggle */
+body[dir="ltr"] .lang-toggle {
+    left: auto;
+    right: 20px;
+}
+
+/* Responsive Language Toggle */
+@media (max-width: 768px) {
+    .lang-toggle {
+        position: relative;
+        top: auto;
+        left: auto;
+        right: auto;
+        margin: 10px;
+        display: inline-block;
+    }
+}
+
+/* Live Status Indicator */
+.live-status {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    background: rgba(0, 0, 0, 0.8);
+    padding: 10px 20px;
+    border-radius: 25px;
+    font-size: 14px;
+    z-index: 999;
+    backdrop-filter: blur(10px);
+    border: 2px solid rgba(16, 185, 129, 0.3);
+}
+
+.live-status.pulse {
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+    0%, 100% { 
+        opacity: 1; 
+        transform: scale(1); 
+    }
+    50% { 
+        opacity: 0.7; 
+        transform: scale(1.05); 
+    }
+}
+
+body[dir="ltr"] .live-status {
+    right: auto;
+    left: 20px;
+}
+
+@media (max-width: 768px) {
+    .live-status {
+        position: relative;
+        top: auto;
+        right: auto;
+        left: auto;
+        margin: 10px;
+        display: inline-block;
+    }
+}
+
+/* Common Container Styles */
+.dashboard-container {
+    max-width: 1800px;
+    margin: 0 auto;
+    padding: 20px;
+    padding-bottom: 100px; /* Space for bottom navigation */
+}
+
+/* Common Card Styles */
+.main-card, .header-card {
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(20px);
+    border-radius: 20px;
+    padding: 30px;
+    margin-bottom: 30px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.main-card:hover, .header-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 15px 50px rgba(0, 0, 0, 0.15);
+}
+
+/* Common Button Styles */
+.btn-custom {
+    border-radius: 10px;
+    padding: 10px 20px;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    border: none;
+    cursor: pointer;
+}
+
+.btn-custom:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+}
+
+.btn-custom:active {
+    transform: translateY(0);
+}
+
+/* Loading States */
+.loading {
+    opacity: 0.6;
+    pointer-events: none;
+}
+
+.loading::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 20px;
+    height: 20px;
+    margin: -10px 0 0 -10px;
+    border: 2px solid #667eea;
+    border-top-color: transparent;
+    border-radius: 50%;
+    animation: spin 0.6s linear infinite;
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+/* Smooth Transitions */
+* {
+    transition: color 0.3s ease, background-color 0.3s ease;
+}
+
+/* Print Styles */
+@media print {
+    .lang-toggle,
+    .live-status,
+    .nav-menu-container {
+        display: none;
+    }
+    
+    .dashboard-container {
+        padding-bottom: 20px;
+    }
+}
+
