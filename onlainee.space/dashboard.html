@@ -231,59 +231,11 @@
         }
         
         async function publishAll() {
-            // #region agent log
-            fetch('http://127.0.0.1:7243/ingest/c21d1c2c-c721-49fe-8ebe-f011d322bca4', {
-                method: 'POST',
-                headers: {'Content-Type': 'application/json'},
-                body: JSON.stringify({
-                    location: 'dashboard.html:publishAll:entry',
-                    message: 'Publish all button clicked',
-                    data: {action: 'button_click'},
-                    timestamp: Date.now(),
-                    sessionId: 'debug-session',
-                    runId: 'run1',
-                    hypothesisId: 'A'
-                })
-            }).catch(() => {});
-            // #endregion
-            
             const statusDiv = document.getElementById('publishStatus');
             statusDiv.innerHTML = '⏳ جاري النشر... يرجى الانتظار / Publishing... Please wait...';
             
             try {
-                // #region agent log
-                fetch('http://127.0.0.1:7243/ingest/c21d1c2c-c721-49fe-8ebe-f011d322bca4', {
-                    method: 'POST',
-                    headers: {'Content-Type': 'application/json'},
-                    body: JSON.stringify({
-                        location: 'dashboard.html:publishAll:before_send',
-                        message: 'Before sending publish_all command',
-                        data: {step: 'before_send'},
-                        timestamp: Date.now(),
-                        sessionId: 'debug-session',
-                        runId: 'run1',
-                        hypothesisId: 'B'
-                    })
-                }).catch(() => {});
-                // #endregion
-                
                 const result = await sendCommand('publish_all');
-                
-                // #region agent log
-                fetch('http://127.0.0.1:7243/ingest/c21d1c2c-c721-49fe-8ebe-f011d322bca4', {
-                    method: 'POST',
-                    headers: {'Content-Type': 'application/json'},
-                    body: JSON.stringify({
-                        location: 'dashboard.html:publishAll:after_receive',
-                        message: 'Received publish_all response',
-                        data: {status: result.status, total_steps: result.total_steps},
-                        timestamp: Date.now(),
-                        sessionId: 'debug-session',
-                        runId: 'run1',
-                        hypothesisId: 'C'
-                    })
-                }).catch(() => {});
-                // #endregion
                 
                 if (result && result.deployment_steps) {
                     let statusHtml = `<strong>${result.message}</strong>\n\n`;
@@ -308,22 +260,6 @@
                     statusDiv.innerHTML = `❌ ${result.message || 'حدث خطأ أثناء النشر'}`;
                 }
             } catch (error) {
-                // #region agent log
-                fetch('http://127.0.0.1:7243/ingest/c21d1c2c-c721-49fe-8ebe-f011d322bca4', {
-                    method: 'POST',
-                    headers: {'Content-Type': 'application/json'},
-                    body: JSON.stringify({
-                        location: 'dashboard.html:publishAll:error',
-                        message: 'Error in publish_all',
-                        data: {error: error.message},
-                        timestamp: Date.now(),
-                        sessionId: 'debug-session',
-                        runId: 'run1',
-                        hypothesisId: 'D'
-                    })
-                }).catch(() => {});
-                // #endregion
-                
                 statusDiv.innerHTML = `❌ خطأ: ${error.message}`;
             }
         }

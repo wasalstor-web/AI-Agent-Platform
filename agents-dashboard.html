@@ -289,10 +289,10 @@
         <!-- Tabs Section -->
         <div class="control-card">
             <ul class="nav nav-tabs" role="tablist" style="display: flex; gap: 10px; border-bottom: 1px solid rgba(255,255,255,0.2); padding-bottom: 10px; margin-bottom: 20px;">
-                <li><a class="nav-link active" onclick="showTab('execute')" style="cursor: pointer; padding: 10px 20px; border-radius: 8px; background: rgba(255,255,255,0.1);">🚀 تنفيذ مهمة</a></li>
-                <li><a class="nav-link" onclick="showTab('analytics')" style="cursor: pointer; padding: 10px 20px; border-radius: 8px; background: rgba(255,255,255,0.1);">📊 التحليلات</a></li>
-                <li><a class="nav-link" onclick="showTab('logs')" style="cursor: pointer; padding: 10px 20px; border-radius: 8px; background: rgba(255,255,255,0.1);">📜 السجلات</a></li>
-                <li><a class="nav-link" onclick="showTab('settings')" style="cursor: pointer; padding: 10px 20px; border-radius: 8px; background: rgba(255,255,255,0.1);">⚙️ الإعدادات</a></li>
+                <li><a class="nav-link active" onclick="showTab('execute', event)" style="cursor: pointer; padding: 10px 20px; border-radius: 8px; background: rgba(255,255,255,0.1);">🚀 تنفيذ مهمة</a></li>
+                <li><a class="nav-link" onclick="showTab('analytics', event)" style="cursor: pointer; padding: 10px 20px; border-radius: 8px; background: rgba(255,255,255,0.1);">📊 التحليلات</a></li>
+                <li><a class="nav-link" onclick="showTab('logs', event)" style="cursor: pointer; padding: 10px 20px; border-radius: 8px; background: rgba(255,255,255,0.1);">📜 السجلات</a></li>
+                <li><a class="nav-link" onclick="showTab('settings', event)" style="cursor: pointer; padding: 10px 20px; border-radius: 8px; background: rgba(255,255,255,0.1);">⚙️ الإعدادات</a></li>
             </ul>
 
             <!-- Execute Tab -->
@@ -401,7 +401,7 @@
             document.getElementById('timestamp').textContent = new Date().toLocaleString('ar-SA');
         }
         
-        function showTab(tabName) {
+        function showTab(tabName, event) {
             // Hide all tabs
             document.querySelectorAll('.tab-content').forEach(tab => {
                 tab.style.display = 'none';
@@ -417,8 +417,22 @@
             document.getElementById(tabName).style.display = 'block';
             
             // Add active class to clicked link
-            event.target.classList.add('active');
-            event.target.style.background = 'rgba(79, 172, 254, 0.3)';
+            let targetLink = null;
+            if (event && event.target) {
+                targetLink = event.target;
+            } else {
+                // Find the nav-link that corresponds to this tab
+                document.querySelectorAll('.nav-link').forEach(link => {
+                    if (link.getAttribute('onclick') && link.getAttribute('onclick').includes(tabName)) {
+                        targetLink = link;
+                    }
+                });
+            }
+            
+            if (targetLink) {
+                targetLink.classList.add('active');
+                targetLink.style.background = 'rgba(79, 172, 254, 0.3)';
+            }
         }
 
         async function loadAgents() {
