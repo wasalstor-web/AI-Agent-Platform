@@ -2,6 +2,7 @@ from flask import Flask, request, jsonify
 from flask_cors import CORS
 import logging
 from datetime import datetime
+from payment_processor import payment_bp
 
 app = Flask(__name__)
 CORS(app)
@@ -9,6 +10,9 @@ CORS(app)
 # Configure logging
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
+
+# Register payment blueprint
+app.register_blueprint(payment_bp)
 
 @app.route('/api/health', methods=['GET'])
 def health_check():
@@ -201,8 +205,13 @@ if __name__ == '__main__':
     logger.info("Starting AI Agent Platform API Server...")
     logger.info("Server will be available at http://localhost:5000")
     logger.info("API endpoints:")
-    logger.info("  - GET  /api/health   - Health check")
-    logger.info("  - GET  /api/status   - API status")
-    logger.info("  - POST /api/process  - Process commands")
-    logger.info("  - GET  /api/models   - List models")
+    logger.info("  - GET  /api/health              - Health check")
+    logger.info("  - GET  /api/status              - API status")
+    logger.info("  - POST /api/process             - Process commands")
+    logger.info("  - GET  /api/models              - List models")
+    logger.info("  - POST /api/payment/create      - Create payment request")
+    logger.info("  - POST /api/payment/confirm     - Confirm payment")
+    logger.info("  - GET  /api/payment/status/<id> - Get payment status")
+    logger.info("  - GET  /api/premium/status/<id> - Get premium status")
+    logger.info("  - GET  /api/payment/plans       - Get available plans")
     app.run(host='0.0.0.0', port=5000, debug=True)

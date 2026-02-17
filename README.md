@@ -490,6 +490,7 @@ AI-Agent-Platform © 2025
 - 🔧 **دليل إعداد النطاق**: [DOMAIN_SETUP_GUIDE.md](DOMAIN_SETUP_GUIDE.md)
 - 💬 **دمج OpenWebUI**: [OPENWEBUI_INTEGRATION.md](OPENWEBUI_INTEGRATION.md)
 - 🤖 **نظام DL+**: [DLPLUS_README.md](DLPLUS_README.md)
+- 💳 **نظام تأكيد الدفع**: [PAYMENT_SYSTEM.md](PAYMENT_SYSTEM.md)
 
 ---
 
