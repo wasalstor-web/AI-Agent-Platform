@@ -1,0 +1,251 @@
+name: Temporary Twilio VPS diagnostic
+
+on:
+  push:
+    branches:
+      - agent/twilio-vps-diagnostic-20260729
+    paths:
+      - .github/workflows/temp-twilio-vps-diagnostic.yml
+
+permissions:
+  contents: write
+
+concurrency:
+  group: temporary-twilio-vps-diagnostic
+  cancel-in-progress: false
+
+jobs:
+  inspect:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    env:
+      VPS_HOST: ${{ secrets.VPS_HOST }}
+      VPS_USER: ${{ secrets.VPS_USER }}
+      VPS_KEY: ${{ secrets.VPS_KEY }}
+
+    steps:
+      - name: Check out diagnostic branch
+        uses: actions/checkout@v4
+
+      - name: Inspect VPS without changing it
+        id: inspect
+        shell: bash
+        run: |
+          set -Eeuo pipefail
+          umask 077
+
+          report_dir="ops-results"
+          report_path="${report_dir}/twilio-vps-diagnostic-20260729.txt"
+          transient_report="${RUNNER_TEMP}/twilio-vps-diagnostic.txt"
+          key_file="${RUNNER_TEMP}/vps-key"
+          known_hosts_file="${RUNNER_TEMP}/known-hosts"
+          remote_report="${RUNNER_TEMP}/remote-report.txt"
+
+          mkdir -p "${report_dir}"
+          : > "${transient_report}"
+
+          cleanup() {
+            shred -u "${key_file}" 2>/dev/null || true
+            rm -f "${known_hosts_file}" "${remote_report}"
+          }
+          trap cleanup EXIT
+
+          fail_preflight() {
+            printf 'result=blocked\nreason=%s\n' "$1" > "${transient_report}"
+            cp "${transient_report}" "${report_path}"
+            exit 0
+          }
+
+          [[ -n "${VPS_HOST:-}" ]] || fail_preflight "VPS_HOST secret is missing"
+          [[ -n "${VPS_USER:-}" ]] || fail_preflight "VPS_USER secret is missing"
+          [[ -n "${VPS_KEY:-}" ]] || fail_preflight "VPS_KEY secret is missing"
+          [[ "${VPS_USER}" == "root" ]] || fail_preflight "VPS_USER is not root"
+
+          resolved_ips="$(getent ahostsv4 "${VPS_HOST}" | awk '{print $1}' | sort -u)"
+          [[ "${resolved_ips}" == "147.93.120.99" ]] || fail_preflight "VPS_HOST does not resolve only to the approved VPS"
+
+          printf '%s\n' "${VPS_KEY}" > "${key_file}"
+          chmod 600 "${key_file}"
+          ssh-keygen -y -f "${key_file}" >/dev/null 2>&1 || fail_preflight "VPS_KEY is not a valid SSH private key"
+
+          for attempt in 1 2 3; do
+            ssh-keyscan -T 10 -t ed25519 "${VPS_HOST}" 2>/dev/null || true
+          done | sort -u > "${known_hosts_file}"
+
+          host_key_count="$(wc -l < "${known_hosts_file}" | tr -d ' ')"
+          [[ "${host_key_count}" == "1" ]] || fail_preflight "Could not obtain one stable ED25519 host key"
+
+          host_fingerprint="$(ssh-keygen -lf "${known_hosts_file}" -E sha256 | awk '{print $2}')"
+
+          ssh_options=(
+            -F /dev/null
+            -o BatchMode=yes
+            -o PasswordAuthentication=no
+            -o KbdInteractiveAuthentication=no
+            -o PubkeyAuthentication=yes
+            -o IdentitiesOnly=yes
+            -o StrictHostKeyChecking=yes
+            -o UserKnownHostsFile="${known_hosts_file}"
+            -o ConnectTimeout=15
+            -i "${key_file}"
+          )
+
+          set +e
+          ssh "${ssh_options[@]}" "${VPS_USER}@${VPS_HOST}" 'bash -s --' > "${remote_report}" 2>&1 <<'REMOTE'
+          set -Eeuo pipefail
+          export LC_ALL=C
+
+          hash_value() {
+            printf '%s' "$1" | sha256sum | awk '{print $1}'
+          }
+
+          report_env_stream() {
+            local source_name="$1"
+            local line key value normalized digest
+            while IFS= read -r line; do
+              [[ "${line}" =~ ^[A-Za-z_][A-Za-z0-9_]*= ]] || continue
+              key="${line%%=*}"
+              case "${key}" in
+                TWILIO_*|HERMES_*|MCP_*|ENVOY_*|TRAEFIK_*|DOMAIN|HOST|PORT)
+                  value="${line#*=}"
+                  normalized="${value}"
+                  if [[ "${normalized}" == \"*\" && "${normalized}" == *\" ]]; then
+                    normalized="${normalized:1:${#normalized}-2}"
+                  elif [[ "${normalized}" == \'*\' && "${normalized}" == *\' ]]; then
+                    normalized="${normalized:1:${#normalized}-2}"
+                  fi
+                  if [[ -n "${normalized}" ]]; then
+                    digest="$(hash_value "${normalized}")"
+                    printf 'env|source=%s|key=%s|state=set|length=%s|sha256=%s\n' \
+                      "${source_name}" "${key}" "${#normalized}" "${digest}"
+                  else
+                    printf 'env|source=%s|key=%s|state=empty|length=0\n' "${source_name}" "${key}"
+                  fi
+                  ;;
+              esac
+            done
+          }
+
+          printf 'identity|uid=%s|user=%s|hostname=%s\n' "$(id -u)" "$(id -un)" "$(hostname -f 2>/dev/null || hostname)"
+          printf 'system|kernel=%s\n' "$(uname -srmo)"
+          printf 'system|uptime_seconds=%s\n' "$(cut -d. -f1 /proc/uptime)"
+          if [[ -r /etc/os-release ]]; then
+            os_name="$(awk -F= '$1=="PRETTY_NAME"{gsub(/^"|"$/, "", $2); print $2}' /etc/os-release)"
+            printf 'system|os=%s\n' "${os_name}"
+          fi
+
+          printf '%s\n' '--- listening-ports ---'
+          ss -ltnpH 2>/dev/null | sed -E 's/users:\(\(([^,]+).*/process=\1/' | sort || true
+
+          printf '%s\n' '--- relevant-services ---'
+          systemctl list-units --type=service --all --no-pager --no-legend 2>/dev/null \
+            | awk 'BEGIN{IGNORECASE=1} /docker|traefik|envoy|nginx|twilio|hermes|mcp|pm2/ {print}' || true
+
+          if command -v pm2 >/dev/null 2>&1; then
+            printf '%s\n' '--- pm2 ---'
+            pm2 ls --no-color 2>/dev/null || true
+          fi
+
+          candidate_list="$(mktemp)"
+          trap 'rm -f "${candidate_list}"' EXIT
+          find /etc /opt /srv /var/www /root -xdev -maxdepth 6 -type f \
+            \( -name '.env' -o -name '*.env' -o -name 'docker-compose*.yml' -o -name 'docker-compose*.yaml' \
+               -o -name 'compose*.yml' -o -name 'compose*.yaml' -o -name 'envoy*.yml' -o -name 'envoy*.yaml' \
+               -o -name 'traefik*.yml' -o -name 'traefik*.yaml' \) \
+            2>/dev/null | sort -u | head -n 300 > "${candidate_list}"
+
+          printf '%s\n' '--- candidate-config-files ---'
+          while IFS= read -r config_file; do
+            [[ -f "${config_file}" ]] || continue
+            file_digest="$(sha256sum "${config_file}" | awk '{print $1}')"
+            file_meta="$(stat -c 'mode=%a|owner=%U|group=%G|bytes=%s' "${config_file}")"
+            printf 'file|path=%s|%s|sha256=%s\n' "${config_file}" "${file_meta}" "${file_digest}"
+            case "${config_file}" in
+              *.env|*/.env)
+                report_env_stream "file:${config_file}" < "${config_file}"
+                ;;
+            esac
+            for marker in 'mcp.wasemsaa.cloud' '/providers/mcp' '/webhooks/twilio' 'oauth'; do
+              if grep -Fq -- "${marker}" "${config_file}" 2>/dev/null; then
+                printf 'marker|path=%s|value=%s\n' "${config_file}" "${marker}"
+              fi
+            done
+          done < "${candidate_list}"
+
+          if command -v docker >/dev/null 2>&1; then
+            printf '%s\n' '--- docker ---'
+            docker version --format 'docker|client={{.Client.Version}}|server={{.Server.Version}}' 2>/dev/null || true
+            docker compose ls --format json 2>/dev/null \
+              | sed -E 's/"ConfigFiles":"[^"]*"/"ConfigFiles":"<reported-in-candidate-files>"/g' || true
+            docker ps --format 'container|name={{.Names}}|image={{.Image}}|status={{.Status}}|ports={{.Ports}}' || true
+
+            while IFS= read -r container_id; do
+              [[ -n "${container_id}" ]] || continue
+              container_name="$(docker inspect --format '{{.Name}}' "${container_id}" | sed 's#^/##')"
+              docker inspect --format '{{range .Config.Env}}{{println .}}{{end}}' "${container_id}" \
+                | report_env_stream "container:${container_name}"
+              docker inspect --format '{{range .Mounts}}{{println .Source "|" .Destination "|" .Type}}{{end}}' "${container_id}" \
+                | while IFS='|' read -r source destination mount_type; do
+                    printf 'mount|container=%s|source=%s|destination=%s|type=%s\n' \
+                      "${container_name}" "${source}" "${destination}" "${mount_type}"
+                  done
+              docker inspect --format '{{range $key, $value := .Config.Labels}}{{println $key "=" $value}}{{end}}' "${container_id}" \
+                | awk -F= -v container="${container_name}" '
+                    $1 ~ /^traefik\.enable$/ ||
+                    $1 ~ /^traefik\.http\.routers\.[^.]+\.(rule|entrypoints|tls|tls\.certresolver)$/ ||
+                    $1 ~ /^traefik\.http\.services\.[^.]+\.loadbalancer\.server\.port$/ {
+                      print "label|container=" container "|" $0
+                    }'
+            done < <(docker ps -q)
+          fi
+
+          printf '%s\n' '--- local-https-probes ---'
+          for host_name in mcp.wasemsaa.cloud agent.wasemsaa.cloud bridge.wasemsaa.cloud wa.wasemsaa.cloud inbound.wasemsaa.cloud; do
+            for request_path in / /health /mcp /providers/mcp /.well-known/oauth-authorization-server /webhooks/twilio; do
+              status_code="$(curl -ksS --max-time 8 -o /dev/null -w '%{http_code}' \
+                --resolve "${host_name}:443:127.0.0.1" "https://${host_name}${request_path}" 2>/dev/null || true)"
+              [[ -n "${status_code}" ]] || status_code="000"
+              printf 'http|host=%s|path=%s|status=%s\n' "${host_name}" "${request_path}" "${status_code}"
+            done
+          done
+
+          printf '%s\n' '--- local-certificates ---'
+          for host_name in mcp.wasemsaa.cloud agent.wasemsaa.cloud bridge.wasemsaa.cloud wa.wasemsaa.cloud inbound.wasemsaa.cloud; do
+            certificate="$(timeout 8 openssl s_client -connect 127.0.0.1:443 -servername "${host_name}" </dev/null 2>/dev/null \
+              | openssl x509 -noout -subject -issuer -dates -fingerprint -sha256 2>/dev/null || true)"
+            if [[ -n "${certificate}" ]]; then
+              printf 'certificate|host=%s|%s\n' "${host_name}" "$(printf '%s' "${certificate}" | tr '\n' '|')"
+            else
+              printf 'certificate|host=%s|state=unavailable\n' "${host_name}"
+            fi
+          done
+          REMOTE
+          ssh_status=$?
+          set -e
+
+          {
+            printf 'result=%s\n' "$([[ "${ssh_status}" == "0" ]] && printf success || printf failed)"
+            printf 'approved_target=147.93.120.99\n'
+            printf 'ssh_host_fingerprint=%s\n' "${host_fingerprint}"
+            printf 'ssh_exit_code=%s\n' "${ssh_status}"
+            printf '%s\n' '--- remote-report ---'
+            sed -E \
+              -e 's/([A-Za-z_][A-Za-z0-9_]*(SECRET|TOKEN|PASSWORD|KEY)[A-Za-z0-9_]*=)[^|[:space:]]+/\1<redacted>/Ig' \
+              -e 's#(https?://)[^/@[:space:]]+:[^/@[:space:]]+@#\1<redacted>@#g' \
+              "${remote_report}"
+          } > "${transient_report}"
+
+          cp "${transient_report}" "${report_path}"
+
+      - name: Commit sanitized diagnostic report
+        shell: bash
+        run: |
+          set -Eeuo pipefail
+          report_path="ops-results/twilio-vps-diagnostic-20260729.txt"
+          test -f "${report_path}"
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -- "${report_path}"
+          git diff --cached --quiet && exit 0
+          git commit -m "Record temporary VPS diagnostic"
+          git push origin "HEAD:${GITHUB_REF_NAME}"
