@@ -1,0 +1,568 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>تأكيد الدفع | Payment Confirmation - AI Agent Platform</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .container {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            max-width: 800px;
+            width: 100%;
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 40px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 32px;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            font-size: 16px;
+            opacity: 0.9;
+        }
+
+        .content {
+            padding: 40px;
+        }
+
+        .section {
+            margin-bottom: 30px;
+        }
+
+        .section-title {
+            font-size: 24px;
+            color: #333;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .icon {
+            font-size: 28px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #555;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: border-color 0.3s;
+        }
+
+        input:focus, select:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .plans-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .plan-card {
+            border: 2px solid #e0e0e0;
+            border-radius: 12px;
+            padding: 20px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .plan-card:hover {
+            border-color: #667eea;
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(102, 126, 234, 0.2);
+        }
+
+        .plan-card.selected {
+            border-color: #667eea;
+            background: #f0f3ff;
+        }
+
+        .plan-name {
+            font-size: 20px;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        .plan-price {
+            font-size: 32px;
+            color: #667eea;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .plan-features {
+            text-align: right;
+            font-size: 14px;
+            color: #666;
+        }
+
+        .plan-features li {
+            margin-bottom: 5px;
+        }
+
+        .btn {
+            width: 100%;
+            padding: 15px;
+            border: none;
+            border-radius: 8px;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-bottom: 10px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
+        }
+
+        .btn-success {
+            background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+            color: white;
+        }
+
+        .btn-success:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(17, 153, 142, 0.3);
+        }
+
+        .btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        .status-box {
+            padding: 20px;
+            border-radius: 12px;
+            margin-top: 20px;
+            display: none;
+        }
+
+        .status-box.success {
+            background: #e8f5e9;
+            border: 2px solid #4caf50;
+            color: #2e7d32;
+            display: block;
+        }
+
+        .status-box.error {
+            background: #ffebee;
+            border: 2px solid #f44336;
+            color: #c62828;
+            display: block;
+        }
+
+        .status-box.info {
+            background: #e3f2fd;
+            border: 2px solid #2196f3;
+            color: #1565c0;
+            display: block;
+        }
+
+        .status-icon {
+            font-size: 48px;
+            margin-bottom: 10px;
+        }
+
+        .status-title {
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .status-message {
+            font-size: 16px;
+            line-height: 1.6;
+        }
+
+        .payment-info {
+            background: #f5f5f5;
+            padding: 20px;
+            border-radius: 12px;
+            margin-top: 20px;
+        }
+
+        .info-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 0;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        .info-row:last-child {
+            border-bottom: none;
+        }
+
+        .info-label {
+            font-weight: 600;
+            color: #555;
+        }
+
+        .info-value {
+            color: #333;
+        }
+
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255,255,255,.3);
+            border-radius: 50%;
+            border-top-color: white;
+            animation: spin 1s ease-in-out infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>💳 تأكيد الدفع</h1>
+            <p>Payment Confirmation - AI Agent Platform</p>
+        </div>
+
+        <div class="content">
+            <!-- Step 1: Select Plan -->
+            <div id="step1" class="section">
+                <h2 class="section-title">
+                    <span class="icon">📋</span>
+                    اختر الخطة | Select Plan
+                </h2>
+
+                <div class="plans-grid" id="plansGrid">
+                    <!-- Plans will be loaded dynamically -->
+                </div>
+
+                <div class="form-group">
+                    <label for="userId">معرف المستخدم | User ID:</label>
+                    <input type="text" id="userId" placeholder="Enter your user ID" required>
+                </div>
+
+                <button class="btn btn-primary" onclick="createPayment()">
+                    إنشاء طلب الدفع | Create Payment Request
+                </button>
+            </div>
+
+            <!-- Step 2: Confirm Payment -->
+            <div id="step2" class="section hidden">
+                <h2 class="section-title">
+                    <span class="icon">✅</span>
+                    تأكيد الدفع | Confirm Payment
+                </h2>
+
+                <div class="payment-info" id="paymentInfo">
+                    <!-- Payment info will be displayed here -->
+                </div>
+
+                <div class="form-group">
+                    <label for="transactionRef">رقم المعاملة (اختياري) | Transaction Reference (optional):</label>
+                    <input type="text" id="transactionRef" placeholder="Enter transaction reference if available">
+                </div>
+
+                <button class="btn btn-success" onclick="confirmPayment()">
+                    ✅ تأكيد الدفع | Confirm Payment
+                </button>
+                <button class="btn btn-primary" onclick="resetForm()">
+                    🔄 إنشاء طلب جديد | New Payment Request
+                </button>
+            </div>
+
+            <!-- Status Messages -->
+            <div id="statusBox" class="status-box">
+                <div class="status-icon" id="statusIcon"></div>
+                <div class="status-title" id="statusTitle"></div>
+                <div class="status-message" id="statusMessage"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let selectedPlan = null;
+        let currentPaymentId = null;
+        const API_BASE = window.location.hostname === 'localhost' 
+            ? 'http://localhost:5000' 
+            : 'https://your-api-url.com';
+
+        // Load available plans on page load
+        window.addEventListener('DOMContentLoaded', loadPlans);
+
+        async function loadPlans() {
+            try {
+                const response = await fetch(`${API_BASE}/api/payment/plans`);
+                const data = await response.json();
+                
+                if (data.success) {
+                    displayPlans(data.plans);
+                }
+            } catch (error) {
+                console.error('Error loading plans:', error);
+                showStatus('error', 'خطأ | Error', 'Failed to load plans. Using default plans.');
+                displayDefaultPlans();
+            }
+        }
+
+        function displayPlans(plans) {
+            const plansGrid = document.getElementById('plansGrid');
+            plansGrid.innerHTML = '';
+
+            Object.keys(plans).forEach(planKey => {
+                const plan = plans[planKey];
+                const card = document.createElement('div');
+                card.className = 'plan-card';
+                card.onclick = () => selectPlan(planKey, plan);
+                
+                card.innerHTML = `
+                    <div class="plan-name">${plan.name_ar}</div>
+                    <div class="plan-price">$${plan.price}</div>
+                    <ul class="plan-features">
+                        ${plan.features.slice(0, 3).map(f => `<li>✓ ${f}</li>`).join('')}
+                    </ul>
+                `;
+                
+                plansGrid.appendChild(card);
+            });
+        }
+
+        function displayDefaultPlans() {
+            const defaultPlans = {
+                basic: { name_ar: 'أساسي', price: 9.99 },
+                pro: { name_ar: 'احترافي', price: 29.99 },
+                enterprise: { name_ar: 'مؤسسات', price: 99.99 }
+            };
+            
+            const plansGrid = document.getElementById('plansGrid');
+            plansGrid.innerHTML = '';
+
+            Object.keys(defaultPlans).forEach(planKey => {
+                const plan = defaultPlans[planKey];
+                const card = document.createElement('div');
+                card.className = 'plan-card';
+                card.onclick = () => selectPlan(planKey, plan);
+                
+                card.innerHTML = `
+                    <div class="plan-name">${plan.name_ar}</div>
+                    <div class="plan-price">$${plan.price}</div>
+                `;
+                
+                plansGrid.appendChild(card);
+            });
+        }
+
+        function selectPlan(planKey, planData) {
+            selectedPlan = { key: planKey, ...planData };
+            
+            // Update UI
+            document.querySelectorAll('.plan-card').forEach(card => {
+                card.classList.remove('selected');
+            });
+            event.currentTarget.classList.add('selected');
+        }
+
+        async function createPayment() {
+            const userId = document.getElementById('userId').value.trim();
+            
+            if (!userId) {
+                showStatus('error', 'خطأ | Error', 'الرجاء إدخال معرف المستخدم | Please enter user ID');
+                return;
+            }
+
+            if (!selectedPlan) {
+                showStatus('error', 'خطأ | Error', 'الرجاء اختيار خطة | Please select a plan');
+                return;
+            }
+
+            try {
+                showStatus('info', 'جاري المعالجة | Processing', 'Creating payment request...');
+
+                const response = await fetch(`${API_BASE}/api/payment/create`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        user_id: userId,
+                        plan: selectedPlan.key,
+                        amount: selectedPlan.price
+                    })
+                });
+
+                const data = await response.json();
+
+                if (data.success) {
+                    currentPaymentId = data.payment.payment_id;
+                    displayPaymentInfo(data.payment);
+                    document.getElementById('step1').classList.add('hidden');
+                    document.getElementById('step2').classList.remove('hidden');
+                    showStatus('success', 'نجح | Success', 
+                        `تم إنشاء طلب الدفع بنجاح<br>Payment request created successfully<br>Payment ID: ${currentPaymentId}`);
+                } else {
+                    showStatus('error', 'خطأ | Error', data.error);
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                showStatus('error', 'خطأ | Error', 'Failed to create payment request');
+            }
+        }
+
+        function displayPaymentInfo(payment) {
+            const infoDiv = document.getElementById('paymentInfo');
+            infoDiv.innerHTML = `
+                <div class="info-row">
+                    <span class="info-label">معرف الدفع | Payment ID:</span>
+                    <span class="info-value">${payment.payment_id}</span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">الخطة | Plan:</span>
+                    <span class="info-value">${payment.plan}</span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">المبلغ | Amount:</span>
+                    <span class="info-value">$${payment.amount} ${payment.currency}</span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">الحالة | Status:</span>
+                    <span class="info-value">${payment.status}</span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">تاريخ الإنشاء | Created:</span>
+                    <span class="info-value">${new Date(payment.created_at).toLocaleString('ar-SA')}</span>
+                </div>
+            `;
+        }
+
+        async function confirmPayment() {
+            if (!currentPaymentId) {
+                showStatus('error', 'خطأ | Error', 'No payment ID found');
+                return;
+            }
+
+            const transactionRef = document.getElementById('transactionRef').value.trim();
+
+            try {
+                showStatus('info', 'جاري المعالجة | Processing', 'Confirming payment...');
+
+                const response = await fetch(`${API_BASE}/api/payment/confirm`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        payment_id: currentPaymentId,
+                        transaction_ref: transactionRef
+                    })
+                });
+
+                const data = await response.json();
+
+                if (data.success) {
+                    showStatus('success', '✅ تم تأكيد الدفع | Payment Confirmed', 
+                        `${data.message_ar}<br>${data.message}<br><br>` +
+                        `تم تفعيل المميزات المتقدمة حتى:<br>Premium active until:<br>` +
+                        `${new Date(data.payment.premium_active_until).toLocaleString('ar-SA')}`);
+                    
+                    displayPaymentInfo(data.payment);
+                } else {
+                    showStatus('error', 'خطأ | Error', data.error || data.error_ar);
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                showStatus('error', 'خطأ | Error', 'Failed to confirm payment');
+            }
+        }
+
+        function resetForm() {
+            document.getElementById('step1').classList.remove('hidden');
+            document.getElementById('step2').classList.add('hidden');
+            document.getElementById('userId').value = '';
+            document.getElementById('transactionRef').value = '';
+            currentPaymentId = null;
+            selectedPlan = null;
+            document.querySelectorAll('.plan-card').forEach(card => {
+                card.classList.remove('selected');
+            });
+            hideStatus();
+        }
+
+        function showStatus(type, title, message) {
+            const statusBox = document.getElementById('statusBox');
+            const statusIcon = document.getElementById('statusIcon');
+            const statusTitle = document.getElementById('statusTitle');
+            const statusMessage = document.getElementById('statusMessage');
+
+            statusBox.className = `status-box ${type}`;
+            
+            const icons = {
+                success: '✅',
+                error: '❌',
+                info: 'ℹ️'
+            };
+            
+            statusIcon.textContent = icons[type] || 'ℹ️';
+            statusTitle.textContent = title;
+            statusMessage.innerHTML = message;
+        }
+
+        function hideStatus() {
+            const statusBox = document.getElementById('statusBox');
+            statusBox.className = 'status-box';
+        }
+    </script>
+</body>
+</html>
