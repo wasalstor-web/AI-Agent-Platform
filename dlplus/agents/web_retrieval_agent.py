@@ -25,6 +25,8 @@ class WebRetrievalAgent(BaseAgent):
         super().__init__("Web Retrieval Agent", config)
         self.max_results = config.get('max_results', 10) if config else 10
         self.timeout = config.get('timeout', 30) if config else 30
+        # Prefer Arabic-understanding models for query enhancement
+        self.set_preferred_models(['arabert', 'camelbert', 'qwen_arabic'])
     
     async def execute(self, task: Dict[str, Any]) -> Dict[str, Any]:
         """
@@ -45,16 +47,53 @@ class WebRetrievalAgent(BaseAgent):
         
         logger.info(f"🔍 Searching for: {query}")
         
-        # In production, this would use actual search API
-        # For now, return simulated results
-        results = await self._search(query)
+        # Enhance query using AI models if available
+        enhanced_query = await self._enhance_query_with_ai(query)
+        
+        # Perform search
+        results = await self._search(enhanced_query)
         
         return {
             'success': True,
             'query': query,
+            'enhanced_query': enhanced_query,
             'results': results,
             'count': len(results)
         }
+    
+    async def _enhance_query_with_ai(self, query: str) -> str:
+        """
+        Enhance search query using AI models
+        
+        Args:
+            query: Original search query
+            
+        Returns:
+            Enhanced query
+        """
+        if not self.model_manager:
+            return query
+        
+        # Try to use Arabic models for query understanding
+        for model_id in self.preferred_models:
+            try:
+                prompt = f"""تحليل وتحسين استعلام البحث التالي:
+
+الاستعلام: {query}
+
+قم بتحليل الاستعلام وتحسينه لنتائج بحث أفضل. اذكر الكلمات المفتاحية المهمة والمفاهيم ذات الصلة."""
+                
+                result = await self.use_model(model_id, prompt)
+                
+                if result.get('success'):
+                    logger.info(f"✅ Query enhanced using model '{model_id}'")
+                    return result.get('output', query)
+                    
+            except Exception as e:
+                logger.warning(f"⚠️ Model '{model_id}' failed: {e}")
+                continue
+        
+        return query
     
     async def _search(self, query: str) -> list:
         """
